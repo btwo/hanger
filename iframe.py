@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 # coding=utf-8
 import json
-import elixir
 import orm
 import lib
 import forms
@@ -106,7 +105,7 @@ class SignUp(Sign):
             password=form.password.data,
             email=form.email.data,
         )
-        elixir.session.commit()
+        orm.session.commit()
         self.login(user)
         self.redir()
 
@@ -141,7 +140,7 @@ handlers = [
 app = web.Application(handlers, **settings)
 
 def server_run():
-    elixir.setup_all() #ORM setup.
+    orm.setup_all() #ORM setup.
     if settings['debug']: options.parse_command_line() #CMD Log
     http_server = httpserver.HTTPServer(app) #Server
     http_server.listen(settings['port']) # Port

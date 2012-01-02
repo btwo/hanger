@@ -10,6 +10,8 @@ from elixir import Entity, Field, metadata
 from elixir import UnicodeText, Unicode, String, DateTime, Boolean, Integer
 #relationships
 from elixir import OneToMany, ManyToOne, ManyToMany
+#action
+from elixir import session, setup_all
 
 class Person(Entity):
     name = Field(Unicode())
