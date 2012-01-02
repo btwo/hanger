@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block tit %}登录{% endblock %}
+{% block main %}
+<article id="signin">
+    <h1>登录</h1>
+    <form method='post'>
+        {{xsrf()}}
+        {{func.field_maker(form.email)}}
+        {{func.field_maker(form.password)}}
+        <input type="submit" value="登录">
+    </form>
+</article>
+{% endblock %}

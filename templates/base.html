@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Site - {%block tit%}{%endblock%}</title>
+        <script src="{{static('main.js')}}"></script>
+        <link rel="stylesheet" media="screen" href="{{static('style.css')}}">
+    </head>
+    <body>
+        <header>
+        <div id='logo'><a href="/">iFrame</a></header></div>
+        <div id="user"><nav>
+            {% if me %}
+            <a href="/person/{{me.id}}/">{{me.name}}</a>
+            <a href="/sign/out/">登出</a>
+            {% else %}
+            <a href="/sign/in/">登录</a>
+            <a href="/sign/up/">注册</a>
+            {% endif %}
+        </nav></div>
+        <div id='main'>{% block main %}{% endblock %}</div>
+    </body>
+</html>
