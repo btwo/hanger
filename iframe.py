@@ -75,14 +75,14 @@ class Sign(Base):
 
 class SignIn(Sign):
     Form = forms.SignIn
-    tempname = 'sign.in.html' #tamplate file name.
+    templname = 'sign.in.html' #tamplate file name.
     def get(self):
-        self.render(self.tempname, form=self.Form())
+        self.render(self.templname, form=self.Form())
 
     def post(self):
         form = self.Form(self)
         if not form.validate():
-            self.render(self.tempname, form=form)
+            self.render(self.templname, form=form)
             return
         user = orm.Person.get_by(email=form.email.data)
         self.login(user)
@@ -90,8 +90,25 @@ class SignIn(Sign):
 
 
 class SignUp(Sign):
+    templname = 'sign.up.html'
+    Form = forms.SignUp
+
     def get(self):
-        self.render('sign.up.html')
+        self.render(self.templname, form=self.Form())
+    
+    def post(self):
+        form = self.Form(self)
+        if not form.validate():
+            self.render(self.templname, form=form)
+            return
+        user = orm.Person(
+            name=form.name.data,
+            password=form.password.data,
+            email=form.email.data,
+        )
+        elixir.session.commit()
+        self.login(user)
+        self.redir()
 
 
 class SignOut(Sign):

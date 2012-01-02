@@ -63,6 +63,9 @@ def remove_space(raw):
 
 def special_char(string):
     '''find special char.'''
+    print string
+    string = unicode(string)
+    print string
     regex = re.compile("\W",re.UNICODE)
     result = regex.search(string)
     return result

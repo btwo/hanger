@@ -47,3 +47,30 @@ class SignIn(Form):
         password = lib.string_hash(field.data, user.salt)
         if not password == user.password:
             raise ValidationError(u'Password error.')
+
+
+class SignUp(Form):
+    email = TextField(u'Email',
+        [Required(), Length(min=6), Length(max=120), Email()])
+    name = TextField(u'称呼',
+        [Required(), Length(min=2), Length(max=10)])
+    password = PasswordField(u'密码', [Required(), Length(min=8)])
+    password_repeat = PasswordField(u'再输一遍密码',
+        [Required()])
+
+    def validate_email(self, field):
+        if orm.Person.get_by(email=field.data):
+            raise ValidationError(
+                u'有这个帐号，是否<a href="/signin/">登录</a>?')
+
+    def validate_name(self, field):
+        if lib.special_char(field.data):
+            raise ValidationError(u'昵称里面不允许有特殊字符。')
+        elif orm.Person.get_by(name=field.data):
+            raise ValidationError(u'Opps，这个昵称已经有人在用了。')
+
+    def validate_password(self, field):
+        password = field.data
+        password_repeat = self.password_repeat.data
+        if password != password_repeat:
+            raise ValidationError(u'Opps, 两次密码输入不一致')
