@@ -1,8 +1,9 @@
 #!/usr/bin/env python2
 # coding=utf-8
-import orm
 import os
 import elixir
+
+from application import orm
 
 def main():
     print('1. init')

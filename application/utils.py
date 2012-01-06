@@ -3,6 +3,7 @@
 import random
 import hashlib
 import re
+import datetime
 
 class UIFunc(object):
     def para(self, raw):
@@ -60,10 +61,36 @@ def remove_space(raw):
         if p: result += p + '\n'
     return result
 
-
 def special_char(string):
     '''find special char.'''
     string = unicode(string)
     regex = re.compile("\W",re.UNICODE)
     result = regex.search(string)
     return result
+
+def gravatar(email, size="200", default="identicon"):
+    '''Make gravatar image URL.'''
+    email = email.encode('utf-8')
+    email = hashlib.md5(email).hexdigest()
+    url = "http://1.gravatar.com/avatar/%s?s=%s&d=%s&r=G" % (
+        email, size, default)
+    return url
+
+def after(time):
+    '''output time diffence.'''
+    diff = datetime.datetime.now() - time
+    if diff.days > 3:
+        return strtime(time)
+    elif diff.days > 0:
+        return unicode(diff.days) + u'天前'
+    elif diff.seconds > (60*60):
+        return unicode(diff.seconds/(60*60)) + u'小时前'
+    elif diff.seconds >= 60:
+        return unicode(diff.seconds/60) + u'分钟前'
+    elif diff.seconds > 20:
+        return unicode(diff.seconds) + u'秒前'
+    else:
+        return u'此时'
+
+def strtime(time, time_format="%y-%m-%d %H:%M"):
+    return datetime.datetime.strftime(time, time_format)

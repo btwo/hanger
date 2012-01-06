@@ -2,7 +2,7 @@
 # coding=utf-8
 import wtforms
 import orm
-import lib
+import utils
 
 from wtforms.fields import TextField, TextField, PasswordField, TextAreaField
 from wtforms.validators import Required, Length, Email, ValidationError
@@ -44,7 +44,7 @@ class SignIn(Form):
     def validate_password(self, field):
         user = orm.Person.get_by(email=self.email.data)
         if not user: return
-        password = lib.string_hash(field.data, user.salt)
+        password = utils.string_hash(field.data, user.salt)
         if not password == user.password:
             raise ValidationError(u'Password error.')
 
@@ -64,7 +64,7 @@ class SignUp(Form):
                 u'有这个帐号，是否<a href="/signin/">登录</a>?')
 
     def validate_name(self, field):
-        if lib.special_char(field.data):
+        if utils.special_char(field.data):
             raise ValidationError(u'昵称里面不允许有特殊字符。')
         elif orm.Person.get_by(name=field.data):
             raise ValidationError(u'Opps，这个昵称已经有人在用了。')
