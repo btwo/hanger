@@ -4,6 +4,7 @@ import random
 import hashlib
 import re
 import datetime
+import os
 
 class UIFunc(object):
     def para(self, raw):
@@ -28,6 +29,10 @@ class UIFunc(object):
         html = '<p>' + html + '</p>'
         return html
 
+
+def realpath():
+    '''Script real path.'''
+    return os.path.split(os.path.realpath(__file__))[0]
 
 def random_string(str_long = 40):
     return ''.join(random.sample([chr(i) for i in range(48, 123)], str_long))
@@ -94,3 +99,5 @@ def after(time):
 
 def strtime(time, time_format="%y-%m-%d %H:%M"):
     return datetime.datetime.strftime(time, time_format)
+
+

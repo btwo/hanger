@@ -4,8 +4,9 @@ import wtforms
 import orm
 import utils
 
-from wtforms.fields import TextField, TextField, PasswordField, TextAreaField
-from wtforms.validators import Required, Length, Email, ValidationError
+from wtforms.fields import TextField, PasswordField, FileField
+from wtforms.validators import Required, Length, Email, ValidationError,\
+        regexp
 
 class MultiDict(object):
     '''Tornado handler arguments to MultiDice, wtforms required.'''

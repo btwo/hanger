@@ -16,6 +16,7 @@ class Person(Entity):
     name = Field(Unicode())
     email = Field(String())
     password = Field(String())
+    avatar = Field(String()) #user avatar file name.
     salt = Field(String())
     created = Field(DateTime())
 
