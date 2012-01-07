@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block main %}
+<article class='error 404'>
+    <h2>哎哟，出错了。</h2>
+    <p>下面这些信息可以让懂行的人看看。</p>
+    <h3>Error {{code}}</h3>
+    <p>{{message}}</p>
+    <section id="exception">
+        <h4>Exception</h4>
+        <pre>
+            {{exception}} 
+        </pre>
+    </section>
+</article>
+{% endblock %}

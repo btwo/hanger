@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 # coding=utf-8
 import json
+import traceback
+import httplib
 import orm
 import utils
 import forms
@@ -47,6 +49,23 @@ class Base(web.RequestHandler):
         )
         template = env.get_template(template_name)
         return template
+
+    def get_error_html(self, status_code, **kwargs):
+        code = status_code
+        try:
+            # add stack trace information
+            message = httplib.responses[status_code]
+            exception = "%s\n\n%s" % (kwargs["exception"], traceback.format_exc())
+            template = "error.html"
+            if code == 404: template = 'error_404.html'
+            return self.render_string(
+                template,
+                code=code,
+                message=message,
+                exception=exception,
+            )
+        except Exception:
+            return super(Base, self).get_error_html(status_code, **kwargs)
 
     def redirect(self, to=None):
         if not to:
@@ -120,4 +139,10 @@ class SignOut(Sign):
 class PersonPage(Base):
     def get(self, uid):
         person = orm.Person.get_by(id=int(uid))
+        if not person: raise web.HTTPError(404)
         self.render('person.page.html', person=person)
+
+
+class Error404(Base):
+    def get(self):
+        raise web.HTTPError(404)
