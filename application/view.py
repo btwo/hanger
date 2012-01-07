@@ -115,3 +115,9 @@ class SignOut(Sign):
     def get(self):
         self.set_secure_cookie('user', '')
         self.redirect()
+
+
+class PersonPage(Base):
+    def get(self, uid):
+        person = orm.Person.get_by(id=int(uid))
+        self.render('person.page.html', person=person)

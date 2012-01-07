@@ -31,6 +31,16 @@ class UIFunc(object):
         html = '<p>' + html + '</p>'
         return html
 
+    def avatar(self, handler, user):
+        avatar = user.avatar
+        if (not avatar) or (avatar == 'gravatar'):
+            return self.gravatar(user)
+        else:
+            return handler.static_url('uploads/avatar/'+user.avatar)
+
+    def gravatar(self, user):
+        return gravatar(user.email)
+
 
 def realpath():
     '''Script real path.'''

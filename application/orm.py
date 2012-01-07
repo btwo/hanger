@@ -17,7 +17,6 @@ class Person(Entity):
     email = Field(String())
     password = Field(String())
     avatar = Field(String()) #user avatar file name.
-    salt = Field(String())
     created = Field(DateTime())
 
     def __init__(self, name, email, password):

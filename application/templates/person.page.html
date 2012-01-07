@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block main %}
+<article id="person">
+    <h1>{{person.name}}</h1>
+    <img src="{{func.avatar(handler, person)}}">
+</article>
+{% endblock %}
