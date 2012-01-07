@@ -28,9 +28,10 @@ class MultiDict(object):
 
 class Form(wtforms.Form):
     def __init__(self, handler=None):
+        formdata = None
         if handler:
-            handler = MultiDict(handler)
-        super(Form, self).__init__(formdata = handler)
+            formdata = MultiDict(handler)
+        super(Form, self).__init__(formdata = formdata, handler = handler)
 
 
 class SignIn(Form):
@@ -45,7 +46,7 @@ class SignIn(Form):
     def validate_password(self, field):
         user = orm.Person.get_by(email=self.email.data)
         if not user: return
-        password = utils.string_hash(field.data, user.salt)
+        password = utils.string_hash(field.data)
         if not password == user.password:
             raise ValidationError(u'Password error.')
 

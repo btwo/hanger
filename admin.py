@@ -3,6 +3,7 @@
 import os
 import readline
 import elixir
+import getpass
 
 from application import orm
 
@@ -25,7 +26,7 @@ def new_user():
     print('New user')
     name = raw_input('Name:\n').decode("utf8")
     email = raw_input('Email:\n')
-    password = raw_input('Password:\n')
+    password = getpass.getpass('Password:\n')
     orm.Person(name, email, password)
     elixir.session.commit()
 

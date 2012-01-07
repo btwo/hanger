@@ -115,18 +115,3 @@ class SignOut(Sign):
     def get(self):
         self.set_secure_cookie('user', '')
         self.redirect()
-
-
-class Settings(Base):
-    Form = forms.Settings
-    templname = 'settings.html'
-
-    @web.authenticated
-    def get(self):
-        self.render(self.templname, form=self.Form())
-    
-    @web.authenticated
-    def post(self):
-        form = self.Form(self)
-        if not form.validate():
-            self.render(self.templname, form = form)

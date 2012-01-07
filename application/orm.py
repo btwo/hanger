@@ -24,7 +24,7 @@ class Person(Entity):
         self.name = utils.escape(name)
         self.email = utils.escape(email)
         self.salt = utils.random_string(10)
-        self.password = utils.string_hash(password, self.salt)
+        self.password = utils.string_hash(password)
         self.created = datetime.datetime.now()
 
 metadata.bind = 'sqlite:///database'

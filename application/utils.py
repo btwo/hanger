@@ -6,6 +6,8 @@ import re
 import datetime
 import os
 
+from conf import settings
+
 class UIFunc(object):
     def para(self, raw):
         '''Text to HTML.'''
@@ -37,7 +39,7 @@ def realpath():
 def random_string(str_long = 40):
     return ''.join(random.sample([chr(i) for i in range(48, 123)], str_long))
 
-def string_hash(string, salt=None):
+def string_hash(string, salt=settings['hash_salt']):
     if salt:
         string += salt
     string = hashlib.sha224(string).hexdigest()
@@ -100,4 +102,5 @@ def after(time):
 def strtime(time, time_format="%y-%m-%d %H:%M"):
     return datetime.datetime.strftime(time, time_format)
 
-
+def read_conf():
+    pass
