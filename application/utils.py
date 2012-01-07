@@ -77,6 +77,3 @@ def after(time):
 
 def strtime(time, time_format="%y-%m-%d %H:%M"):
     return datetime.datetime.strftime(time, time_format)
-
-def read_conf():
-    pass

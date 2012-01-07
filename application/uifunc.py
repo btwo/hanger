@@ -28,7 +28,7 @@ def avatar(handler, user):
     if (not avatar) or (avatar == 'gravatar'):
         return utils.gravatar(user.email)
     else:
-        return handler.static_url('uploads/avatar/'+user.avatar)
+        return handler.static_url('avatar/'+user.avatar)
 
 def gravatar(handler, user):
     return utils.gravatar(user.email)

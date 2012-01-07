@@ -74,6 +74,11 @@ class Base(web.RequestHandler):
         super(Base, self).redirect(to)
 
 
+class Error404(Base):
+    def get(self):
+        raise web.HTTPError(404)
+
+
 class Home(Base):
     def get(self):
         self.render('home.html')
@@ -143,6 +148,25 @@ class PersonPage(Base):
         self.render('person.page.html', person=person)
 
 
-class Error404(Base):
+class Settings(Base):
+    Form = forms.Settings
+    templname = 'settings.html'
+
+    @web.authenticated
     def get(self):
-        raise web.HTTPError(404)
+        self.render(self.templname, form=self.Form())
+    
+    @web.authenticated
+    def post(self):
+        form = self.Form(self)
+        if not form.validate():
+            self.render(self.templname, form = form)
+            return
+        new_password = form.new_password.data
+        name = form.name.data
+        if new_password:
+            self.current_user.password = utils.string_hash(new_password)
+        if name:
+            self.current_user.name = name
+        orm.session.commit()
+        self.redirect()

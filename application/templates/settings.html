@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block tit %}用户设置{% endblock %}
+{% block main %}
+<article id="settings">
+    <h1>用户设置</h1>
+    <form method='post'>
+        {{xsrf()}}
+        {{field_maker(form.name)}}
+        <div id="change_password">
+            <h2>修改密码</h2>
+            {{field_maker(form.password)}}
+            {{field_maker(form.new_password)}}
+            {{field_maker(form.new_password_repeat)}}
+        </div>
+        <input type="submit" value="修改">
+    </form>
+</article>
+{% endblock %}

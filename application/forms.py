@@ -4,9 +4,8 @@ import wtforms
 import orm
 import utils
 
-from wtforms.fields import TextField, PasswordField, FileField
-from wtforms.validators import Required, Length, Email, ValidationError,\
-        regexp
+from wtforms.fields import TextField, PasswordField
+from wtforms.validators import Required, Length, Email, ValidationError
 
 class MultiDict(object):
     '''Tornado handler arguments to MultiDice, wtforms required.'''
@@ -27,11 +26,13 @@ class MultiDict(object):
 
 
 class Form(wtforms.Form):
-    def __init__(self, handler=None):
+    handler = None
+    def __init__(self, handler=None, **kwargs):
         formdata = None
         if handler:
             formdata = MultiDict(handler)
-        super(Form, self).__init__(formdata = formdata, handler = handler)
+            self.handler = handler
+        super(Form, self).__init__(formdata = formdata, **kwargs)
 
 
 class SignIn(Form):
@@ -51,28 +52,46 @@ class SignIn(Form):
             raise ValidationError(u'Password error.')
 
 
+def name_validate(self, field):
+    if utils.special_char(field.data):
+        raise ValidationError(u'昵称里面不允许有特殊字符。')
+    elif orm.Person.get_by(name=field.data):
+        raise ValidationError(u'Opps，这个昵称已经有人在用了。')
+
 class SignUp(Form):
     email = TextField(u'Email',
         [Required(), Length(min=6), Length(max=120), Email()])
     name = TextField(u'称呼',
-        [Required(), Length(min=2), Length(max=10)])
+        [Required(), name_validate, Length(min=2), Length(max=10)])
     password = PasswordField(u'密码', [Required(), Length(min=8)])
-    password_repeat = PasswordField(u'再输一遍密码',
-        [Required()])
+    password_repeat = PasswordField(u'再输一遍密码', [Required()])
 
     def validate_email(self, field):
         if orm.Person.get_by(email=field.data):
             raise ValidationError(
                 u'有这个帐号，是否<a href="/signin/">登录</a>?')
 
-    def validate_name(self, field):
-        if utils.special_char(field.data):
-            raise ValidationError(u'昵称里面不允许有特殊字符。')
-        elif orm.Person.get_by(name=field.data):
-            raise ValidationError(u'Opps，这个昵称已经有人在用了。')
-
     def validate_password(self, field):
         password = field.data
         password_repeat = self.password_repeat.data
         if password != password_repeat:
             raise ValidationError(u'Opps, 两次密码输入不一致')
+
+
+class Settings(Form):
+    name = TextField(u'更改称呼',
+        [name_validate, Length(min=2), Length(max=10)])
+    password = PasswordField(u'原密码', [Length(min=8)])
+    new_password = PasswordField(u'新密码', [Length(min=8)])
+    new_password_repeat = PasswordField(u'再输一遍')
+
+    def validate_password(self, field):
+        password = field.data
+        new_password = self.new_password.data
+        new_password_repeat = self.new_password_repeat.data
+        if not new_password:
+            return # not change password.
+        elif new_password != new_password_repeat:
+            raise ValidationError(u'Opps, 两次密码输入不一致')
+        elif utils.string_hash(password) != self.handler.current_user.password:
+            raise ValidationError(u'Opps, 密码输错了。')
