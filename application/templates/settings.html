@@ -3,6 +3,14 @@
 {% block main %}
 <article id="settings">
     <h1>用户设置</h1>
+    <form method='post' enctype="multipart/form-data">
+        <h2>头像</h2>
+        {{xsrf()}}
+        <img src="{{avatar(me)}}">
+        <p><input id="avatar" name="avatar" type="file" /></p>
+        <p><input type="submit" value="上传头像"></p>
+        {{avatar_error}}
+    </form>
     <form method='post'>
         {{xsrf()}}
         {{field_maker(form.name)}}

@@ -4,8 +4,9 @@ import wtforms
 import orm
 import utils
 
-from wtforms.fields import TextField, PasswordField
-from wtforms.validators import Required, Length, Email, ValidationError
+from wtforms.fields import TextField, PasswordField, FileField
+from wtforms.validators import Required, Length, Email, ValidationError,\
+        regexp
 
 class MultiDict(object):
     '''Tornado handler arguments to MultiDice, wtforms required.'''
@@ -80,9 +81,9 @@ class SignUp(Form):
 
 class Settings(Form):
     name = TextField(u'更改称呼',
-        [name_validate, Length(min=2), Length(max=10)])
-    password = PasswordField(u'原密码', [Length(min=8)])
-    new_password = PasswordField(u'新密码', [Length(min=8)])
+        [name_validate, Length(max=10)])
+    password = PasswordField(u'原密码')
+    new_password = PasswordField(u'新密码')
     new_password_repeat = PasswordField(u'再输一遍')
 
     def validate_password(self, field):
@@ -95,3 +96,8 @@ class Settings(Form):
             raise ValidationError(u'Opps, 两次密码输入不一致')
         elif utils.string_hash(password) != self.handler.current_user.password:
             raise ValidationError(u'Opps, 密码输错了。')
+
+    def validate_new_password(self, field):
+        if field.data:
+            if len(field.data) < 8:
+                raise ValidationError(u'密码太短啦')

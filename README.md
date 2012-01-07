@@ -5,8 +5,9 @@
 基于Tornado Web框架，使用WTForms，elixir等代码库。
 
 ## ToDo
-
-* 头像上传 & 个人设置
+* 识别上传头像的文件大小
+* 限制每日上传
+* Javascript裁剪头像
 * 好友
 * 配置文件
 * 使用sqlalchemy ORM
@@ -23,4 +24,5 @@
 * jinja2
 
 ## 授权
-BSD开源协议
+BSD开源协议 或者 WTFPL
+随你愿意用哪个

@@ -1,8 +1,10 @@
 #!/usr/bin/env python2
 # coding=utf-8
+import os
 import json
 import traceback
 import httplib
+import re
 import orm
 import utils
 import forms
@@ -158,6 +160,12 @@ class Settings(Base):
     
     @web.authenticated
     def post(self):
+        #Upload avatar
+        files = self.request.files
+        if files:
+            self.avatar_uploads(files['avatar'][0])
+            self.redirect()
+            return
         form = self.Form(self)
         if not form.validate():
             self.render(self.templname, form = form)
@@ -170,3 +178,34 @@ class Settings(Base):
             self.current_user.name = name
         orm.session.commit()
         self.redirect()
+
+    def avatar_uploads(self, avatar):
+        #ToDo
+        #* 文件上传class。
+        #* 限制每日上传次数
+        avatar_error = None
+        name_validate = re.search(
+            '\.jpg$|\.png$|\.jpeg$|\.gif', avatar['filename'])
+        if not name_validate:
+            avatar_error = u'请上传图片'
+        # todo : validation file size
+        if avatar_error:
+            self.render(self.templname, form = self.Form(),
+                avatar_error = avatar_error)
+            return
+        filename = self.avatar_save(avatar)
+        self.current_user.avatar = filename
+        orm.session.commit()
+        return
+
+    def avatar_save(self, avatar):
+        path = utils.realpath() + '/static/avatar/'
+        old_file = self.current_user.avatar
+        os.remove(path + old_file) # remove old avatar file.
+        uid = str(self.current_user.id)
+        suffix = avatar['filename'].split('.')[-1]
+        filename = uid + '.' + suffix
+        avatar_file = open(path + filename, 'w') 
+        avatar_file.write(avatar['body'])
+        avatar_file.close()
+        return filename
