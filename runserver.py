@@ -10,7 +10,7 @@ from application.conf import settings
 
 app = web.Application(handlers, **settings)
 
-def log_congfig():
+def log_config():
     level = logging.WARN
     if settings['debug']: level = logging.DEBUG
     logging.basicConfig(
