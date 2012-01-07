@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # coding=utf-8
 import os
+import uifunc
 # copy to utils, because cannot import
 PATH = os.path.split(os.path.realpath(__file__))[0] 
 settings = dict(
@@ -14,4 +15,5 @@ settings = dict(
     xsrf_cookies = True,
     cookie_secret = r'ThisIsTheCookieSecret_2012/1/7/12:14.',
     hash_salt = '**salt**',
+    ui_methods = uifunc,
 )

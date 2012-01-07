@@ -8,40 +8,6 @@ import os
 
 from conf import settings
 
-class UIFunc(object):
-    def para(self, raw):
-        '''Text to HTML.'''
-        raw = raw.split('\n')
-        result = ''
-        for p in raw:
-            p = p.strip()
-            if p:
-                result += '<p>' + p + '</p>\n' 
-        return result
-
-
-    def field_maker(self, field, class_=None):
-        '''WTForms field to HTML.'''
-        html = field.label() + '<br>' + field(class_=class_)
-        if field.errors:
-            html += '\n<ul class="errors">\n'
-            for error in field.errors:
-                html += '<li class="error"><p>' + error + '<p></li>\n'
-            html += '</ul>\n'
-        html = '<p>' + html + '</p>'
-        return html
-
-    def avatar(self, handler, user):
-        avatar = user.avatar
-        if (not avatar) or (avatar == 'gravatar'):
-            return self.gravatar(user)
-        else:
-            return handler.static_url('uploads/avatar/'+user.avatar)
-
-    def gravatar(self, user):
-        return gravatar(user.email)
-
-
 def realpath():
     '''Script real path.'''
     return os.path.split(os.path.realpath(__file__))[0]

@@ -30,12 +30,12 @@ class Base(web.RequestHandler):
                 'xsrf': self.xsrf_form_html,
                 'request': self.request,
                 'settings': self.settings,
-                'func': utils.UIFunc(),
                 'me': self.current_user,
                 'url': self.settings['site_url'],
                 'static': self.static_url,
                 'handler': self,
             })
+        methods.update(self.ui)
         template = self.get_template(template_name)
         html = template.render(methods)
         return utils.remove_space(html)
