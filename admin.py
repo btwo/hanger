@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # coding=utf-8
 import os
+import readline
 import elixir
 
 from application import orm

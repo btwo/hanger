@@ -7,8 +7,11 @@
 ## ToDo
 
 * 用户页面
+* 头像上传 & 个人设置
 * 好友
-* 头像上传
+* 配置文件
+* 进一步整合Tornado和Jinja2
+* 使用sqlalchemy ORM
 * session
 * 兼容性
 

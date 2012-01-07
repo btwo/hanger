@@ -5,7 +5,7 @@ import logging
 
 from tornado import web, httpserver, ioloop
 from application import orm
-from application.view import Home, SignIn, SignUp, SignOut
+from application.urls import handlers
 
 settings = dict(
     #Site and application settings.
@@ -19,12 +19,7 @@ settings = dict(
 )
 
 
-app = web.Application([
-    (r'/?', Home),
-    (r'/sign/in/?', SignIn),
-    (r'/sign/up/?', SignUp),
-    (r'/sign/out/?', SignOut),
-], **settings)
+app = web.Application(handlers, **settings)
 
 def server_run(port):
     orm.setup_all() #ORM setup.
