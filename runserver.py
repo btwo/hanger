@@ -10,13 +10,18 @@ from application.conf import settings
 
 app = web.Application(handlers, **settings)
 
+def log_congfig():
+    level = logging.WARN
+    if settings['debug']: level = logging.DEBUG
+    logging.basicConfig(
+        filename = settings['log_path'],
+        level = level) #set log output.
+
 def server_run(port):
+    log_config()
     orm.setup_all() #ORM setup.
     http_server = httpserver.HTTPServer(app) #Server
     http_server.listen(port)
-    logging.basicConfig(
-        filename = settings['log_path'],
-        level = logging.DEBUG) #set log output.
     ioloop.IOLoop.instance().start() #Start IO Loop
 
 if __name__ == '__main__':

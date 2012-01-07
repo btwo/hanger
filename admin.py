@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 # coding=utf-8
+import sys
 import os
 import readline
 import elixir
@@ -7,7 +8,7 @@ import getpass
 
 from application import orm
 
-def main():
+def cmd():
     print('1. init')
     print('2. New user.')
     user_input = raw_input()
@@ -30,4 +31,4 @@ def new_user():
     orm.Person(name, email, password)
     elixir.session.commit()
 
-if __name__ == '__main__': main()
+if __name__ == '__main__': cmd()
