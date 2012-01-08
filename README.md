@@ -5,9 +5,10 @@
 基于Tornado Web框架，使用WTForms，elixir等代码库。
 
 ## ToDo
-* 识别上传头像的文件大小
+* 弱智密码防范
 * 限制每日上传
 * Javascript裁剪头像
+* Nginx 文件上传模块支持。
 * 好友
 * 配置文件
 * 使用sqlalchemy ORM

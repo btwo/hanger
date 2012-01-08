@@ -9,6 +9,8 @@ import getpass
 from application import orm
 
 def router():
+    orm.metadata.bind.echo = True
+    elixir.setup_all(True)
     option = sys.argv[1:]
     if (not option) or option[0] == 'help': admin_help()
     elif option[0] == 'init': init()
@@ -18,9 +20,8 @@ def router():
 def init():
     if os.path.exists('database'):
         os.remove('database') #remove sqlite datebase
-    orm.metadata.bind.echo = True
-    elixir.setup_all(True)
-    print('all done, please create user.')
+    if raw_input('Are you create new user?') == 'y':
+        new_user()
 
 def new_user():
     print('New user')
@@ -28,7 +29,7 @@ def new_user():
     email = raw_input('Email:\n')
     password = getpass.getpass('Password:\n')
     orm.Person(name, email, password)
-    elixir.session.commit()
+    orm.session.commit()
 
 def admin_help():
     print('init              : Initialize the database')
