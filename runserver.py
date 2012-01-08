@@ -11,14 +11,11 @@ from application.conf import settings
 app = web.Application(handlers, **settings)
 
 def log_config():
-    level = logging.WARN
     if settings['debug']:
-        level = logging.DEBUG
         options.parse_command_line()
     else:
-        logging.basicConfig(
-            filename = settings['log_path'],
-            level = level) #set log output.
+        logging.basicConfig( filename = settings['log_path'],
+            level = logging.WARN) #set log output.
 
 def server_run(port):
     log_config()

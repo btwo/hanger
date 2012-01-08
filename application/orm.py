@@ -22,7 +22,6 @@ class Person(Entity):
     def __init__(self, name, email, password):
         self.name = utils.escape(name)
         self.email = utils.escape(email)
-        self.salt = utils.random_string(10)
         self.password = utils.string_hash(password)
         self.created = datetime.datetime.now()
 

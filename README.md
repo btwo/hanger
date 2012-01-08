@@ -22,6 +22,7 @@
 * tornado
 * wtforms
 * jinja2
+
 软件假定你使用的是Linux系统，WebServer是Nginx，如果有其他需求请自行修改。
 
 ## 授权
