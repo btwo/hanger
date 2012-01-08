@@ -5,7 +5,6 @@
 基于Tornado Web框架，使用WTForms，elixir等代码库。
 
 ## ToDo
-* 弱智密码防范
 * 限制每日上传
 * Javascript裁剪头像
 * Nginx 文件上传模块支持。
@@ -24,5 +23,6 @@
 * wtforms
 * jinja2
 软件假定你使用的是Linux系统，WebServer是Nginx，如果有其他需求请自行修改。
+
 ## 授权
 公共领域

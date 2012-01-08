@@ -3,7 +3,7 @@
 import sys
 import logging
 
-from tornado import web, httpserver, ioloop
+from tornado import web, options,httpserver, ioloop
 from application import orm
 from application.urls import handlers
 from application.conf import settings
@@ -12,10 +12,13 @@ app = web.Application(handlers, **settings)
 
 def log_config():
     level = logging.WARN
-    if settings['debug']: level = logging.DEBUG
-    logging.basicConfig(
-        filename = settings['log_path'],
-        level = level) #set log output.
+    if settings['debug']:
+        level = logging.DEBUG
+        options.parse_command_line()
+    else:
+        logging.basicConfig(
+            filename = settings['log_path'],
+            level = level) #set log output.
 
 def server_run(port):
     log_config()
