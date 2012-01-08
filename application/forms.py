@@ -77,6 +77,8 @@ class SignUp(Form):
         password_repeat = self.password_repeat.data
         if password != password_repeat:
             raise ValidationError(u'Opps, 两次密码输入不一致')
+        if utils.stupid_password(field.data):
+            raise ValidationError(u'你的密码太简单了！')
 
 
 class Settings(Form):

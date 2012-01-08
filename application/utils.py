@@ -77,3 +77,19 @@ def after(time):
 
 def strtime(time, time_format="%y-%m-%d %H:%M"):
     return datetime.datetime.strftime(time, time_format)
+
+def stupid_password(password):
+    '''look here http://coolshell.cn/articles/6193.html .'''
+    stupid_password_list = [
+        '123456789',
+        '12345678',
+        'dearbook',
+        '123123123',
+        '1234567890',
+        '147258369',
+        '987654321',
+    ]
+    clean = list(set(password)) # 如果是 aaaaaaa这样的密码，就会返回['a']
+    if password in stupid_password_list or len(clean) == 1:
+        return True
+    else: return False
