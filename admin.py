@@ -8,20 +8,19 @@ import getpass
 
 from application import orm
 
-def cmd():
-    print('1. init')
-    print('2. New user.')
-    user_input = raw_input()
-    if user_input == '1': init()
-    elif user_input == '2': new_user()
+def router():
+    option = sys.argv[1:]
+    if (not option) or option[0] == 'help': admin_help()
+    elif option[0] == 'init': init()
+    elif option[0] == 'user':
+        if option[1] == 'new': new_user()
 
 def init():
     if os.path.exists('database'):
         os.remove('database') #remove sqlite datebase
     orm.metadata.bind.echo = True
     elixir.setup_all(True)
-    new_user()
-    print('all done.')
+    print('all done, please create user.')
 
 def new_user():
     print('New user')
@@ -31,4 +30,10 @@ def new_user():
     orm.Person(name, email, password)
     elixir.session.commit()
 
-if __name__ == '__main__': cmd()
+def admin_help():
+    print('init              : Initialize the database')
+    print('user              : User Management')
+    print('user new          : Create_user')
+
+
+if __name__ == '__main__': router()

@@ -201,7 +201,8 @@ class Settings(Base):
     def avatar_save(self, avatar):
         path = utils.realpath() + '/static/avatar/'
         old_file = self.current_user.avatar
-        os.remove(path + old_file) # remove old avatar file.
+        if old_file:
+            os.remove(path + old_file) # remove old avatar file.
         uid = str(self.current_user.id)
         suffix = avatar['filename'].split('.')[-1]
         filename = uid + '.' + suffix

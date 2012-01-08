@@ -5,3 +5,6 @@ import view
 import urls
 import forms
 import utils
+
+AUTHOR = 'tioover <tioover@gmail.com>'
+VERSION = '0.1'

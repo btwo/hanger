@@ -14,13 +14,13 @@ def para(handler, raw):
 
 def field_maker(handler, field, class_=None):
     '''WTForms field to HTML.'''
-    html = field.label() + '<br>' + field(class_=class_)
+    html = field.label() + '<br>\n' + field(class_=class_)
     if field.errors:
         html += '\n<ul class="errors">\n'
         for error in field.errors:
-            html += '<li class="error"><p>' + error + '<p></li>\n'
+            html += '\n<li class="error"><p>' + error + '<p></li>\n'
         html += '</ul>\n'
-    html = '<p>' + html + '</p>'
+    html = '<p>' + html + '</p>\n'
     return html
 
 def avatar(handler, user):
