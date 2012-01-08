@@ -209,6 +209,7 @@ class Settings(Base):
 
     def avatar_save(self, avatar):
         path = self.settings['static_path'] +'/avatar/'
+        if not os.path.exists(path): os.mkdir(path)
         old_file = self.current_user.avatar
         if old_file:
             os.remove(path + old_file) # remove old avatar file.
