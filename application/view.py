@@ -57,7 +57,8 @@ class Base(web.RequestHandler):
         try:
             # add stack trace information
             message = httplib.responses[status_code]
-            exception = "%s\n\n%s" % (kwargs["exception"], traceback.format_exc())
+            exception = "%s\n\n%s" % (kwargs["exception"],
+                traceback.format_exc())
             template = "error.html"
             if code == 404: template = 'error_404.html'
             return self.render_string(

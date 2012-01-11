@@ -2,7 +2,6 @@
 # coding=utf-8
 import os
 import readline
-import elixir
 import getpass
 
 from application import orm
@@ -11,9 +10,13 @@ def init():
     if os.path.exists('database'):
         os.remove('database') #remove sqlite datebase
     orm.metadata.bind.echo = True
-    elixir.setup_all(True)
-    raw_input('Are you create new user?')
-    new_user()
+    orm.setup_all(True)
+    print '---------'
+    if raw_input('Are you create new user? [Y/n]') != 'n':
+        new_user()
+        print '---------'
+    print('All done, please edit application/conf.py'
+          'settings["cookie_secret"], and settings["hash_salt"]')
 
 def new_user():
     print('New user')
@@ -24,4 +27,5 @@ def new_user():
     orm.session.commit()
 
 
-if __name__ == '__main__': init()
+if __name__ == '__main__':
+    init()

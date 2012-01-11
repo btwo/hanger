@@ -8,8 +8,6 @@
 * 限制每日上传
 * Javascript裁剪头像
 * Nginx 文件上传模块支持。
-* 好友
-* 配置文件
 * 使用sqlalchemy ORM
 * session
 * 兼容性
@@ -22,6 +20,7 @@
 * tornado
 * wtforms
 * jinja2
+* markdown2
 
 软件假定你使用的是Linux系统，WebServer是Nginx，如果有其他需求请自行修改。
 

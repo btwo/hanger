@@ -5,6 +5,7 @@ import hashlib
 import re
 import datetime
 import os
+import markdown2
 
 from conf import settings
 
@@ -47,7 +48,7 @@ def remove_space(raw):
 def special_char(string):
     '''find special char.'''
     string = unicode(string)
-    regex = re.compile("\W",re.UNICODE)
+    regex = re.compile("\W", re.UNICODE)
     result = regex.search(string)
     return result
 
@@ -93,3 +94,12 @@ def stupid_password(password):
     if password in stupid_password_list or len(clean) == 1:
         return True
     else: return False
+
+def mdtohtml(raw):
+    """将markdown格式文本转换为HTML"""
+    #解决转义和markdown格式的冲突
+    raw = raw.replace("&gt;", "\n>")
+    #开始转换
+    md = markdown2.Markdown()
+    html = md.convert(raw)
+    return html

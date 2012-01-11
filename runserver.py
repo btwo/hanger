@@ -1,9 +1,8 @@
 #!/usr/bin/env python2
 # coding=utf-8
-import sys
 import logging
 
-from tornado import web, options,httpserver, ioloop
+from tornado import web, options, httpserver, ioloop
 from application import orm
 from application.urls import handlers
 from application.conf import settings
@@ -13,9 +12,9 @@ app = web.Application(handlers, **settings)
 def log_config():
     if settings['debug']:
         options.parse_command_line()
-    else:
-        logging.basicConfig( filename = settings['log_path'],
-            level = logging.WARN) #set log output.
+        return
+    logging.basicConfig(filename = settings['log_path'],
+        level = logging.WARN) #set log output.
 
 def server_run(port):
     log_config()
@@ -25,4 +24,4 @@ def server_run(port):
     ioloop.IOLoop.instance().start() #Start IO Loop
 
 if __name__ == '__main__':
-    server_run(8888)
+    server_run(settings['port'])

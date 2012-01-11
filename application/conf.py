@@ -2,7 +2,6 @@
 # coding=utf-8
 import os
 import uifunc
-# copy to utils, because cannot import
 PATH = os.path.split(os.path.realpath(__file__))[0] 
 settings = dict(
     #Site and application settings.
@@ -13,7 +12,8 @@ settings = dict(
     login_url = '/signin/',
     site_url = 'http://127.0.0.1:8888',
     xsrf_cookies = True,
-    cookie_secret = r'ThisIsTheCookieSecret_2012/1/7/12:14.',
+    cookie_secret = r'ThisIsTheCookieSecret_2012/1/11/23:36.',
     hash_salt = '**salt**',
     ui_methods = uifunc,
+    port = 8888,
 )
