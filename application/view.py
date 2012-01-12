@@ -8,6 +8,9 @@ import re
 import orm
 import utils
 import forms
+import StringIO
+import Image
+import platform
 
 from jinja2 import Environment, FileSystemLoader
 from tornado import web
@@ -210,6 +213,8 @@ class Settings(Base):
 
     def avatar_save(self, avatar):
         path = self.settings['static_path'] +'/avatar/'
+        if platform.system() is 'Windows':
+            path = path.replace("/", "\\")
         if not os.path.exists(path): os.mkdir(path)
         old_file = self.current_user.avatar
         if old_file:
@@ -217,7 +222,6 @@ class Settings(Base):
         uid = str(self.current_user.id)
         suffix = avatar['filename'].split('.')[-1]
         filename = uid + '.' + suffix
-        avatar_file = open(path + filename, 'w') 
-        avatar_file.write(avatar['body'])
-        avatar_file.close()
+        avatar_file = Image.open(StringIO.StringIO(avatar['body']))
+        avatar_file.save(path+filename, avatar_file.format)
         return filename

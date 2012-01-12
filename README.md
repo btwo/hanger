@@ -10,7 +10,6 @@
 * Nginx 文件上传模块支持。
 * 使用sqlalchemy ORM
 * session
-* 兼容性
 
 ## 使用
 没有文档，需要熟悉Tornado Web框架。
@@ -21,7 +20,8 @@
 * wtforms
 * jinja2
 * markdown2
-
+* elixir
+* Python Image library(PIL)
 软件假定你使用的是Linux系统，WebServer是Nginx，如果有其他需求请自行修改。
 
 ## 授权

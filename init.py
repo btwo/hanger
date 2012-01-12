@@ -1,8 +1,10 @@
 #!/usr/bin/env python2
 # coding=utf-8
 import os
-import readline
 import getpass
+import platform
+if platform.system() is not 'Windows':
+    import readline
 
 from application import orm
 
