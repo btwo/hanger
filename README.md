@@ -22,7 +22,10 @@
 * markdown2
 * elixir
 * Python Image library(PIL)
+
 软件假定你使用的是Linux系统，WebServer是Nginx，如果有其他需求请自行修改。
+
+你可以在Win下开发，但是运行的时候建议删去一些兼容性代码，兼容性代码需要判断平台，请用编辑器搜索platform。
 
 ## 授权
 公共领域
