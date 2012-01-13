@@ -17,3 +17,4 @@ settings = dict(
     ui_methods = uifunc,
     port = 8888,
 )
+settings['avatar_path'] = settings['static_path'] + '/avatar/'

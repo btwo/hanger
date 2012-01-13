@@ -168,7 +168,6 @@ class Settings(Base):
         files = self.request.files
         if files:
             self.avatar_uploads(files['avatar'][0])
-            self.redirect()
             return
         form = self.Form(self)
         if not form.validate():
@@ -189,39 +188,40 @@ class Settings(Base):
         #* 文件上传class。
         #* 限制每日上传次数
         if self.avatar_validate(avatar):
+            self.remove_old_avatar()
             filename = self.avatar_save(avatar)
             self.current_user.avatar = filename
             orm.session.commit()
+            self.redirect()
         return
     
     def avatar_validate(self, avatar):
         avatar_error = None
         max_size = 1024 * 1024 * 2 #3MB
-        content_type = avatar['content_type'][:5]
-        name_validate = re.search(
-            '\.jpg$|\.png$|\.jpeg$|\.gif', avatar['filename'])
-        if content_type != 'image' or not name_validate:
+        try:
+            image = Image.open(StringIO.StringIO(avatar['body']))
+        except IOError:
             avatar_error = u'请上传图片'
-        elif len(avatar['body']) > max_size:
+        if len(avatar['body']) > max_size:
             avatar_error = u'文件太大！最多能上传2mb的图片。'
         # todo : validation file size
         if avatar_error:
             self.render(self.templname, form = self.Form(),
                 avatar_error = avatar_error)
             return False
-        else: return True
+        return image
 
-    def avatar_save(self, avatar):
-        path = self.settings['static_path'] +'/avatar/'
-        if platform.system() is 'Windows':
-            path = path.replace("/", "\\")
-        if not os.path.exists(path): os.mkdir(path)
+    def remove_old_avatar(self):
         old_file = self.current_user.avatar
         if old_file:
-            os.remove(path + old_file) # remove old avatar file.
+            os.remove(self.settings['avatar_path'] + old_file)
+
+    def avatar_save(self, avatar):
+        path = self.settings['avatar_path']
+        if not os.path.exists(path): os.mkdir(path)
         uid = str(self.current_user.id)
         suffix = avatar['filename'].split('.')[-1]
         filename = uid + '.' + suffix
         avatar_file = Image.open(StringIO.StringIO(avatar['body']))
-        avatar_file.save(path+filename, avatar_file.format)
+        avatar_file.save(path + filename, avatar_file.format)
         return filename

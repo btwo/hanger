@@ -14,9 +14,6 @@ def init():
     orm.metadata.bind.echo = True
     orm.setup_all(True)
     print '---------'
-    if raw_input('Are you create new user? [Y/n]') != 'n':
-        new_user()
-        print '---------'
     print('All done, please edit application/conf.py'
           'settings["cookie_secret"], and settings["hash_salt"]')
 
