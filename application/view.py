@@ -195,7 +195,7 @@ class Settings(Base):
             filename = self.avatar_save(avatar)
             self.current_user.avatar = filename
             orm.session.commit()
-            self.redirect()
+            self.redirect('/settings')
         return
     
     def avatar_validate(self, avatar):
@@ -226,5 +226,11 @@ class Settings(Base):
         suffix = avatar['filename'].split('.')[-1]
         filename = uid + '.' + suffix
         avatar_file = Image.open(StringIO.StringIO(avatar['body']))
+        avatar_file = self.avatar_resize(avatar_file)
         avatar_file.save(path + filename, avatar_file.format)
         return filename
+
+    def avatar_resize(self, avatar):
+        height = 160
+        weight = 160
+        return avatar.resize((height, weight))
