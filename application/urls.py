@@ -7,7 +7,7 @@ handlers = [
     (r'/signin/?', SignIn),
     (r'/signup/?', SignUp),
     (r'/signout/?', SignOut),
-    (r'/person/(\d+)/?', PersonPage),
+    (r'/person/(\d+)?/?', PersonPage),
     (r'/settings/?', Settings),
     (r'.*', Error404), #If url not belonging to any handler, raise 404error.
 ]

@@ -2,7 +2,7 @@
 <html lang="zh-CN">
     <head>
         <meta charset="UTF-8" />
-        <title>hanger - {%block tit%}一个小框架{%endblock%}</title>
+        <title>Hanger - {%block tit%}一个小框架{%endblock%}</title>
         <script src="{{static('main.js')}}"></script>
         <link rel="stylesheet" media="screen" href="{{static('style.css')}}">
     </head>
@@ -11,7 +11,7 @@
         <div id='logo'><a href="/">Hanger</a></header></div>
         <div id="user"><nav>
             {% if me %}
-            <a href="/person/{{me.id}}/">{{me.name}}</a>
+            <a href="/person/">{{me.name}}</a>
             <a href="/settings/">设置</a>
             <a href="/signout/">登出</a>
             {% else %}
@@ -19,6 +19,6 @@
             <a href="/signup/">注册</a>
             {% endif %}
         </nav></div>
-        <div id='main'>{% block main %}{% endblock %}</div>
+        {% block main %}{% endblock %}
     </body>
 </html>

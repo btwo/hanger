@@ -1,18 +1,16 @@
 # 自用的Web骨架
 
-包括了一些常用的设置，函数等等等等。
-
-基于Tornado Web框架，使用WTForms，elixir等代码库。
+包括了一些常用的设置，函数等等等等，能帮助快速开发。基于Tornado Web框架。
 
 ## ToDo
-* 限制每日上传
-* Javascript裁剪头像
+* Email 找回密码。
 * Nginx 文件上传模块支持。
 * 使用sqlalchemy ORM
-* session
 
 ## 使用
 没有文档，需要熟悉Tornado Web框架。
+
+软件假定你使用的是Linux系统，WebServer是Nginx，如果有其他需求请自行修改。
 
 ## 安装需求
 * python 2.7
@@ -23,9 +21,6 @@
 * elixir
 * Python Image library(PIL)
 
-软件假定你使用的是Linux系统，WebServer是Nginx，如果有其他需求请自行修改。
-
-你可以在Win下开发，但是运行的时候建议删去一些兼容性代码，兼容性代码需要判断平台，请用编辑器搜索platform。
 
 ## 授权
-公共领域
+WTFPL

@@ -6,6 +6,7 @@ import re
 import datetime
 import os
 import markdown2
+import tornado.escape
 
 from conf import settings
 
@@ -13,31 +14,38 @@ def realpath():
     '''Script real path.'''
     return os.path.split(os.path.realpath(__file__))[0]
 
+def escape(raw):
+    '''Html escape.'''
+    #todo: Not escape Escaped Char.
+    raw = tornado.escape.xhtml_unescape(raw)
+    raw = tornado.escape.xhtml_escape(raw)
+    return raw
+
 def random_string(str_long = 40):
     return ''.join(random.sample([chr(i) for i in range(48, 123)], str_long))
 
 def string_hash(string, salt=settings['hash_salt']):
-    if salt:
-        string += salt
     string = hashlib.sha224(string).hexdigest()
     return string
 
-def escape(raw):
-    '''Html escape.'''
-    #todo: Not escape Escaped Char.
-    escape_word = [
-        ('&', '&amp;'),
-        ('<', '&lt;'),
-        ('>', '&gt;'),
-        ('\"', '&quot;'),
-        ('\'', '&apos;'),
+def stupid_password(password):
+    '''look here http://coolshell.cn/articles/6193.html .'''
+    stupid_password_list = [
+        '123456789',
+        '12345678',
+        'dearbook',
+        '123123123',
+        '1234567890',
+        '147258369',
+        '987654321',
     ]
-    for word in escape_word:
-        raw = raw.replace(word[0], word[1])
-    return raw
-
+    clean = list(set(password)) # 如果是 aaaaaaa这样的密码，就会返回['a']
+    if password in stupid_password_list or len(clean) is 1:
+        return True
+    else: return False
 
 def remove_space(raw):
+    '''清除首位空格'''
     raw = raw.split('\n')
     result = ''
     for p in raw:
@@ -78,22 +86,6 @@ def after(time):
 
 def strtime(time, time_format="%y-%m-%d %H:%M"):
     return datetime.datetime.strftime(time, time_format)
-
-def stupid_password(password):
-    '''look here http://coolshell.cn/articles/6193.html .'''
-    stupid_password_list = [
-        '123456789',
-        '12345678',
-        'dearbook',
-        '123123123',
-        '1234567890',
-        '147258369',
-        '987654321',
-    ]
-    clean = list(set(password)) # 如果是 aaaaaaa这样的密码，就会返回['a']
-    if password in stupid_password_list or len(clean) == 1:
-        return True
-    else: return False
 
 def mdtohtml(raw):
     """将markdown格式文本转换为HTML"""

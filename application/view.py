@@ -148,8 +148,11 @@ class SignOut(Sign):
 
 
 class PersonPage(Base):
-    def get(self, uid):
-        person = orm.Person.get_by(id=int(uid))
+    def get(self, uid=None):
+        if uid:
+            person = orm.Person.get_by(id=int(uid))
+        else:
+            person = self.current_user
         if not person: raise web.HTTPError(404)
         self.render('person.page.html', person=person)
 
@@ -199,7 +202,7 @@ class Settings(Base):
         avatar_error = None
         max_size = 1024 * 1024 * 2 #3MB
         try:
-            image = Image.open(StringIO.StringIO(avatar['body']))
+            Image.open(StringIO.StringIO(avatar['body']))
         except IOError:
             avatar_error = u'请上传图片'
         if len(avatar['body']) > max_size:
@@ -209,7 +212,7 @@ class Settings(Base):
             self.render(self.templname, form = self.Form(),
                 avatar_error = avatar_error)
             return False
-        return image
+        return True
 
     def remove_old_avatar(self):
         old_file = self.current_user.avatar
