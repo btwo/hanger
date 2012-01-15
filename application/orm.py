@@ -1,7 +1,8 @@
 #!/usr/bin/env python2
 # coding=utf-8
 import datetime
-import utils
+
+from utils import escape, string_hash, url_escape
 #Elixir ORM
 #Base
 from elixir import Entity, Field, metadata
@@ -20,9 +21,9 @@ class Person(Entity):
     created = Field(DateTime())
 
     def __init__(self, name, email, password):
-        self.name = utils.escape(name)
-        self.email = utils.escape(email)
-        self.password = utils.string_hash(password)
+        self.name = escape(name)
+        self.email = escape(email)
+        self.password = string_hash(password)
         self.created = datetime.datetime.now()
 
 metadata.bind = 'sqlite:///database'

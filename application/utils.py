@@ -21,6 +21,12 @@ def escape(raw):
     raw = tornado.escape.xhtml_escape(raw)
     return raw
 
+
+def url_escape(url):
+    url = tornado.escape.url_escape(url)
+    return url
+
+
 def random_string(str_long = 40):
     return ''.join(random.sample([chr(i) for i in range(48, 123)], str_long))
 
