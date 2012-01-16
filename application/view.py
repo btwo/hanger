@@ -4,31 +4,22 @@ import os
 import json
 import traceback
 import httplib
-import re
-import orm
 import utils
 import forms
 import StringIO
 import Image
 
+from orm import Person, session
 from jinja2 import Environment, FileSystemLoader
 from tornado import web
 
 class Base(web.RequestHandler):
-    templname = ''
-    Form = None
-
-
     def get_current_user(self):
         cookie = self.get_secure_cookie('user')
         if not cookie: return False
         user = json.loads(cookie)
-        user = orm.Person.get_by(id=int(user['id']))
+        user = Person.get_by(id=int(user['id']))
         return user
-
-    def json_write(self, obj):
-        self.set_header('Content-Type', 'application/json')
-        self.write(json.dumps(obj))
 
     def render_string(self, template_name, **kwargs):
         '''Template render by Jinja2.'''
@@ -76,20 +67,21 @@ class Base(web.RequestHandler):
         except Exception:
             return super(Base, self).get_error_html(status_code, **kwargs)
 
+    def json_write(self, obj):
+        self.set_header('Content-Type', 'application/json')
+        self.write(json.dumps(obj))
+
     def redirect(self, to=None):
         if not to:
             to = self.get_argument("next", None)
             if not to: to = '/'
         super(Base, self).redirect(to)
 
-    def get_obj(self, Obj, obj_id=None):
-        if not obj_id:
-            obj = Obj.query.all()
-        else:
-            obj = Obj.get_by(id = int(id))
-        if not obj:
+    def item(self, Item, itemid):
+        item = Item.get_by(id = int(id))
+        if not item:
             raise web.HTTPError(404)
-        return obj
+        return item 
 
     def form_validate(self, form, **kwargs):
         if not form.validate():
@@ -116,23 +108,24 @@ class Sign(Base):
                 'id': user.id,
                 'name': user.name,
                 'email': user.email,
-            }
-        )
+            })
         self.set_secure_cookie("user", json_str)
 
 
 class SignIn(Sign):
     Form = forms.SignIn
     templname = 'sign.in.html' #tamplate file name.
+
     def get(self):
         self.render(self.templname, form=self.Form())
 
     def post(self):
         form = self.Form(self)
-        if self.form_validate(form):
-            user = orm.Person.get_by(email=form.email.data)
-            self.login(user)
-            self.redirect()
+        if not self.form_validate(form):
+            return
+        user = Person.get_by(email=form.email.data)
+        self.login(user)
+        self.redirect()
 
 
 class SignUp(Sign):
@@ -144,15 +137,16 @@ class SignUp(Sign):
     
     def post(self):
         form = self.Form(self)
-        if self.form_validate(form):
-            user = orm.Person(
-                name=form.name.data,
-                password=form.password.data,
-                email=form.email.data,
-            )
-            orm.session.commit()
-            self.login(user)
-            self.redirect()
+        if not self.form_validate(form):
+            return
+        user = Person(
+            name = form.name.data,
+            password = form.password.data,
+            email = form.email.data,
+        )
+        session.commit()
+        self.login(user)
+        self.redirect()
 
 
 class SignOut(Sign):
@@ -164,7 +158,7 @@ class SignOut(Sign):
 class PersonPage(Base):
     def get(self, uid=None):
         if uid:
-            person = get_obj(orm.Person, int(uid))
+            person = self.item(Person, int(uid))
         elif self.current_user:
             person = self.current_user
         else:
@@ -190,21 +184,17 @@ class Settings(Base):
             self.avatar_uploads(avatar_form)
             return
         #normal settings
-        if self.form_validate(form):
+        if self.form_validate(form, avatar_form = avatar_form):
             new_password = form.new_password.data
             name = form.name.data
             if new_password:
                 self.current_user.password = utils.string_hash(new_password)
             if name:
                 self.current_user.name = name
-            orm.session.commit()
+            session.commit()
             self.redirect()
 
     def avatar_uploads(self, avatar_form):
-        #ToDo
-        #* 支持Nginx upload module.
-        #* 文件上传class。
-        #* 限制每日上传次数
         if not self.form_validate(avatar_form):
             return
         avatar = Image.open(StringIO.StringIO(
@@ -212,7 +202,7 @@ class Settings(Base):
         self.remove_old_avatar()
         filename = self.avatar_save(avatar)
         self.current_user.avatar = filename
-        orm.session.commit()
+        session.commit()
         self.redirect('/settings')
         return
     
