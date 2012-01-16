@@ -3,6 +3,9 @@
 import os
 import getpass
 import platform
+
+from application import conf
+
 if platform.system() is not 'Windows':
     import readline
 
@@ -13,6 +16,7 @@ def init():
         os.remove('database') #remove sqlite datebase
     orm.metadata.bind.echo = True
     orm.setup_all(True)
+    os.mkdir(conf['avatar_path'])
     print '---------'
     print('All done, please edit application/conf.py'
           'settings["cookie_secret"], and settings["hash_salt"]')

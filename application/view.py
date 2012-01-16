@@ -174,21 +174,22 @@ class PersonPage(Base):
 
 class Settings(Base):
     Form = forms.Settings
+    AvatarForm = forms.Avatar
     templname = 'settings.html'
 
     @web.authenticated
     def get(self):
-        self.render(self.templname, form=self.Form())
+        self.render(self.templname, form=self.Form(),
+            avatar_form = self.AvatarForm())
     
     @web.authenticated
     def post(self):
-        #Upload avatar
-        files = self.request.files
-        if files:
-            self.avatar_uploads(files['avatar'][0])
+        form = self.Form(self)
+        avatar_form = self.AvatarForm(self)
+        if self.request.files:
+            self.avatar_uploads(avatar_form)
             return
         #normal settings
-        form = self.Form(self)
         if self.form_validate(form):
             new_password = form.new_password.data
             name = form.name.data
@@ -199,35 +200,22 @@ class Settings(Base):
             orm.session.commit()
             self.redirect()
 
-    def avatar_uploads(self, avatar):
+    def avatar_uploads(self, avatar_form):
         #ToDo
         #* 支持Nginx upload module.
         #* 文件上传class。
         #* 限制每日上传次数
-        if self.avatar_validate(avatar):
-            self.remove_old_avatar()
-            filename = self.avatar_save(avatar)
-            self.current_user.avatar = filename
-            orm.session.commit()
-            self.redirect('/settings')
+        if not self.form_validate(avatar_form):
+            return
+        avatar = Image.open(StringIO.StringIO(
+            self.request.files['avatar'][0]['body']))
+        self.remove_old_avatar()
+        filename = self.avatar_save(avatar)
+        self.current_user.avatar = filename
+        orm.session.commit()
+        self.redirect('/settings')
         return
     
-    def avatar_validate(self, avatar):
-        avatar_error = None
-        max_size = 1024 * 1024 * 2 #3MB
-        try:
-            Image.open(StringIO.StringIO(avatar['body']))
-        except IOError:
-            avatar_error = u'请上传图片'
-        if len(avatar['body']) > max_size:
-            avatar_error = u'文件太大！最多能上传2mb的图片。'
-        # todo : validation file size
-        if avatar_error:
-            self.render(self.templname, form = self.Form(),
-                avatar_error = avatar_error)
-            return False
-        return True
-
     def remove_old_avatar(self):
         old_file = self.current_user.avatar
         if old_file:
@@ -235,13 +223,10 @@ class Settings(Base):
 
     def avatar_save(self, avatar):
         path = self.settings['avatar_path']
-        if not os.path.exists(path): os.mkdir(path)
         uid = str(self.current_user.id)
-        suffix = avatar['filename'].split('.')[-1]
-        filename = uid + '.' + suffix
-        avatar_file = Image.open(StringIO.StringIO(avatar['body']))
-        avatar_file = self.avatar_resize(avatar_file)
-        avatar_file.save(path + filename, avatar_file.format)
+        filename = uid + '.' + avatar.format
+        avatar = self.avatar_resize(avatar)
+        avatar.save(path + filename, avatar.format)
         return filename
 
     def avatar_resize(self, avatar):

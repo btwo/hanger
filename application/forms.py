@@ -3,8 +3,10 @@
 import wtforms
 import orm
 import utils
+import Image
+import StringIO
 
-from wtforms.fields import TextField, PasswordField
+from wtforms.fields import TextField, PasswordField, FileField
 from wtforms.validators import Required, Length, Email, ValidationError
 
 class MultiDict(object):
@@ -102,3 +104,17 @@ class Settings(Form):
             raise ValidationError(u'密码太短啦')
         elif field.data != self.new_password_repeat.data:
             raise ValidationError(u'两次密码输入的不一样。')
+
+
+class Avatar(Form):
+    avatar = FileField(u'上传头像')
+
+    def validate_avatar(self, field):
+        max_size = 1024 * 1024 * 2 #2MB
+        try:
+            Image.open(StringIO.StringIO(
+                self.handler.request.files['avatar'][0]['body']))
+        except IOError:
+            raise ValidationError(u'这不是一个图片')
+        if len(field.data) > max_size:
+            raise ValidationError(u'文件太大！最多只能上传2MB的图片')
