@@ -10,12 +10,15 @@ import utils
 import forms
 import StringIO
 import Image
-import platform
 
 from jinja2 import Environment, FileSystemLoader
 from tornado import web
 
 class Base(web.RequestHandler):
+    templname = ''
+    Form = None
+
+
     def get_current_user(self):
         cookie = self.get_secure_cookie('user')
         if not cookie: return False
@@ -79,6 +82,21 @@ class Base(web.RequestHandler):
             if not to: to = '/'
         super(Base, self).redirect(to)
 
+    def get_obj(self, Obj, obj_id=None):
+        if not obj_id:
+            obj = Obj.query.all()
+        else:
+            obj = Obj.get_by(id = int(id))
+        if not obj:
+            raise web.HTTPError(404)
+        return obj
+
+    def form_validate(self, form, **kwargs):
+        if not form.validate():
+            self.render(self.templname, form = form, **kwargs)
+            return False
+        return True
+
 
 class Error404(Base):
     def get(self):
@@ -111,12 +129,10 @@ class SignIn(Sign):
 
     def post(self):
         form = self.Form(self)
-        if not form.validate():
-            self.render(self.templname, form=form)
-            return
-        user = orm.Person.get_by(email=form.email.data)
-        self.login(user)
-        self.redirect()
+        if self.form_validate(form):
+            user = orm.Person.get_by(email=form.email.data)
+            self.login(user)
+            self.redirect()
 
 
 class SignUp(Sign):
@@ -128,17 +144,15 @@ class SignUp(Sign):
     
     def post(self):
         form = self.Form(self)
-        if not form.validate():
-            self.render(self.templname, form=form)
-            return
-        user = orm.Person(
-            name=form.name.data,
-            password=form.password.data,
-            email=form.email.data,
-        )
-        orm.session.commit()
-        self.login(user)
-        self.redirect()
+        if self.form_validate(form):
+            user = orm.Person(
+                name=form.name.data,
+                password=form.password.data,
+                email=form.email.data,
+            )
+            orm.session.commit()
+            self.login(user)
+            self.redirect()
 
 
 class SignOut(Sign):
@@ -150,10 +164,11 @@ class SignOut(Sign):
 class PersonPage(Base):
     def get(self, uid=None):
         if uid:
-            person = orm.Person.get_by(id=int(uid))
-        else:
+            person = get_obj(orm.Person, int(uid))
+        elif self.current_user:
             person = self.current_user
-        if not person: raise web.HTTPError(404)
+        else:
+            raise web.HTTPError(404)
         self.render('person.page.html', person=person)
 
 
@@ -172,18 +187,17 @@ class Settings(Base):
         if files:
             self.avatar_uploads(files['avatar'][0])
             return
+        #normal settings
         form = self.Form(self)
-        if not form.validate():
-            self.render(self.templname, form = form)
-            return
-        new_password = form.new_password.data
-        name = form.name.data
-        if new_password:
-            self.current_user.password = utils.string_hash(new_password)
-        if name:
-            self.current_user.name = name
-        orm.session.commit()
-        self.redirect()
+        if self.form_validate(form):
+            new_password = form.new_password.data
+            name = form.name.data
+            if new_password:
+                self.current_user.password = utils.string_hash(new_password)
+            if name:
+                self.current_user.name = name
+            orm.session.commit()
+            self.redirect()
 
     def avatar_uploads(self, avatar):
         #ToDo
