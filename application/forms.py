@@ -90,15 +90,15 @@ class Settings(Form):
     def validate_password(self, field):
         password = field.data
         new_password = self.new_password.data
-        new_password_repeat = self.new_password_repeat.data
         if not new_password:
             return # not change password.
-        elif new_password != new_password_repeat:
-            raise ValidationError(u'Opps, 两次密码输入不一致')
         elif utils.string_hash(password) != self.handler.current_user.password:
-            raise ValidationError(u'Opps, 密码输错了。')
+            raise ValidationError(u'原密码输错了。')
 
     def validate_new_password(self, field):
-        if field.data:
-            if len(field.data) < 8:
-                raise ValidationError(u'密码太短啦')
+        if not field.data:
+            return
+        if len(field.data) < 8:
+            raise ValidationError(u'密码太短啦')
+        elif field.data != self.new_password_repeat.data:
+            raise ValidationError(u'两次密码输入的不一样。')
