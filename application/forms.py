@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 # coding=utf-8
 import wtforms
-import orm
 import utils
 import Image
 import StringIO
@@ -79,8 +78,8 @@ class SignUp(Form):
         password_repeat = self.password_repeat.data
         if password != password_repeat:
             raise ValidationError(u'Opps, 两次密码输入不一致')
-        if utils.stupid_password(field.data):
-            raise ValidationError(u'你的密码太简单了！')
+        #if utils.stupid_password(field.data):
+        #    raise ValidationError(u'你的密码太简单了！')
 
 
 class Settings(Form):
@@ -111,7 +110,7 @@ class Avatar(Form):
     avatar = FileField(u'上传头像')
 
     def validate_avatar(self, field):
-        max_size = 1024 * 1024 * 2 #2MB
+        max_size = 1024 * 1024 * 2 #bit
         try:
             Image.open(StringIO.StringIO(
                 self.handler.request.files['avatar'][0]['body']))

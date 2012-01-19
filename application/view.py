@@ -94,6 +94,9 @@ class Error404(Base):
     def get(self):
         raise web.HTTPError(404)
 
+    def post(self):
+        raise web.HTTPError(404)
+
 
 class Home(Base):
     def get(self):
@@ -221,5 +224,5 @@ class Settings(Base):
 
     def avatar_resize(self, avatar):
         height = 160
-        weight = 160
+        weight = height
         return avatar.resize((height, weight))
