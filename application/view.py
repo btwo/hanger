@@ -78,7 +78,7 @@ class Base(web.RequestHandler):
         super(Base, self).redirect(to)
 
     def item(self, Item, itemid):
-        item = Item.get_by(id = int(id))
+        item = Item.get_by(id = int(itemid))
         if not item:
             raise web.HTTPError(404)
         return item 
@@ -96,11 +96,6 @@ class Error404(Base):
 
     def post(self):
         raise web.HTTPError(404)
-
-
-class Home(Base):
-    def get(self):
-        self.render('home.html')
 
 
 class Sign(Base):
@@ -226,3 +221,8 @@ class Settings(Base):
         height = 160
         weight = height
         return avatar.resize((height, weight))
+
+
+class Home(Base):
+    def get(self):
+        self.render('home.html')
