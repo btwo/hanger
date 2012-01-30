@@ -2,13 +2,9 @@
 # coding=utf-8
 import os
 import getpass
-import platform
+import readline
 
 from application.conf import settings
-
-if platform.system() is not 'Windows':
-    import readline
-
 from application import orm
 
 def init():
@@ -17,8 +13,8 @@ def init():
     orm.metadata.bind.echo = True
     orm.setup_all(True)
     os.mkdir(settings['avatar_path'])
-    print '---------'
-    print('All done, please edit application/conf.py'
+    print('---------'
+          'All done, please edit application/conf.py'
           'settings["cookie_secret"], and settings["hash_salt"]')
 
 def new_user():

@@ -2,8 +2,6 @@
 # coding=utf-8
 import os
 import json
-import traceback
-import httplib
 import utils
 import forms
 import StringIO
@@ -16,25 +14,26 @@ from tornado import web
 class Base(web.RequestHandler):
     def get_current_user(self):
         cookie = self.get_secure_cookie('user')
-        if not cookie: return False
-        user = json.loads(cookie)
-        user = Person.get_by(id=int(user['id']))
+        if not cookie:
+            return False
+        user_json = json.loads(cookie)
+        user = Person.get_by(id=int(user_json['id']))
+        if not user:
+            return False
         return user
 
-    def render_string(self, template_name, **kwargs):
+    def render_string(self, template_name, **methods):
         '''Template render by Jinja2.'''
-        methods = kwargs
         methods.update(
-            {
-                'xsrf': self.xsrf_form_html,
-                'request': self.request,
-                'settings': self.settings,
-                'me': self.current_user,
-                'url': self.settings['site_url'],
-                'static': self.static_url,
-                'handler': self,
-            })
-        methods.update(self.ui)
+            {'xsrf': self.xsrf_form_html,
+            'request': self.request,
+            'settings': self.settings,
+            'me': self.current_user,
+            'url': self.settings['site_url'],
+            'static': self.static_url,
+            'handler': self,}
+        )
+        methods.update(self.ui) # UI methods.
         template = self.get_template(template_name)
         html = template.render(methods)
         return utils.remove_space(html)
@@ -50,31 +49,24 @@ class Base(web.RequestHandler):
         return template
 
     def get_error_html(self, status_code, **kwargs):
-        code = status_code
-        try:
-            # add stack trace information
-            message = httplib.responses[status_code]
-            exception = "%s\n\n%s" % (kwargs["exception"],
-                traceback.format_exc())
-            template = "error.html"
-            if code == 404: template = 'error_404.html'
-            return self.render_string(
-                template,
-                code=code,
-                message=message,
-                exception=exception,
-            )
-        except Exception:
-            return super(Base, self).get_error_html(status_code, **kwargs)
+        if status_code is not 404:
+            super(Base, self).get_error_html(status_code, **kwargs)
+        template = 'error_404.html'
+        return self.render_string(
+            template,
+            code=code,
+        )
 
     def json_write(self, obj):
         self.set_header('Content-Type', 'application/json')
         self.write(json.dumps(obj))
 
-    def redirect(self, to=None):
+    def redirect(self, to = None):
+        if to:
+            super(Base, self).redirect(to)
+        to = self.get_argument("next", None)
         if not to:
-            to = self.get_argument("next", None)
-            if not to: to = '/'
+            to = '/'
         super(Base, self).redirect(to)
 
     def item(self, Item, itemid):
@@ -102,11 +94,10 @@ class Sign(Base):
     def login(self, user):
         '''LogIn user to secure cookie'''
         json_str = json.dumps(
-            {
-                'id': user.id,
-                'name': user.name,
-                'email': user.email,
-            })
+            {'id': user.id,
+            'name': user.name,
+            'email': user.email,}
+        )
         self.set_secure_cookie("user", json_str)
 
 
@@ -220,7 +211,8 @@ class Settings(Base):
     def avatar_resize(self, avatar):
         height = 160
         weight = height
-        return avatar.resize((height, weight))
+        avatar = avatar.resize((height, weight))
+        return avatar
 
 
 class Home(Base):
