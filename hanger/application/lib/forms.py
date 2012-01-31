@@ -5,7 +5,7 @@ import utils
 import Image
 import StringIO
 
-from orm import Person
+from model import Person
 from wtforms.fields import TextField, PasswordField, FileField
 from wtforms.validators import Required, Length, Email, ValidationError
 
@@ -28,7 +28,6 @@ class MultiDict(object):
 
 
 class Form(wtforms.Form):
-    handler = None
     def __init__(self, handler=None, **kwargs):
         formdata = None
         if handler:
@@ -44,7 +43,7 @@ class SignIn(Form):
     def validate_email(self, field):
         user = Person.get_by(email = field.data)
         if not user:
-            raise ValidationError(u'Email not found.')
+            raise ValidationError(u'Email 没有找到。')
 
     def validate_password(self, field):
         user = Person.get_by(email=self.email.data)
@@ -61,7 +60,8 @@ def name_validate(self, field):
         raise ValidationError(u'Opps，这个昵称已经有人在用了。')
 
 class SignUp(Form):
-    email = TextField(u'Email',
+    email = TextField(
+        u'Email',
         [Required(), Length(min=6), Length(max=120), Email()])
     name = TextField(u'称呼',
         [Required(), name_validate, Length(min=2), Length(max=18)])
@@ -110,11 +110,11 @@ class Avatar(Form):
     avatar = FileField(u'上传头像')
 
     def validate_avatar(self, field):
-        max_size = 1024 * 1024 * 2 #bit
+        filebody = self.handler.request.files['avatar'][0]['body']
         try:
-            Image.open(StringIO.StringIO(
-                self.handler.request.files['avatar'][0]['body']))
+            avatar = Image.open(StringIO.StringIO(filebody))
         except IOError:
             raise ValidationError(u'这不是一个图片')
-        if len(field.data) > max_size:
+        max_size = 1024 * 1024 * 2 #bit
+        if len(filebody) > max_size:
             raise ValidationError(u'文件太大！最多只能上传2MB的图片')

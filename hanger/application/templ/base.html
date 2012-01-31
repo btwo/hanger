@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Hanger - {%block tit%}一个小框架{%endblock%}</title>
+        <link rel="stylesheet" media="screen" href="{{static('style.css')}}">
+    </head>
+    <body>
+        {% block header %}
+        <header>
+            <div id='title'><a href="/">Hanger</a></div>
+            {% include 'inc/userbar.html' %}
+        </header>
+        {% endblock %}
+        {% block main %}{% endblock %}
+        {% block footer %}
+        <footer>powered by <a href="http://github.com/tioover/hanger/">Hanger</a>.</footer>
+        {% endblock %}
+    </body>
+</html>

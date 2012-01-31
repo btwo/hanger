@@ -1,8 +1,15 @@
-# 自用的Web骨架
+# Hanger
+## 简单明了的Web框架。
 
-包括了一些常用的设置，函数等等等等，能帮助快速开发。基于Tornado Web框架。
+一个基于[Tornado](http://www.tornadoweb.org/)以及其它许多代码库的Web微框架。
+
+有一些常用的功能和结构能节省开发时间，并且能迅速的修改，增删修改功能。
+
+使用 [WTFPL](http://sam.zoy.org/wtfpl/COPYING) 进行授权。
 
 ## ToDo
+
+* 可以让用户自行选择是否带有附加功能，如用户登录注册。
 * Redis 支持
 * 使用 Redis 储存session。
 * Email 找回密码。
@@ -10,11 +17,13 @@
 * 使用 sqlalchemy ORM
 
 ## 使用
-没有文档，需要熟悉Tornado Web框架。
 
 软件假定你使用的是Linux系统，使用Nginx反向代理Tornado Web Server。
 
+暂时没有文档
+
 ## 安装需求
+
 * Python 2.7
 * [Tornado](http://www.tornadoweb.org/)
 * [WTForms](http://wtforms.simplecodes.com/docs/dev/)
@@ -22,7 +31,3 @@
 * [Markdown2](https://github.com/trentm/python-markdown2)
 * [Elixir](http://elixir.ematia.de/trac/wiki)
 * [Python Image library(PIL)](http://www.pythonware.com/products/pil/)
-
-
-## 授权
-[WTFPL](http://sam.zoy.org/wtfpl/COPYING)

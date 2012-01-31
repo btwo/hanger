@@ -2,22 +2,25 @@
 # coding=utf-8
 import utils
 
-def para(handler, raw):
+def texttohtml(handler, text):
     '''Text to HTML.'''
-    raw = raw.split('\n')
-    result = ''
-    for p in raw:
-        p = p.strip()
-        if p:
-            result += '<p>' + p + '</p>\n' 
-    return result
+    text = utils.remove_space(text)
+    html = ''
+    para_list = text.split('\n')
+    for para in para_list:
+        html += '<p>%s</p>\n' % para
+    return html
 
-def field_maker(handler, field, class_=None):
+def field_maker(handler, field, class_ = None):
     '''WTForms field to HTML.'''
-    html = field.label() + '<br>\n' + field(class_=class_)
-    if field.errors:
+    html = ''
+    label = field.label()
+    field_html = field(class_ = class_)
+    errors = field.errors
+    html +=  label + '<br>\n' + field_html
+    if errors:
         html += '\n<ul class="errors">\n'
-        for error in field.errors:
+        for error in errors:
             html += '\n<li class="error"><p>' + error + '<p></li>\n'
         html += '</ul>\n'
     html = '<p>' + html + '</p>\n'
@@ -27,8 +30,8 @@ def avatar(handler, user):
     avatar = user.avatar
     if (not avatar) or (avatar == 'gravatar'):
         return utils.gravatar(user.email)
-    else:
-        return handler.static_url('avatar/'+user.avatar)
+    return handler.static_url('avatar/'+user.avatar)
+
 
 def gravatar(handler, user):
     return utils.gravatar(user.email)

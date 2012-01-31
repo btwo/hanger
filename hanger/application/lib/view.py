@@ -7,80 +7,10 @@ import forms
 import StringIO
 import Image
 
-from orm import Person, session
-from jinja2 import Environment, FileSystemLoader
+from base import Base
+from model import Person
+from elixir import session
 from tornado import web
-
-class Base(web.RequestHandler):
-    def get_current_user(self):
-        cookie = self.get_secure_cookie('user')
-        if not cookie:
-            return False
-        user_json = json.loads(cookie)
-        user = Person.get_by(id=int(user_json['id']))
-        if not user:
-            return False
-        return user
-
-    def render_string(self, template_name, **methods):
-        '''Template render by Jinja2.'''
-        methods.update(
-            {'xsrf': self.xsrf_form_html,
-            'request': self.request,
-            'settings': self.settings,
-            'me': self.current_user,
-            'url': self.settings['site_url'],
-            'static': self.static_url,
-            'handler': self,}
-        )
-        methods.update(self.ui) # UI methods.
-        template = self.get_template(template_name)
-        html = template.render(methods)
-        return utils.remove_space(html)
-
-    def get_template(self, template_name):
-        '''Get jinja2 template object.'''
-        env = Environment(
-            loader = FileSystemLoader(self.settings['template_path']),
-            auto_reload = self.settings['debug'],
-            autoescape = False,
-        )
-        template = env.get_template(template_name)
-        return template
-
-    def get_error_html(self, status_code, **kwargs):
-        if status_code is not 404:
-            super(Base, self).get_error_html(status_code, **kwargs)
-        template = 'error_404.html'
-        return self.render_string(
-            template,
-            code=code,
-        )
-
-    def json_write(self, obj):
-        self.set_header('Content-Type', 'application/json')
-        self.write(json.dumps(obj))
-
-    def redirect(self, to = None):
-        if to:
-            super(Base, self).redirect(to)
-        to = self.get_argument("next", None)
-        if not to:
-            to = '/'
-        super(Base, self).redirect(to)
-
-    def item(self, Item, itemid):
-        item = Item.get_by(id = int(itemid))
-        if not item:
-            raise web.HTTPError(404)
-        return item 
-
-    def form_validate(self, form, **kwargs):
-        if not form.validate():
-            self.render(self.templname, form = form, **kwargs)
-            return False
-        return True
-
 
 class Error404(Base):
     def get(self):
@@ -93,17 +23,17 @@ class Error404(Base):
 class Sign(Base):
     def login(self, user):
         '''LogIn user to secure cookie'''
-        json_str = json.dumps(
+        json_obj = json.dumps(
             {'id': user.id,
             'name': user.name,
             'email': user.email,}
         )
-        self.set_secure_cookie("user", json_str)
+        self.set_secure_cookie("user", json_obj)
 
 
 class SignIn(Sign):
     Form = forms.SignIn
-    templname = 'sign.in.html' #tamplate file name.
+    templname = 'SignIn.html' #tamplate file name.
 
     def get(self):
         self.render(self.templname, form=self.Form())
@@ -118,7 +48,7 @@ class SignIn(Sign):
 
 
 class SignUp(Sign):
-    templname = 'sign.up.html'
+    templname = 'SignUp.html'
     Form = forms.SignUp
 
     def get(self):
@@ -145,20 +75,15 @@ class SignOut(Sign):
 
 
 class PersonPage(Base):
-    def get(self, uid=None):
-        if uid:
-            person = self.item(Person, int(uid))
-        elif self.current_user:
-            person = self.current_user
-        else:
-            raise web.HTTPError(404)
-        self.render('person.page.html', person=person)
+    def get(self, uid):
+        person = self.item(Person, int(uid))
+        self.render('PersonPage.html', person=person)
 
 
 class Settings(Base):
     Form = forms.Settings
     AvatarForm = forms.Avatar
-    templname = 'settings.html'
+    templname = 'Settings.html'
 
     @web.authenticated
     def get(self):
@@ -184,7 +109,9 @@ class Settings(Base):
             self.redirect()
 
     def avatar_uploads(self, avatar_form):
-        if not self.form_validate(avatar_form):
+        if not avatar_form.validate():
+            self.render(
+                self.templname, form = self.Form(), avatar_form = avatar_form)
             return
         avatar = Image.open(StringIO.StringIO(
             self.request.files['avatar'][0]['body']))
@@ -217,4 +144,4 @@ class Settings(Base):
 
 class Home(Base):
     def get(self):
-        self.render('home.html')
+        self.render('Home.html')
