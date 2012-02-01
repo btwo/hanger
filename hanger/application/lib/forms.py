@@ -115,6 +115,6 @@ class Avatar(Form):
             avatar = Image.open(StringIO.StringIO(filebody))
         except IOError:
             raise ValidationError(u'这不是一个图片')
-        max_size = 1024 * 1024 * 2 #bit
+        max_size = 1024 * 1024 #1Mb
         if len(filebody) > max_size:
-            raise ValidationError(u'文件太大！最多只能上传2MB的图片')
+            raise ValidationError(u'文件太大！最多只能上传1Mb的图片')

@@ -6,13 +6,7 @@ import elixir
 import lib
 
 from config import settings
-from tornado import web, options, httpserver, ioloop
-
-class App(web.Application):
-    def __init__(self):
-        # "handlers" in "__init__.py".
-        super(App, self).__init__(lib.handlers, **settings)
-
+from tornado import options, httpserver, ioloop
 
 def run():
     database()
@@ -38,7 +32,7 @@ def log_config():
     ) 
 
 def server():
-    http_server = httpserver.HTTPServer(App())
+    http_server = httpserver.HTTPServer(lib.App())
     http_server.listen(settings['port'])
     ioloop.IOLoop.instance().start() #Start IO Loop.
 
