@@ -44,6 +44,7 @@ class Base(web.RequestHandler):
     def get_error_html(self, status_code, **kwargs):
         if status_code == 404:
             return self.render_string('errors/404.html')
+        self.write(str(status_code) + 'error')
 
     def json_write(self, obj):
         self.set_header('Content-Type', 'application/json')
