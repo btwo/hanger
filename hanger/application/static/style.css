@@ -1,0 +1,12 @@
+a {
+    text-decoration: none;
+    color: #398b39;
+}
+
+body {
+    font-family: Monaco, 'Trebuchet MS', monospace, verdana;
+}
+
+body > footer {
+    font-size: 12px;
+}
