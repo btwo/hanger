@@ -10,22 +10,24 @@ from jinja2 import Environment, FileSystemLoader
 class Base(web.RequestHandler):
     def get_current_user(self):
         cookie = self.get_secure_cookie('user')
-        if cookie:
-            user_json = json.loads(cookie)
-            user = Person.get_by(id=int(user_json['id']))
-            if user: return user
-        return False
+        if not cookie:
+            return False
+        user_json = json.loads(cookie)
+        user = Person.get_by(id=int(user_json['id']))
+        if not user:
+            return False
+        return user
 
     def render_string(self, template_name, **methods):
         '''Template render by Jinja2.'''
-        methods.update(
-            {'xsrf': self.xsrf_form_html,
+        methods.update({
+            'xsrf': self.xsrf_form_html,
             'request': self.request,
             'settings': self.settings,
             'me': self.current_user,
             'static': self.static_url,
-            'handler': self,}
-        )
+            'handler': self,
+        })
         methods.update(self.ui) # UI methods.
         template = self.get_template(template_name)
         html = template.render(methods)

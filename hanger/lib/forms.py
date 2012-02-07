@@ -60,8 +60,7 @@ def name_validate(self, field):
         raise ValidationError(u'Opps，这个昵称已经有人在用了。')
 
 class SignUp(Form):
-    email = TextField(
-        u'Email',
+    email = TextField(u'Email',
         [Required(), Length(min=6), Length(max=120), Email()])
     name = TextField(u'称呼',
         [Required(), name_validate, Length(min=2), Length(max=18)])
@@ -78,8 +77,6 @@ class SignUp(Form):
         password_repeat = self.password_repeat.data
         if password != password_repeat:
             raise ValidationError(u'Opps, 两次密码输入不一致')
-        #if utils.stupid_password(field.data):
-        #    raise ValidationError(u'你的密码太简单了！')
 
 
 class Settings(Form):
@@ -98,8 +95,7 @@ class Settings(Form):
             raise ValidationError(u'原密码输错了。')
 
     def validate_new_password(self, field):
-        if not field.data:
-            return
+        if not field.data: return
         if len(field.data) < 8:
             raise ValidationError(u'密码太短啦')
         elif field.data != self.new_password_repeat.data:
@@ -111,10 +107,10 @@ class Avatar(Form):
 
     def validate_avatar(self, field):
         filebody = self.handler.request.files['avatar'][0]['body']
-        try:
-            avatar = Image.open(StringIO.StringIO(filebody))
-        except IOError:
-            raise ValidationError(u'这不是一个图片')
         max_size = 1024 * 1024 #1Mb
         if len(filebody) > max_size:
             raise ValidationError(u'文件太大！最多只能上传1Mb的图片')
+        try:
+            Image.open(StringIO.StringIO(filebody))
+        except IOError:
+            raise ValidationError(u'这不是一个图片')
