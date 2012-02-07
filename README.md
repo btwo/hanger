@@ -20,7 +20,11 @@
 
 软件假定你使用的是Linux系统，使用Nginx反向代理Tornado Web Server。
 
-暂时没有文档
+暂时没有文档。
+
+可以使用hanger.py来快速创建项目：
+
+	./hanger.py -n <ProjectName> -t <ProjectPath>
 
 ## 安装需求
 
