@@ -12,50 +12,38 @@ from model import Person
 from elixir import session
 from tornado import web
 
-class Error404(Base):
-    def get(self):
-        raise web.HTTPError(404)
-
-    def post(self):
-        raise web.HTTPError(404)
-
-
 class Sign(Base):
     def login(self, user):
         '''LogIn user to secure cookie'''
         json_obj = json.dumps(
-            {'id': user.id,
-            'name': user.name,
-            'email': user.email,}
+            {
+                'id': user.id,
+                'name': user.name,
+                'email': user.email,
+            }
         )
         self.set_secure_cookie("user", json_obj)
 
 
 class SignIn(Sign):
-    Form = forms.SignIn
-    templname = 'SignIn.html' #tamplate file name.
-
     def get(self):
-        self.render(self.templname, form=self.Form())
+        self.render()
 
     def post(self):
-        form = self.Form(self)
+        form = self.form_loader()
         if not self.form_validate(form):
             return
-        user = Person.get_by(email=form.email.data)
+        user = Person.get_by(email = form.email.data)
         self.login(user)
         self.redirect()
 
 
 class SignUp(Sign):
-    templname = 'SignUp.html'
-    Form = forms.SignUp
-
     def get(self):
-        self.render(self.templname, form=self.Form())
+        self.render()
     
     def post(self):
-        form = self.Form(self)
+        form = self.form_loader()
         if not self.form_validate(form):
             return
         user = Person(
@@ -76,42 +64,45 @@ class SignOut(Sign):
 
 class PersonPage(Base):
     def get(self, uid):
-        person = self.item(Person, int(uid))
-        self.render('PersonPage.html', person=person)
+        person = self.getitem(Person, uid)
+        self.render(person = person)
 
 
 class Settings(Base):
-    Form = forms.Settings
-    AvatarForm = forms.Avatar
-    templname = 'Settings.html'
+    def __init__(self, *args):
+        super(Settings, self).__init__(*args)
+        self.forms['Avatar'] = forms.Avatar
 
     @web.authenticated
     def get(self):
-        self.render(self.templname, form=self.Form(),
-            avatar_form = self.AvatarForm())
+        self.render()
     
     @web.authenticated
     def post(self):
-        form = self.Form(self)
-        avatar_form = self.AvatarForm(self)
         if self.request.files:
-            self.avatar_uploads(avatar_form)
-            return
-        #normal settings
-        if self.form_validate(form, avatar_form = avatar_form):
-            new_password = form.new_password.data
-            name = form.name.data
-            if new_password:
-                self.current_user.password = utils.string_hash(new_password)
-            if name:
-                self.current_user.name = name
-            session.commit()
-            self.redirect()
+            self.avatar_uploads()
+        else:
+            self.do_set()
+        return
 
-    def avatar_uploads(self, avatar_form):
-        if not avatar_form.validate():
-            self.render(
-                self.templname, form = self.Form(), avatar_form = avatar_form)
+    def do_set(self):
+        #normal settings
+        form = self.form_loader()
+        if not self.form_validate(form):
+            return
+        new_password = form.new_password.data
+        username = form.name.data
+        if new_password: # change password.
+            self.current_user.password = utils.string_hash(new_password)
+        if username: # change name.
+            self.current_user.name = username
+        session.commit()
+        self.redirect()
+
+    def avatar_uploads(self):
+        form_key = 'Avatar'
+        form = self.form_loader(form_key)
+        if not self.form_validate(form, form_key):
             return
         avatar = Image.open(StringIO.StringIO(
             self.request.files['avatar'][0]['body']))
@@ -144,4 +135,4 @@ class Settings(Base):
 
 class Home(Base):
     def get(self):
-        self.render('Home.html')
+        self.render()

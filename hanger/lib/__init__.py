@@ -5,7 +5,17 @@ import model
 
 from tornado import web
 from config import settings
-from view import Home, SignIn, SignUp, SignOut, PersonPage, Error404, Settings
+from base import Base
+from view import Home, SignIn, SignUp, SignOut, PersonPage, Settings
+
+class Error404(Base):
+    '''If url not belonging to any handler, raise 404error.'''
+    def get(self):
+        raise web.HTTPError(404)
+
+    def post(self):
+        raise web.HTTPError(404)
+
 
 handlers = [
     (r'/?', Home),
@@ -14,7 +24,7 @@ handlers = [
     (r'/signout/?', SignOut),
     (r'/person/(\d+)/?', PersonPage),
     (r'/settings/?', Settings),
-    (r'.*', Error404), #If url not belonging to any handler, raise 404error.
+    (r'.*', Error404),
 ]
 
 class App(web.Application):

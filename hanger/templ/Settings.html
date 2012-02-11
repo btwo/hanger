@@ -7,18 +7,18 @@
         <h2>头像</h2>
         {{xsrf()}}
         <img src="{{avatar(me)}}">
-        {{field_maker(avatar_form.avatar)}}
+        {{field_maker(forms['Avatar'].avatar)}}
         <p><input type="submit" value="上传头像"></p>
         {{avatar_error}}
     </form>
     <form method='post'>
         {{xsrf()}}
-        {{field_maker(form.name)}}
+        {{field_maker(forms['Settings'].name)}}
         <div id="change_password">
             <h2>修改密码</h2>
-            {{field_maker(form.password)}}
-            {{field_maker(form.new_password)}}
-            {{field_maker(form.new_password_repeat)}}
+            {{field_maker(forms['Settings'].password)}}
+            {{field_maker(forms['Settings'].new_password)}}
+            {{field_maker(forms['Settings'].new_password_repeat)}}
         </div>
         <input type="submit" value="修改">
     </form>
