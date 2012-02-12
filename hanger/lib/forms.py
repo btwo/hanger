@@ -86,10 +86,7 @@ class ChangePassword(Form):
 
     def validate_password(self, field):
         current_user = self.handler.current_user
-        password = field.data
-        new_password = self.new_password.data
-        hashed_pswd = utils.string_hash(password, salt = current_user.email)
-        if hashed_pswd != current_user.password:
+        if current_user.hash_password(field.data) != current_user.password:
             raise ValidationError(u'原密码输错了。')
 
     def validate_new_password(self, field):
@@ -97,17 +94,12 @@ class ChangePassword(Form):
             raise ValidationError(u'两次密码输入的不一样。')
 
 
-class Settings(Form):
+class ChangeName(Form):
     name = TextField(u'更改称呼',
         [name_validate, Length(max=10)])
-    password = PasswordField(u'原密码')
-    new_password = PasswordField(u'新密码')
-    new_password_repeat = PasswordField(u'再输一遍')
 
 
-
-
-class Avatar(Form):
+class ChangeAvatar(Form):
     avatar = FileField(u'上传头像')
 
     def validate_avatar(self, field):

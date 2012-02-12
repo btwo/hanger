@@ -2,13 +2,11 @@
 # coding=utf-8
 import os
 import json
-import utils
-import forms
 import StringIO
 import Image
 
 from base import Base
-from model import Person
+from model import getitem, Person
 from elixir import session
 from tornado import web
 
@@ -64,14 +62,17 @@ class SignOut(Sign):
 
 class PersonPage(Base):
     def get(self, uid):
-        person = self.getitem(Person, uid)
+        person = getitem(Person, uid)
+        print person
         self.render(person = person)
 
 
 class Settings(Base):
     def __init__(self, *args):
         super(Settings, self).__init__(*args)
-        self.forms['Avatar'] = forms.Avatar
+        self.form_add('ChangeAvatar')
+        self.form_add('ChangePassword')
+        self.form_add('ChangeName')
 
     @web.authenticated
     def get(self):
@@ -79,28 +80,31 @@ class Settings(Base):
     
     @web.authenticated
     def post(self):
+        new_password = self.form_loader('ChangePassword')
+        new_name = self.form_loader('ChangeName')
         if self.request.files:
             self.avatar_uploads()
-        else:
-            self.do_set()
-        return
+        elif new_password.password.data:
+            self.change_password(new_password)
+        elif new_name.name.data:
+            self.change_name(new_name)
+        self.redirect('')
 
-    def do_set(self):
+    def change_name(self, form):
         #normal settings
-        form = self.form_loader()
-        if not self.form_validate(form):
+        if not self.form_validate(form, 'ChangeName'):
             return
-        new_password = form.new_password.data
-        username = form.name.data
-        if new_password: # change password.
-            self.current_user.password = utils.string_hash(new_password)
-        if username: # change name.
-            self.current_user.name = username
+        self.current_user.change_name(form.name.data)
         session.commit()
-        self.redirect()
+
+    def change_password(self, form):
+        if not self.form_validate(form, 'ChangePassword'): # change password.
+            return
+        self.current_user.change_password(form.new_password.data)
+        session.commit()
 
     def avatar_uploads(self):
-        form_key = 'Avatar'
+        form_key = 'ChangeAvatar'
         form = self.form_loader(form_key)
         if not self.form_validate(form, form_key):
             return
@@ -115,8 +119,9 @@ class Settings(Base):
     
     def remove_old_avatar(self):
         old_file = self.current_user.avatar
-        if old_file:
-            os.remove(self.settings['avatar_path'] + old_file)
+        if not old_file:
+            return
+        os.remove(self.settings['avatar_path'] + old_file)
 
     def avatar_save(self, avatar):
         path = self.settings['avatar_path']

@@ -32,6 +32,5 @@ def avatar(handler, user):
         return utils.gravatar(user.email)
     return handler.static_url('avatar/'+user.avatar)
 
-
 def gravatar(handler, user):
     return utils.gravatar(user.email)

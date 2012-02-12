@@ -3,23 +3,27 @@
 {% block main %}
 <article id="settings">
     <h1>用户设置</h1>
-    <form method='post' enctype="multipart/form-data">
+    <form method='post' enctype="multipart/form-data" id='change_avatar'>
         <h2>头像</h2>
         {{xsrf()}}
         <img src="{{avatar(me)}}">
-        {{field_maker(forms['Avatar'].avatar)}}
+        {{field_maker(forms['ChangeAvatar'].avatar)}}
         <p><input type="submit" value="上传头像"></p>
         {{avatar_error}}
     </form>
-    <form method='post'>
+
+    <form method='post' id='change_name'>
+		<h2>修改名称</h2>
         {{xsrf()}}
-        {{field_maker(forms['Settings'].name)}}
-        <div id="change_password">
-            <h2>修改密码</h2>
-            {{field_maker(forms['Settings'].password)}}
-            {{field_maker(forms['Settings'].new_password)}}
-            {{field_maker(forms['Settings'].new_password_repeat)}}
-        </div>
+        {{field_maker(forms['ChangeName'].name)}}
+		<input type='submit' value='修改'>
+    </form>
+
+    <form method='post' id='change_password'>
+		<h2>修改密码</h2>
+		{{field_maker(forms['ChangePassword'].password)}}
+		{{field_maker(forms['ChangePassword'].new_password)}}
+		{{field_maker(forms['ChangePassword'].new_password_repeat)}}
         <input type="submit" value="修改">
     </form>
 </article>

@@ -1,8 +1,10 @@
 #!/usr/bin/env python2
 # coding=utf-8
 import os
+import logging
 
 from lib import ui
+from tornado import options
 
 PATH = os.path.split(os.path.realpath(__file__))[0] 
 settings = {}
@@ -20,3 +22,14 @@ settings['login_url'] = '/signin/'
 settings['xsrf_cookies'] = True
 settings['cookie_secret'] = 'ThisCookieSecret(=w=)' #TODO random secret.
 #TODO: MySQL.
+
+def log_config():
+    if settings['debug']:
+        options.parse_command_line()
+    else:
+        logging.basicConfig(
+            #set log output.
+            filename = settings['log_path'],
+            level = logging.WARN,
+        ) 
+    return

@@ -2,6 +2,7 @@
 # coding=utf-8 
 import json
 import utils
+import forms
 
 from tornado import web
 from model import Person
@@ -20,18 +21,20 @@ class Base(web.RequestHandler):
         self.templname = name + '.html'
         # default form.
         try:
-            import forms
             self.forms[name] = eval('forms.' + name)
         except AttributeError:
             pass
 
-    def render(self, formdict = None, **kwargs):
-        forms = {}
-        for key in self.forms:
-            forms[key] = self.forms[key]() # Instance of form.
-        if formdict:
-            forms.update(formdict) # merger.
-        super(Base, self).render(self.templname, forms = forms, **kwargs)
+    def json_write(self, obj):
+        self.set_header('Content-Type', 'application/json')
+        self.write(json.dumps(obj))
+
+    def redirect(self, path = None):
+        if not path:
+            path = self.get_argument("next", None)
+            if not path:
+                path = '/'
+        super(Base, self).redirect(path)
 
     def get_current_user(self):
         cookie = self.get_secure_cookie('user')
@@ -43,22 +46,32 @@ class Base(web.RequestHandler):
             return False
         return user
 
-    def render_string(self, template_name, **methods):
+    # These is templates handle methods.
+    def render(self, formobj_dict = None, **kwargs):
+        # Auto load form.
+        formdict = {}
+        for key in self.forms:
+            formdict[key] = self.forms[key]() # Instance of form.
+        if formobj_dict:
+            formdict.update(formobj_dict) # merger.
+        super(Base, self).render(self.templname, forms = formdict, **kwargs)
+
+    def render_string(self, template_name, **kwargs):
         '''Template render by Jinja2.'''
-        methods.update(
-            {
-                'xsrf': self.xsrf_form_html,
-                'request': self.request,
-                'settings': self.settings,
-                'me': self.current_user,
-                'static': self.static_url,
-                'handler': self,
-            }
-        )
-        methods.update(self.ui) # Enabled tornado UI methods.
+        default = {
+            'xsrf': self.xsrf_form_html,
+            'request': self.request,
+            'settings': self.settings,
+            'me': self.current_user,
+            'static': self.static_url,
+            'handler': self,
+        }
+        kwargs.update(default)
+        kwargs.update(self.ui) # Enabled tornado UI methods.
         template = self.get_template(template_name)
-        html = template.render(methods)
-        return utils.remove_space(html) #remove space in line head and end.
+        html = template.render(**kwargs) #Render template.
+        html = utils.remove_space(html) #remove space in line head and end.
+        return html 
 
     def get_template(self, template_name):
         '''Get jinja2 template object.'''
@@ -78,33 +91,24 @@ class Base(web.RequestHandler):
     #        self.write(str(status_code) + ' error')
     #    return
 
-    def json_write(self, obj):
-        self.set_header('Content-Type', 'application/json')
-        self.write(json.dumps(obj))
-
-    def redirect(self, path = None):
-        if not path:
-            path = self.get_argument("next", None)
-            if not path:
-                path = '/'
-        super(Base, self).redirect(path)
-
-    def getitem(self, Item, itemid):
-        item = Item.get_by(id = int(itemid))
-        if not item:
-            raise web.HTTPError(404)
-        return item 
-
+    # These is form handle methods.
     def form_loader(self, key = None):
+        '''Return instance of form.'''
         if not key:
             key = self.name
         form = self.forms[self.name]
         return form(self)
 
+    def form_add(self, form_name):
+        '''Add form to self.forms. '''
+        self.forms[form_name] = eval('forms.' + form_name)
+
     def form_validate(self, form, key = None, **kwargs):
+        '''Automated handle of Forms validate.'''
         if not key:
-            key = self.name
+            key = self.name # default form key.
         if not form.validate():
             self.render({key: form}, **kwargs)
             return False
-        return True
+        else:
+            return True
