@@ -5,7 +5,7 @@ import utils
 import forms
 
 from tornado import web
-from model import Person
+from model import getitem, Person
 from jinja2 import Environment, FileSystemLoader
 
 class Base(web.RequestHandler):
@@ -41,7 +41,7 @@ class Base(web.RequestHandler):
         if not cookie:
             return False
         user_json = json.loads(cookie)
-        user = Person.get_by(id=int(user_json['id']))
+        user = getitem(Person, user_json['id'], show_error = False)
         if not user:
             return False
         return user

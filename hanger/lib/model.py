@@ -31,8 +31,8 @@ class Person(Entity):
     def change_name(self, name):
         self.name = escape(name)
 
-def getitem(Item, itemid):
+def getitem(Item, itemid ,show_error = True):
     item = Item.get_by(id = int(itemid))
-    if not item:
+    if show_error and not item:
         raise web.HTTPError(404) 
     return item
