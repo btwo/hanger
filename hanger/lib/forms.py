@@ -77,6 +77,25 @@ class SignUp(Form):
         if password != password_repeat:
             raise ValidationError(u'Opps, 两次密码输入不一致')
 
+class ChangePassword(Form):
+    password = PasswordField(u'原密码', [Length(min = 6), Length(max = 30)])
+    new_password = PasswordField(u'新密码',
+        [Length(min = 6), Length(max = 30)])
+    new_password_repeat = PasswordField(u'再输一遍', 
+        [Length(min = 6), Length(max = 30)])
+
+    def validate_password(self, field):
+        current_user = self.handler.current_user
+        password = field.data
+        new_password = self.new_password.data
+        hashed_pswd = utils.string_hash(password, salt = current_user.email)
+        if hashed_pswd != current_user.password:
+            raise ValidationError(u'原密码输错了。')
+
+    def validate_new_password(self, field):
+        if field.data != self.new_password_repeat.data:
+            raise ValidationError(u'两次密码输入的不一样。')
+
 
 class Settings(Form):
     name = TextField(u'更改称呼',
@@ -85,20 +104,7 @@ class Settings(Form):
     new_password = PasswordField(u'新密码')
     new_password_repeat = PasswordField(u'再输一遍')
 
-    def validate_password(self, field):
-        password = field.data
-        new_password = self.new_password.data
-        if not new_password:
-            return # not change password.
-        elif utils.string_hash(password) != self.handler.current_user.password:
-            raise ValidationError(u'原密码输错了。')
 
-    def validate_new_password(self, field):
-        if not field.data: return
-        if len(field.data) < 8:
-            raise ValidationError(u'密码太短啦')
-        elif field.data != self.new_password_repeat.data:
-            raise ValidationError(u'两次密码输入的不一样。')
 
 
 class Avatar(Form):

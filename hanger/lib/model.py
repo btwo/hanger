@@ -18,5 +18,5 @@ class Person(Entity):
     def __init__(self, name, email, password):
         self.name = escape(name)
         self.email = escape(email)
-        self.password = string_hash(password, salt = name)
+        self.password = string_hash(password, salt = self.email)
         self.created = datetime.datetime.now()
