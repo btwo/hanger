@@ -25,9 +25,3 @@ def field_maker(handler, field, class_ = None):
         html += '</ul>\n'
     html = '<p>' + html + '</p>\n'
     return html
-
-def avatar(handler, user):
-    avatar = user.avatar
-    if (not avatar) or (avatar == 'gravatar'):
-        return utils.gravatar(user.email)
-    return handler.static_url('avatar/'+user.avatar)

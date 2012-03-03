@@ -5,7 +5,7 @@ import utils
 import forms
 
 from tornado import web
-from model import getitem, Person
+from model import getitem
 from jinja2 import Environment, FileSystemLoader
 
 class BaseHandler(web.RequestHandler):
@@ -117,13 +117,3 @@ class Base(JinjaHandler):
             if not path:
                 path = '/'
         super(Base, self).redirect(path)
-
-    def get_current_user(self):
-        cookie = self.get_secure_cookie('user')
-        if not cookie:
-            return False
-        user_json = json.loads(cookie)
-        user = getitem(Person, user_json['id'], show_error = False)
-        if not user:
-            return False
-        return user
