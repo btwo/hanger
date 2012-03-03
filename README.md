@@ -18,13 +18,9 @@
 
 ## 使用
 
-软件假定你使用的是Linux系统，使用Nginx反向代理Tornado Web Server。
+假定你使用的是Linux系统，使用Nginx反向代理Tornado Web Server。
 
-暂时没有文档。
-
-可以使用hanger.py来快速创建项目：
-
-	./hanger.py -n <ProjectName> -t <ProjectPath>
+详细请自行阅读代码，这里有一份[简单的使用指南](https://github.com/tioover/hanger/wiki)。
 
 ## 安装需求
 
