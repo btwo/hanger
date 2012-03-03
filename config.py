@@ -3,19 +3,19 @@
 import os
 import logging
 
+from os.path import join
 from app import ui
 from tornado import options
 
-PATH = os.path.split(os.path.realpath(__file__))[0] 
+path = os.path.split(os.path.realpath(__file__))[0] 
 settings = {}
 settings['debug'] = True
 settings['ui_methods'] = ui
 settings['port'] = 8888
 # Path
-settings['template_path'] = PATH + '/templ'
-settings['static_path'] = PATH + '/static'
-settings['log_path'] = PATH + '/error.log'
-settings['avatar_path'] = settings['static_path'] + '/avatar/'
+settings['template_path'] = join(path, 'templ')
+settings['static_path'] = join(path, 'static')
+settings['log_path'] = join(path, 'error.log')
 # url
 settings['login_url'] = '/signin/'
 # Security
