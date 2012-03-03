@@ -70,6 +70,7 @@ class PersonPage(Base):
 class Settings(Base):
     def __init__(self, *args):
         super(Settings, self).__init__(*args)
+        self.avatar_path = os.path.join(self.settings['static_path'], 'avatar')
         self.form_add('ChangeAvatar')
         self.form_add('ChangePassword')
         self.form_add('ChangeName')
@@ -88,7 +89,7 @@ class Settings(Base):
             self.change_password(new_password)
         elif new_name.name.data:
             self.change_name(new_name)
-        self.redirect('')
+        self.redirect('/settings')
 
     def change_name(self, form):
         #normal settings
@@ -114,21 +115,20 @@ class Settings(Base):
         filename = self.avatar_save(avatar)
         self.current_user.avatar = filename
         session.commit()
-        self.redirect('/settings')
         return
     
     def remove_old_avatar(self):
         old_file = self.current_user.avatar
         if not old_file:
             return
-        os.remove(self.settings['avatar_path'] + old_file)
+        os.remove(os.path.join(self.avatar_path, old_file))
 
     def avatar_save(self, avatar):
-        path = self.settings['avatar_path']
         uid = str(self.current_user.id)
-        filename = uid + '.' + avatar.format
+        filename = uid + '.' + avatar.format.lower()
         avatar = self.avatar_resize(avatar)
-        avatar.save(path + filename, avatar.format)
+        save_path = os.path.join(self.avatar_path, filename)
+        avatar.save(save_path, avatar.format)
         return filename
 
     def avatar_resize(self, avatar):

@@ -30,7 +30,7 @@ class FormHandler(BaseHandler):
         '''Return instance of form.'''
         if not key:
             key = self.name
-        form = self.forms[self.name]
+        form = self.forms[key]
         return form(self)
 
     def form_add(self, form_name):
