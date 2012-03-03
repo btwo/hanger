@@ -3,7 +3,7 @@
 import os
 import logging
 
-from lib import ui
+from app import ui
 from tornado import options
 
 PATH = os.path.split(os.path.realpath(__file__))[0] 
@@ -14,14 +14,13 @@ settings['port'] = 8888
 # Path
 settings['template_path'] = PATH + '/templ'
 settings['static_path'] = PATH + '/static'
-settings['log_path'] = PATH + '/app.log'
+settings['log_path'] = PATH + '/error.log'
 settings['avatar_path'] = settings['static_path'] + '/avatar/'
 # url
 settings['login_url'] = '/signin/'
 # Security
 settings['xsrf_cookies'] = True
-settings['cookie_secret'] = 'ThisCookieSecret(=w=)' #TODO random secret.
-#TODO: MySQL.
+settings['cookie_secret'] = 'Orz'
 
 def log_config():
     if settings['debug']:

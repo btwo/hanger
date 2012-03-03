@@ -2,15 +2,17 @@
 # coding=utf-8
 import os
 import elixir
-import lib
+import app
 
 from config import settings, log_config
 from tornado import httpserver, ioloop
 
-def run():
+def runserver():
     database()
     log_config()
-    server()
+    http_server = httpserver.HTTPServer(app.App())
+    http_server.listen(settings['port'])
+    ioloop.IOLoop.instance().start() #Start IO Loop.
 
 def database():
     db_filename = 'sqlite'
@@ -21,10 +23,5 @@ def database():
         elixir.create_all()
     elixir.metadata.bind.echo = False
 
-def server():
-    http_server = httpserver.HTTPServer(lib.App())
-    http_server.listen(settings['port'])
-    ioloop.IOLoop.instance().start() #Start IO Loop.
-
 if __name__ == '__main__':
-    run()
+    runserver()
