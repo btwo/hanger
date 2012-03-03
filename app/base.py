@@ -66,12 +66,14 @@ class TemplateHandler(FormHandler):
         super(TemplateHandler, self).render(self.templname, forms = formdict,
             **kwargs)
 
-    #def get_error_html(self, status_code, **kwargs):
-    #    if status_code == 404:
-    #        return self.render_string('errors/404.html', **kwargs)
-    #    else:
-    #        self.write(str(status_code) + ' error')
-    #    return
+    def get_error_html(self, status_code, **kwargs):
+        if status_code == 404:
+            return self.render_string('errors/404.html', **kwargs)
+        elif status_code == 500:
+            return self.render_string('errors/500.html', **kwargs)
+        else:
+            self.write('Sorry, server error.')
+        return
 
 
 class JinjaHandler(TemplateHandler):
