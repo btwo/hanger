@@ -48,7 +48,7 @@ def after(time):
         return unicode(diff.seconds / (60*60)) + u'小时前'
     elif diff.seconds >= 60:
         return unicode(diff.seconds / 60) + u'分钟前'
-    elif diff.seconds > 20:
+    elif diff.seconds > 5:
         return unicode(diff.seconds) + u'秒前'
     return u'此时'
     

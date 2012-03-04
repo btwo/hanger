@@ -9,8 +9,8 @@ from model import Person
 from wtforms.fields import TextField, TextAreaField, PasswordField, FileField
 from wtforms.validators import Required, Length, Email, ValidationError
 
-class TornadoArgumentsWrapper(object):
-    '''Tornado handler arguments to MultiDice, wtforms required.'''
+class FormDict(dict):
+    '''Tornado handler arguments to MultiDict, wtforms required.'''
     def __init__(self, handler):
         self.handler = handler
 
@@ -31,7 +31,7 @@ class Form(wtforms.Form):
     def __init__(self, formdata = None, **kwargs):
         if formdata:
             self.handler = formdata
-            formdata = TornadoArgumentsWrapper(formdata)
+            formdata = FormDict(formdata)
         super(Form, self).__init__(formdata = formdata, **kwargs)
 
 

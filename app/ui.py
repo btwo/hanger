@@ -6,9 +6,9 @@ def text2html(handler, text):
     '''Text to HTML.'''
     text = utils.remove_space(text)
     html = ''
-    para_list = text.split('\n')
-    for para in para_list:
-        html += '<p>%s</p>\n' % para
+    paragraphs = text.split('\n')
+    for paragraph in paragraphs:
+        html += '<p>%s</p>\n' % paragraph
     return html
 
 def field_maker(handler, field, class_ = None):
