@@ -111,19 +111,18 @@ class Base(JinjaHandler):
         self.set_header('Content-Type', 'application/json')
         self.write(json.dumps(obj))
 
-    def redirect(self, path = None):
-        if not path:
-            path = self.get_argument("next", None)
-            if not path:
-                path = '/'
-        super(Base, self).redirect(path)
+    def redirect(self, url = None, *args):
+        if url == None:
+            url = self.get_argument("next", None)
+        if url == None:
+            url = '/'
+        super(Base, self).redirect(url, *args)
 
     def get_current_user(self):
         cookie = self.get_secure_cookie('user')
-        if not cookie:
-            return False
-        user_json = json.loads(cookie)
-        user = getitem(Person, user_json['id'], show_error = False)
-        if not user:
-            return False
-        return user
+        if cookie:
+            user_json = json.loads(cookie)
+            user = getitem(Person, user_json['id'], show_error = False)
+            if user:
+                return user
+        return False

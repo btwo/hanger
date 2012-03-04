@@ -86,7 +86,6 @@ class Settings(Base):
         bio = self.form_loader('EditBio').bio.data
         if self.request.files:
             self.avatar_uploads()
-            return
         if new_password.password.data:
             self.change_password(new_password)
         if new_name.name.data:
@@ -149,3 +148,8 @@ class Settings(Base):
 class Home(Base):
     def get(self):
         self.render()
+
+
+class Redir(Base):
+    def get(self):
+        self.redirect()
