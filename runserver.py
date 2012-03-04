@@ -4,12 +4,12 @@ import os
 import elixir
 import app
 
-from config import settings, log_config
+from config import settings, logging_config
 from tornado import httpserver, ioloop
 
 def runserver():
     database()
-    log_config()
+    logging_config()
     http_server = httpserver.HTTPServer(app.App())
     http_server.listen(settings['port'])
     ioloop.IOLoop.instance().start() #Start IO Loop.

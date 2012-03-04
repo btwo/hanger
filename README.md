@@ -1,5 +1,5 @@
 # Hanger
-## 简单明了的Web框架。
+## 一个简单明了的Web框架。
 
 一个基于[Tornado](http://www.tornadoweb.org/)以及其它许多代码库的Web微框架。
 
@@ -9,12 +9,10 @@
 
 ## ToDo
 
-* 可以让用户自行选择是否带有附加功能，如用户登录注册。
-* Redis 支持
 * 使用 Redis 储存session。
 * Email 找回密码。
 * Nginx 文件上传模块支持。
-* 使用 sqlalchemy ORM
+* 使用 sqlalchemy ORM。
 
 ## 使用
 
@@ -22,7 +20,7 @@
 
 详细请自行阅读代码，这里有一份[简单的使用指南](https://github.com/tioover/hanger/wiki)。
 
-## 安装需求
+## 需求
 
 * Python 2.7
 * [Tornado](http://www.tornadoweb.org/)

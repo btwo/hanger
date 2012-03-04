@@ -15,20 +15,16 @@ settings['port'] = 8888
 # Path
 settings['template_path'] = join(path, 'templ')
 settings['static_path'] = join(path, 'static')
-settings['log_path'] = join(path, 'error.log')
+settings['logfile_path'] = join(path, 'error.log')
 # url
 settings['login_url'] = '/signin/'
 # Security
 settings['xsrf_cookies'] = True
 settings['cookie_secret'] = 'Orz'
 
-def log_config():
+def logging_config():
     if settings['debug']:
         options.parse_command_line()
-    else:
-        logging.basicConfig(
-            #set log output.
-            filename = settings['log_path'],
-            level = logging.WARN,
-        ) 
-    return
+        return
+    logging.basicConfig(filename = settings['logfile_path'],
+        level = logging.ERROR) 
