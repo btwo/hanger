@@ -33,8 +33,8 @@ def gravatar(email, size="200", default="identicon"):
     '''Make gravatar image URL.'''
     email = email.encode('utf-8')
     email = hashlib.md5(email).hexdigest()
-    url = "http://1.gravatar.com/avatar/%s?s=%s&d=%s&r=G" % (
-        email, size, default)
+    url = "http://1.gravatar.com/"
+    url = "%s/avatar/%s?s=%s&d=%s&r=G" % (url, email, size, default)
     return url
 
 def after(time):
@@ -45,21 +45,19 @@ def after(time):
     elif diff.days > 0:
         return unicode(diff.days) + u'天前'
     elif diff.seconds > (60*60):
-        return unicode(diff.seconds/(60*60)) + u'小时前'
+        return unicode(diff.seconds / (60*60)) + u'小时前'
     elif diff.seconds >= 60:
-        return unicode(diff.seconds/60) + u'分钟前'
+        return unicode(diff.seconds / 60) + u'分钟前'
     elif diff.seconds > 20:
         return unicode(diff.seconds) + u'秒前'
-    else:
-        return u'此时'
+    return u'此时'
     
 def strtime(time, time_format="%y-%m-%d %H:%M"):
     return datetime.datetime.strftime(time, time_format)
 
 def mdtohtml(raw):
     """Markdown to HTML."""
-    #解决转义和markdown格式的冲突
-    raw = raw.replace("&gt;", "\n>")
+    raw = raw.replace("\n&gt;", "\n>")
     md = markdown2.Markdown()
     html = md.convert(raw)
     return html

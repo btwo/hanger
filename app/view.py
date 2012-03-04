@@ -63,7 +63,6 @@ class SignOut(Sign):
 class PersonPage(Base):
     def get(self, uid):
         person = getitem(Person, uid)
-        print person
         self.render(person = person)
 
 
