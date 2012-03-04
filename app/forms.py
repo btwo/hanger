@@ -6,7 +6,7 @@ import Image
 import StringIO
 
 from model import Person
-from wtforms.fields import TextField, PasswordField, FileField
+from wtforms.fields import TextField, TextAreaField, PasswordField, FileField
 from wtforms.validators import Required, Length, Email, ValidationError
 
 class TornadoArgumentsWrapper(object):
@@ -111,3 +111,7 @@ class ChangeAvatar(Form):
             Image.open(StringIO.StringIO(filebody))
         except IOError:
             raise ValidationError(u'这不是一个图片')
+
+
+class EditBio(Form):
+    bio = TextAreaField(u'简介', [Length(max=200)])

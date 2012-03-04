@@ -11,13 +11,15 @@ def texttohtml(handler, text):
         html += '<p>%s</p>\n' % para
     return html
 
-def field_maker(handler, field, class_ = None):
+def field_maker(handler, field, class_ = None, show_label = True):
     '''WTForms field to HTML.'''
     html = ''
-    label = field.label()
+    label = ''
+    if show_label:
+        label = field.label() + '<br>\n'
     field_html = field(class_ = class_)
     errors = field.errors
-    html +=  label + '<br>\n' + field_html
+    html +=  label + field_html
     if errors:
         html += '\n<ul class="errors">\n'
         for error in errors:

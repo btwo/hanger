@@ -3,5 +3,9 @@
 <article id="person">
     <h1>{{person.name}}</h1>
     <img src="{{avatar(person)}}">
+	<section id='bio'>
+		<h2>个人简介</h2>
+		{{texttohtml(person.bio)}}
+	</section>
 </article>
 {% endblock %}

@@ -73,6 +73,7 @@ class Settings(Base):
         self.form_add('ChangeAvatar')
         self.form_add('ChangePassword')
         self.form_add('ChangeName')
+        self.form_add('EditBio')
 
     @web.authenticated
     def get(self):
@@ -82,12 +83,16 @@ class Settings(Base):
     def post(self):
         new_password = self.form_loader('ChangePassword')
         new_name = self.form_loader('ChangeName')
+        bio = self.form_loader('EditBio').bio.data
         if self.request.files:
             self.avatar_uploads()
-        elif new_password.password.data:
+            return
+        if new_password.password.data:
             self.change_password(new_password)
-        elif new_name.name.data:
+        if new_name.name.data:
             self.change_name(new_name)
+        if bio:
+            self.editbio(bio)
         self.redirect('/settings')
 
     def change_name(self, form):
@@ -101,6 +106,10 @@ class Settings(Base):
         if not self.form_validate(form, 'ChangePassword'): # change password.
             return
         self.current_user.change_password(form.new_password.data)
+        session.commit()
+
+    def editbio(self, bio):
+        self.current_user.bio = bio
         session.commit()
 
     def avatar_uploads(self):

@@ -12,14 +12,12 @@
         {{avatar_error}}
     </form>
 
-    <form method='post' id='change_name'>
+    <form method='post' id='change_person_data'>
 		<h2>修改名称</h2>
         {{xsrf()}}
-        {{field_maker(forms['ChangeName'].name)}}
-		<input type='submit' value='修改'>
-    </form>
-
-    <form method='post' id='change_password'>
+        {{field_maker(forms['ChangeName'].name, show_label = False)}}
+		<h2>个人简介</h2>
+		{{field_maker(forms['EditBio'].bio, show_label = False)}}
 		<h2>修改密码</h2>
 		{{field_maker(forms['ChangePassword'].password)}}
 		{{field_maker(forms['ChangePassword'].new_password)}}
