@@ -2,7 +2,7 @@
 # coding=utf-8
 import utils
 
-def texttohtml(handler, text):
+def text2html(handler, text):
     '''Text to HTML.'''
     text = utils.remove_space(text)
     html = ''
@@ -11,14 +11,12 @@ def texttohtml(handler, text):
         html += '<p>%s</p>\n' % para
     return html
 
-def field_maker(handler, field, class_ = None, show_label = True):
+def field_maker(handler, field, class_ = None):
     '''WTForms field to HTML.'''
-    html = ''
-    label = ''
-    if show_label:
-        label = field.label() + '<br>\n'
+    label = field.label() + '<br>\n'
     field_html = field(class_ = class_)
     errors = field.errors
+    html = ''
     html +=  label + field_html
     if errors:
         html += '\n<ul class="errors">\n'
