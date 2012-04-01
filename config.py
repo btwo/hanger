@@ -9,7 +9,7 @@ from tornado import options
 
 path = os.path.split(os.path.realpath(__file__))[0] 
 settings = {}
-settings['debug'] = False
+settings['debug'] = True
 settings['ui_methods'] = ui
 settings['port'] = 8888
 # Path
