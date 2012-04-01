@@ -21,10 +21,3 @@ settings['login_url'] = '/signin/'
 # Security
 settings['xsrf_cookies'] = True
 settings['cookie_secret'] = 'Orz'
-
-def logging_config():
-    if settings['debug']:
-        options.parse_command_line()
-        return
-    logging.basicConfig(filename = settings['logfile_path'],
-        level = logging.ERROR) 
