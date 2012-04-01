@@ -10,9 +10,8 @@ from tornado import httpserver, ioloop, options
 def runserver():
     orminit()
     if settings['debug']:
-        options.parse_command_line()
-    else:
-        options.parse_config_file(settings['logfile_path'])
+        options.options.log_file_prefix = settings['logfile_path']
+    options.parse_command_line()
     http_server = httpserver.HTTPServer(app.App())
     http_server.listen(settings['port'])
     ioloop.IOLoop.instance().start() #Start IO Loop.
