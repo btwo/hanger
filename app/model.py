@@ -38,19 +38,12 @@ class Person(Base):
 
     def change_password(self, password):
         self.password = self.hash_password(password)
-        session.commit()
 
     def change_name(self, name):
         self.name = escape(name)
-        session.commit()
 
     def change_bio(self, bio):
         self.bio = escape(bio)
-        session.commit()
-
-    def change_avatar(self, filename):
-        self.avatar = filename
-        session.commit()
 
 
 def getuser(uid = None, email = None, name = None):
@@ -63,11 +56,6 @@ def getuser(uid = None, email = None, name = None):
         return query.filter_by(name = name).first()
     else:
         return None
-
-def insert(obj):
-    session.add(obj)
-    session.commit()
-    return obj
 
 def create_all():
     Base.metadata.create_all(engine)

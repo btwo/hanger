@@ -2,6 +2,7 @@
 # coding=utf-8 
 import json
 import utils
+import model
 import forms
 
 from tornado import web
@@ -13,6 +14,10 @@ class BaseHandler(web.RequestHandler):
         super(BaseHandler, self).__init__(*args)
         name = str(self.__class__.__name__) # Class name.
         self.name = name
+
+    def on_finish(self):
+        model.session.commit()
+        model.session.close()
 
 
 class FormHandler(BaseHandler):

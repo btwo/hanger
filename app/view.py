@@ -6,7 +6,7 @@ import StringIO
 import Image
 
 from base import Base
-from model import getuser, insert, Person
+from model import getuser, session, Person
 from tornado import web
 
 class Sign(Base):
@@ -48,7 +48,8 @@ class SignUp(Sign):
             password = form.password.data,
             email = form.email.data,
         )
-        user = insert(user)
+        session.add(user)
+        session.commit()
         self.login(user)
         self.redirect()
 
@@ -116,7 +117,7 @@ class Settings(Base):
             self.request.files['avatar'][0]['body']))
         self.remove_old_avatar()
         filename = self.avatar_save(avatar)
-        self.current_user.change_avatar(filename)
+        self.current_user.avatar = filename
         return
     
     def remove_old_avatar(self):
