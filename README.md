@@ -12,7 +12,6 @@
 * 使用 Redis 储存session。
 * Email 找回密码。
 * Nginx 文件上传模块支持。
-* 使用 sqlalchemy ORM。
 
 ## 使用
 

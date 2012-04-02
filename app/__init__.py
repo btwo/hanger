@@ -4,7 +4,6 @@ import view
 import model
 
 from tornado import web
-from config import settings
 from base import Base
 from view import Home, SignIn, SignUp, SignOut, PersonPage, Settings
 
@@ -28,5 +27,6 @@ handlers = [
 ]
 
 class App(web.Application):
-    def __init__(self):
+    def __init__(self, settings):
         super(App, self).__init__(handlers, **settings)
+

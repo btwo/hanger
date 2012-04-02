@@ -31,7 +31,7 @@ class Person(Base):
         self.created = datetime.datetime.now()
 
     def __repr__(self):
-        return "<User('%s', '%s')>" % (self.id, self.name)
+        return "<Person ('%s', '%s')>" % (self.id, self.name)
 
     def hash_password(self, password):
         return string_hash(password, salt = self.email)
