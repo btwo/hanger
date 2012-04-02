@@ -51,7 +51,6 @@ class Person(Base):
     def change_avatar(self, filename):
         self.avatar = filename
         session.commit()
-        print self.avatar
 
 
 def getuser(uid = None, email = None, name = None):
@@ -69,3 +68,6 @@ def insert(obj):
     session.add(obj)
     session.commit()
     return obj
+
+def create_all():
+    Base.metadata.create_all(engine)

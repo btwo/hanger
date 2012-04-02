@@ -48,7 +48,7 @@ class SignUp(Sign):
             password = form.password.data,
             email = form.email.data,
         )
-        insert(user)
+        user = insert(user)
         self.login(user)
         self.redirect()
 
