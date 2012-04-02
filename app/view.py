@@ -6,8 +6,7 @@ import StringIO
 import Image
 
 from base import Base
-from model import getitem, Person
-from elixir import session
+from model import getuser, insert, Person
 from tornado import web
 
 class Sign(Base):
@@ -31,7 +30,7 @@ class SignIn(Sign):
         form = self.form_loader()
         if not self.form_validate(form):
             return
-        user = Person.get_by(email = form.email.data)
+        user = getuser(email = form.email.data)
         self.login(user)
         self.redirect()
 
@@ -49,7 +48,7 @@ class SignUp(Sign):
             password = form.password.data,
             email = form.email.data,
         )
-        session.commit()
+        insert(user)
         self.login(user)
         self.redirect()
 
@@ -62,7 +61,7 @@ class SignOut(Sign):
 
 class PersonPage(Base):
     def get(self, uid):
-        person = getitem(Person, uid)
+        person = getuser(uid)
         self.render(person = person)
 
 
@@ -99,17 +98,14 @@ class Settings(Base):
         if not self.form_validate(form, 'ChangeName'):
             return
         self.current_user.change_name(form.name.data)
-        session.commit()
 
     def change_password(self, form):
         if not self.form_validate(form, 'ChangePassword'): # change password.
             return
         self.current_user.change_password(form.new_password.data)
-        session.commit()
 
     def editbio(self, bio):
-        self.current_user.bio = bio
-        session.commit()
+        self.current_user.change_bio(bio)
 
     def avatar_uploads(self):
         form_key = 'ChangeAvatar'
@@ -120,8 +116,7 @@ class Settings(Base):
             self.request.files['avatar'][0]['body']))
         self.remove_old_avatar()
         filename = self.avatar_save(avatar)
-        self.current_user.avatar = filename
-        session.commit()
+        self.current_user.change_avatar(filename)
         return
     
     def remove_old_avatar(self):

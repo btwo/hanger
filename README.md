@@ -27,5 +27,5 @@
 * [WTForms](http://wtforms.simplecodes.com/docs/dev/)
 * [Jinja2](http://jinja.pocoo.org/docs/)
 * [Markdown2](https://github.com/trentm/python-markdown2)
-* [Elixir](http://elixir.ematia.de/trac/wiki)
+* [SQLAlchemy](http://www.sqlalchemy.org/)
 * [Python Image library(PIL)](http://www.pythonware.com/products/pil/)

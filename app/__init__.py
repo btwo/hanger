@@ -18,7 +18,7 @@ class Error404(Base):
 
 
 handlers = [
-    (r'/?', Home),
+    (r'/', Home),
     (r'/signin/?', SignIn),
     (r'/signup/?', SignUp),
     (r'/signout/?', SignOut),

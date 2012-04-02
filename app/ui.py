@@ -4,6 +4,7 @@ import utils
 
 def text2html(handler, text):
     '''Text to HTML.'''
+    if not text: return ''
     text = utils.remove_space(text)
     html = ''
     paragraphs = text.split('\n')

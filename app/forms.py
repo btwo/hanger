@@ -5,7 +5,7 @@ import utils
 import Image
 import StringIO
 
-from model import Person
+from model import getuser
 from wtforms.fields import TextField, TextAreaField, PasswordField, FileField
 from wtforms.validators import Required, Length, Email, ValidationError
 
@@ -40,12 +40,12 @@ class SignIn(Form):
     password = PasswordField(u'密码', [Required()])
 
     def validate_email(self, field):
-        user = Person.get_by(email = field.data)
+        user = getuser(email = field.data)
         if not user:
             raise ValidationError(u'Email 没有找到。')
 
     def validate_password(self, field):
-        user = Person.get_by(email=self.email.data)
+        user = getuser(email=self.email.data)
         if not user: return
         password = utils.string_hash(field.data)
         if not password == user.password:
@@ -55,7 +55,7 @@ class SignIn(Form):
 def name_validate(self, field):
     if utils.special_char(field.data):
         raise ValidationError(u'昵称里面不允许有特殊字符。')
-    elif Person.get_by(name=field.data):
+    elif getuser(name=field.data):
         raise ValidationError(u'Opps，这个昵称已经有人在用了。')
 
 class SignUp(Form):
@@ -67,7 +67,7 @@ class SignUp(Form):
     password_repeat = PasswordField(u'再输一遍密码', [Required()])
 
     def validate_email(self, field):
-        if Person.get_by(email=field.data):
+        if getuser(email=field.data):
             raise ValidationError(
                 u'有这个帐号，是否<a href="/signin/">登录</a>?')
 
