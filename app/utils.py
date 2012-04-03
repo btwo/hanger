@@ -22,18 +22,17 @@ def string_hash(string, salt=""):
 
 def remove_space(raw):
     '''remove space in line start and end.'''
-    raw = raw.split('\n')
     result = ''
-    for p in raw:
-        p = p.strip()
-        if p: result += p + '\n'
+    for part in raw.split('\n'):
+        part = ppart.strip()
+        if part: result += part + '\n'
     return result
 
 def gravatar(email, size="200", default="identicon"):
     '''Make gravatar image URL.'''
     email = email.encode('utf-8')
     email = hashlib.md5(email).hexdigest()
-    url = "http://1.gravatar.com/"
+    url = "http://www.gravatar.com/"
     url = "%s/avatar/%s?s=%s&d=%s&r=G" % (url, email, size, default)
     return url
 
