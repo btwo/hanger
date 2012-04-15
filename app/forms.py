@@ -76,7 +76,7 @@ class SignUp(Form):
     def validate_password(self, field):
         password = field.data
         password_repeat = self.password_repeat.data
-        if password is not password_repeat:
+        if password != password_repeat:
             raise ValidationError(u'Opps, 两次密码输入不一致')
 
 class ChangePassword(Form):
