@@ -1,12 +1,12 @@
 #!/usr/bin/env python2 
 # coding=utf-8 
 import json
+import forms
 import utils
 import model
-import forms
 
-from tornado import web
 from model import getuser
+from tornado import web
 from jinja2 import Environment, FileSystemLoader
 
 class Base(web.RequestHandler):
@@ -31,7 +31,6 @@ class Base(web.RequestHandler):
         model.session.commit()
         model.session.close()
 
-
     def form_loader(self, key = None):
         '''Return instance of form.'''
         if not key:
@@ -50,8 +49,7 @@ class Base(web.RequestHandler):
         if not form.validate():
             self.render({key: form}, **kwargs)
             return False
-        else:
-            return True
+        return True
 
     def render(self, formobj_dict = None, **kwargs):
         # Auto load form.
@@ -68,9 +66,7 @@ class Base(web.RequestHandler):
             return self.render_string('errors/404.html', **kwargs)
         elif status_code == 500:
             return self.render_string('errors/500.html', **kwargs)
-        else:
-            self.write('Sorry, server error.')
-        return
+        self.write('Sorry, server error.')
 
     def render_string(self, template_name, **kwargs):
         '''Template render by Jinja2.'''
@@ -119,3 +115,12 @@ class Base(web.RequestHandler):
             if user:
                 return user
         return False
+
+
+class Error404(Base):
+    '''If url not belonging to any handler, raise 404error.'''
+    def get(self):
+        raise web.HTTPError(404)
+
+    def post(self):
+        raise web.HTTPError(404)

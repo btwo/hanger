@@ -6,13 +6,14 @@ from os.path import join
 from app import ui
 
 path = os.path.split(os.path.realpath(__file__))[0] 
+appdir = join(path, 'app')
 settings = {}
 settings['debug'] = True
 settings['ui_methods'] = ui
 settings['port'] = 8888
 # Path
-settings['template_path'] = join(path, 'app', 'templates')
-settings['static_path'] = join(path, 'app','static')
+settings['template_path'] = join(appdir, 'templates')
+settings['static_path'] = join(appdir, 'static')
 settings['logfile_path'] = join(path, 'error.log')
 # url
 settings['login_url'] = '/signin/'

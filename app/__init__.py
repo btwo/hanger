@@ -2,18 +2,14 @@
 # coding=utf-8
 import view
 import model
+import forms
+import utils
+
 
 from tornado import web
-from base import Base
 from view import Home, SignIn, SignUp, SignOut, PersonPage, Settings
+from base import Error404
 
-class Error404(Base):
-    '''If url not belonging to any handler, raise 404error.'''
-    def get(self):
-        raise web.HTTPError(404)
-
-    def post(self):
-        raise web.HTTPError(404)
 
 
 handlers = [

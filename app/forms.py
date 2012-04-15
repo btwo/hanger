@@ -5,35 +5,10 @@ import utils
 import Image
 import StringIO
 
+from lib.forms import Form, EmailField
 from model import getuser
 from wtforms.fields import TextField, TextAreaField, PasswordField, FileField
 from wtforms.validators import Required, Length, Email, ValidationError
-
-class FormDict(dict):
-    '''Tornado handler arguments to MultiDict, wtforms required.'''
-    def __init__(self, handler):
-        self.handler = handler
-
-    def __iter__(self):
-        return iter(self.handler.request.arguments)
-
-    def __len__(self):
-        return len(self.handler.request.arguments)
-
-    def __contains__(self, name):
-        return (name in self.handler.request.arguments)
-
-    def getlist(self, name):
-        return self.handler.get_arguments(name, strip=False)
-
-
-class Form(wtforms.Form):
-    def __init__(self, formdata = None, **kwargs):
-        if formdata:
-            self.handler = formdata
-            formdata = FormDict(formdata)
-        super(Form, self).__init__(formdata = formdata, **kwargs)
-
 
 def name_validate(self, field):
     if utils.special_char(field.data):
@@ -42,7 +17,7 @@ def name_validate(self, field):
         raise ValidationError(u'Opps，这个昵称已经有人在用了。')
 
 class SignIn(Form):
-    email = TextField(u'邮箱', [Required()])
+    email = EmailField(u'邮箱', [Required()])
     password = PasswordField(u'密码', [Required()])
 
     def validate_email(self, field):
@@ -59,7 +34,7 @@ class SignIn(Form):
 
 
 class SignUp(Form):
-    email = TextField(u'Email',
+    email = EmailField(u'Email',
         [Required(), Length(min=6), Length(max=120), Email()])
 
     name = TextField(u'称呼',
