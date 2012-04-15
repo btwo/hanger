@@ -29,4 +29,3 @@ handlers = [
 class App(web.Application):
     def __init__(self, settings):
         super(App, self).__init__(handlers, **settings)
-

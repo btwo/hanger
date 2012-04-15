@@ -1,31 +1,33 @@
 #!/usr/bin/env python2
 # coding=utf-8
+import os
 import re
 import random
 import hashlib
 import datetime
 import markdown2
-import tornado.escape
+
+from tornado.escape import xhtml_unescape, xhtml_escape
 
 def escape(raw):
     '''Html escape.'''
-    raw = tornado.escape.xhtml_unescape(raw)
-    raw = tornado.escape.xhtml_escape(raw)
-    return raw
+    return xhtml_escape(xhtml_unescape(raw))
 
-def random_string(str_long = 40):
-    return ''.join(random.sample([chr(i) for i in range(48, 123)], str_long))
+def random_string(long = 40):
+    #return ''.join(random.sample([chr(i) for i in range(48, 123)], long))
+    return os.urandom(long)
 
 def string_hash(string, salt=""):
-    string = hashlib.sha224(string).hexdigest()
+    string = hashlib.sha224(salt + string).hexdigest()
     return string
 
 def remove_space(raw):
     '''remove space in line start and end.'''
     result = ''
     for part in raw.split('\n'):
-        part = ppart.strip()
-        if part: result += part + '\n'
+        part = part.strip()
+        if not part: continue
+        result += part + '\n'
     return result
 
 def gravatar(email, size="200", default="identicon"):

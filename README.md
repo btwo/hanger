@@ -7,17 +7,11 @@
 
 使用 [WTFPL](http://sam.zoy.org/wtfpl/COPYING) 进行授权。
 
-## ToDo
-
-* 使用 Redis 储存session。
-* Email 找回密码。
-* Nginx 文件上传模块支持。
-
 ## 使用
 
 假定你使用的是Linux系统，使用Nginx反向代理Tornado Web Server。
 
-详细请自行阅读代码，这里有一份[简单的使用指南](https://github.com/tioover/hanger/wiki)。
+详细请自行阅读代码。
 
 ## 需求
 

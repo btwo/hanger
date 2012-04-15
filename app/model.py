@@ -54,8 +54,7 @@ def getuser(uid = None, email = None, name = None):
         return query.filter_by(email = email).first()
     elif name:
         return query.filter_by(name = name).first()
-    else:
-        return None
+    return None
 
 def create_all():
     Base.metadata.create_all(engine)

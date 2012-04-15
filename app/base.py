@@ -9,27 +9,28 @@ from tornado import web
 from model import getuser
 from jinja2 import Environment, FileSystemLoader
 
-class BaseHandler(web.RequestHandler):
-    def __init__(self, *args):
-        super(BaseHandler, self).__init__(*args)
+class Base(web.RequestHandler):
+    forms = {}
+    templname = ''
+
+    def __init__(self, *args, **kwargs):
+        super(Base, self).__init__(*args, **kwargs)
         name = str(self.__class__.__name__) # Class name.
         self.name = name
 
-    def on_finish(self):
-        model.session.commit()
-        model.session.close()
-
-
-class FormHandler(BaseHandler):
-    forms = {}
-
-    def __init__(self, *args):
-        super(FormHandler, self).__init__(*args)
         # default form.
         try:
             self.forms[self.name] = eval('forms.' + self.name)
         except AttributeError:
             pass
+
+        # default template.
+        self.templname = self.name + '.html'
+
+    def on_finish(self):
+        model.session.commit()
+        model.session.close()
+
 
     def form_loader(self, key = None):
         '''Return instance of form.'''
@@ -52,15 +53,6 @@ class FormHandler(BaseHandler):
         else:
             return True
 
-
-class TemplateHandler(FormHandler):
-    templname = ''
-
-    def __init__(self, *args):
-        super(TemplateHandler, self).__init__(*args)
-        # default template.
-        self.templname = self.name + '.html'
-
     def render(self, formobj_dict = None, **kwargs):
         # Auto load form.
         formdict = {}
@@ -68,7 +60,7 @@ class TemplateHandler(FormHandler):
             formdict[key] = self.forms[key]() # Instance of form.
         if formobj_dict:
             formdict.update(formobj_dict) # merger.
-        super(TemplateHandler, self).render(self.templname, forms = formdict,
+        super(Base, self).render(self.templname, forms = formdict,
             **kwargs)
 
     def get_error_html(self, status_code, **kwargs):
@@ -80,8 +72,6 @@ class TemplateHandler(FormHandler):
             self.write('Sorry, server error.')
         return
 
-
-class JinjaHandler(TemplateHandler):
     def render_string(self, template_name, **kwargs):
         '''Template render by Jinja2.'''
         default = {
@@ -110,8 +100,6 @@ class JinjaHandler(TemplateHandler):
         template = env.get_template(template_name)
         return template
 
-
-class Base(JinjaHandler):
     def json_write(self, obj):
         self.set_header('Content-Type', 'application/json')
         self.write(json.dumps(obj))
