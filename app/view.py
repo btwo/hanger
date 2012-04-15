@@ -67,9 +67,9 @@ class PersonPage(Base):
 
 
 class Settings(Base):
-    def __init__(self, *args):
-        super(Settings, self).__init__(*args)
-        self.avatar_path = os.path.join(self.settings['static_path'], 'avatar')
+    def __init__(self, *args, **kwargs):
+        super(Settings, self).__init__(*args, **kwargs)
+        self.avatar_path = self.settings['avatar_path']
         self.form_add('ChangeAvatar')
         self.form_add('ChangePassword')
         self.form_add('ChangeName')

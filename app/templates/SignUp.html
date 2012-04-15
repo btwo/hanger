@@ -5,10 +5,10 @@
     <h1>注册</h1>
     <form method='post'>
         {{xsrf()}}
-        {{field_maker(forms['SignUp'].name)}}
-        {{field_maker(forms['SignUp'].email)}}
-        {{field_maker(forms['SignUp'].password)}}
-        {{field_maker(forms['SignUp'].password_repeat)}}
+        {{field(forms['SignUp'].name)}}
+        {{field(forms['SignUp'].email)}}
+        {{field(forms['SignUp'].password)}}
+        {{field(forms['SignUp'].password_repeat)}}
         <input type="submit" value="注册">
     </form>
 </article>

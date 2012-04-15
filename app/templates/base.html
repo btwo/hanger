@@ -1,3 +1,12 @@
+{% macro field(field, cls='') -%}
+<p>{{field.label()}}</p>
+<p>{{field(class_ = cls)}}</p>
+<ul class='errors'>
+    {%for error in field.errors%}
+    <li class='error'>{{error}}</li>
+    {%endfor%}
+</ul>
+{%- endmacro %}
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>

@@ -29,7 +29,7 @@ class SignIn(Form):
         user = getuser(email=self.email.data)
         if not user: return
         password = utils.string_hash(field.data, self.email.data)
-        if password is not user.password:
+        if password != user.password:
             raise ValidationError(u'Password error.')
 
 

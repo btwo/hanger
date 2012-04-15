@@ -19,9 +19,9 @@
 		<h2>{{ forms['EditBio'].bio.label() }}</h2>
 		{{forms['EditBio'].bio()}}
 		<h2>修改密码</h2>
-		{{field_maker(forms['ChangePassword'].password)}}
-		{{field_maker(forms['ChangePassword'].new_password)}}
-		{{field_maker(forms['ChangePassword'].new_password_repeat)}}
+		{{field(forms['ChangePassword'].password)}}
+		{{field(forms['ChangePassword'].new_password)}}
+		{{field(forms['ChangePassword'].new_password_repeat)}}
         <input type="submit" value="修改">
     </form>
 </article>

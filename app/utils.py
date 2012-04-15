@@ -5,8 +5,8 @@ import re
 import random
 import hashlib
 import datetime
-import markdown2
 
+from lib import markdown2
 from tornado.escape import xhtml_unescape, xhtml_escape
 
 def escape(raw):
