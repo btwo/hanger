@@ -2,18 +2,13 @@
 # coding=utf-8
 import datetime
 
+from app import db
 from utils import escape, string_hash
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:////tmp/hanger.db', echo=False)
-Base = declarative_base()
-Session = sessionmaker(bind=engine)
-session = Session()
+session = db.session
 
-class Person(Base):
+class Person(db.Model):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
@@ -55,6 +50,3 @@ def getuser(uid = None, email = None, name = None):
     elif name:
         return query.filter_by(name = name).first()
     return None
-
-def create_all():
-    Base.metadata.create_all(engine)

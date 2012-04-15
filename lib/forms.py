@@ -27,6 +27,9 @@ class FormDict(dict):
 
 
 class Form(wtforms.Form):
+    '''
+    Base form class
+    '''
     def __init__(self, formdata = None, **kwargs):
         if formdata:
             self.handler = formdata
@@ -34,6 +37,7 @@ class Form(wtforms.Form):
         super(Form, self).__init__(formdata = formdata, **kwargs)
 
 
+#some html5 field
 #form https://github.com/rduplain/flask-wtf/
 class DateInput(Input):
     """

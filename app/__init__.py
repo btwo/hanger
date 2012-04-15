@@ -1,10 +1,12 @@
 #!/usr/bin/env python2
 # coding=utf-8
+from lib.database import SQLAlchemy
+db = SQLAlchemy('sqlite:////tmp/hanger.db')
+
 import view
 import model
 import forms
 import utils
-
 
 from tornado import web
 from config import settings
@@ -31,4 +33,7 @@ routes = [
     (r'.*', Error404),
 ]
 
-application = web.Application(routes, **settings)
+
+class Application(web.Application):
+    def __init__(self):
+        super(Application, self).__init__(routes, **settings)

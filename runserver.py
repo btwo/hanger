@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # coding=utf-8
 
-from app import application
+from app import Application
 from config import settings
 from tornado import httpserver, ioloop, options
 
@@ -9,6 +9,6 @@ from tornado import httpserver, ioloop, options
 if not settings['debug']:
     options.options.log_file_prefix = settings['logfile_path']
 options.parse_command_line()
-http_server = httpserver.HTTPServer(application)
+http_server = httpserver.HTTPServer(Application())
 http_server.listen(settings['port'])
 ioloop.IOLoop.instance().start() #Start IO Loop.

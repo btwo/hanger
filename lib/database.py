@@ -26,15 +26,15 @@ https://github.com/mitsuhiko/sqlalchemy-django-query
 
 class DjangoQuery(Query):
     """Can be mixed into any Query class of SQLAlchemy and extends it to
-implements more Django like behavior:
+    implements more Django like behavior:
 
-- `filter_by` supports implicit joining and subitem accessing with
-double underscores.
-- `exclude_by` works like `filter_by` just that every expression is
-automatically negated.
-- `order_by` supports ordering by field name with an optional `-`
-in front.
-"""
+    - `filter_by` supports implicit joining and subitem accessing with
+    double underscores.
+    - `exclude_by` works like `filter_by` just that every expression is
+    automatically negated.
+    - `order_by` supports ordering by field name with an optional `-`
+    in front.
+    """
     _underscore_operators = {
         'gt': operators.gt,
         'lt': operators.lt,
@@ -159,19 +159,19 @@ def create_session(engine):
 
 class SQLAlchemy(object):
     """
-Example::
+    Example::
 
-db = SQLAlchemy("mysql://user:pass@host:port/db", pool_recycle=3600)
+    db = SQLAlchemy("mysql://user:pass@host:port/db", pool_recycle=3600)
 
-from sqlalchemy import Column, String
+    from sqlalchemy import Column, String
 
-class User(db.Model):
-username = Column(String(16), unique=True, nullable=False)
-password = Column(String(30), nullable=False)
+    class User(db.Model):
+    username = Column(String(16), unique=True, nullable=False)
+    password = Column(String(30), nullable=False)
 
->>> User.query.filter_by(username='yourname')
+    >>> User.query.filter_by(username='yourname')
 
-"""
+    """
     def __init__(self, master, slaves=[], **kwargs):
         self.engine = create_engine(master, **kwargs)
         self.session = create_session(self.engine)
