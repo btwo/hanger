@@ -8,10 +8,13 @@ import model
 import forms
 import utils
 
+from os import path
 from tornado import web
 from config import settings
 from view import Home, SignIn, SignUp, SignOut, PersonPage, Settings
 from base import Base
+
+PATH = path.split(path.realpath(__file__))[0]
 
 class Error404(Base):
     '''If url not belonging to any handler, raise 404error.'''
