@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # coding=utf-8
 '''
+SQLAlchemy simpliy.
 Form lepture / june
 https://github.com/lepture/june/
 '''

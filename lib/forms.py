@@ -1,5 +1,8 @@
 #!/usr/bin/env python2
 # coding=utf-8
+'''
+WTForm with tornado.
+'''
 import wtforms
 
 from wtforms import TextField

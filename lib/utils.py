@@ -1,5 +1,8 @@
 #!/usr/bin/env python2
 # coding=utf-8
+'''
+Some project helper functions.
+'''
 import os
 import re
 import random
