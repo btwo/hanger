@@ -10,6 +10,7 @@ import hashlib
 import datetime
 
 from lib import markdown2
+from lib.gravatar import gravatar
 from tornado.escape import xhtml_unescape, xhtml_escape
 
 def realpath(file_):
@@ -36,14 +37,6 @@ def remove_space(raw):
         if not part: continue
         result += part + '\n'
     return result
-
-def gravatar(email, size="200", default="identicon"):
-    '''Make gravatar image URL.'''
-    email = email.encode('utf-8')
-    email = hashlib.md5(email).hexdigest()
-    url = "http://www.gravatar.com/"
-    url = "%s/avatar/%s?s=%s&d=%s&r=G" % (url, email, size, default)
-    return url
 
 def after(time):
     '''output time diffence.'''
