@@ -1,15 +1,16 @@
 #!/usr/bin/env python2
 # coding=utf-8
+from os import path
+PATH = path.split(path.realpath(__file__))[0]
+
 from lib.database import SQLAlchemy
 db = SQLAlchemy('sqlite:////tmp/hanger.db')
 
+import utils
 import view
 import model
 import forms
-import utils
 
-from os import path
-PATH = path.split(path.realpath(__file__))[0]
 
 from tornado import web
 from config import settings
