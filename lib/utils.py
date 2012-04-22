@@ -9,6 +9,10 @@ import datetime
 from lib import markdown2
 from tornado.escape import xhtml_unescape, xhtml_escape
 
+def realpath(file_):
+    '''file local path.'''
+    return os.path.split(os.path.realpath(file_))[0]
+
 def escape(raw):
     '''Html escape.'''
     return xhtml_escape(xhtml_unescape(raw))

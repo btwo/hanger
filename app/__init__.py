@@ -1,10 +1,10 @@
 #!/usr/bin/env python2
 # coding=utf-8
-from os import path
-PATH = path.split(path.realpath(__file__))[0]
+from lib import utils
+PATH = utils.realpath(__file__)
 
 from lib.database import SQLAlchemy
-db = SQLAlchemy('sqlite:////tmp/hanger.db')
+db = SQLAlchemy('sqlite:////tmp/hanger.db') # first run, run db.create_all().
 
 import view
 import model
@@ -12,7 +12,6 @@ import forms
 
 
 from tornado import web
-from lib import utils
 from config import settings
 from view import Home, SignIn, SignUp, SignOut, PersonPage, Settings
 from base import Base
