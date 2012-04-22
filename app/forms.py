@@ -1,10 +1,10 @@
 #!/usr/bin/env python2
 # coding=utf-8
 import wtforms
-import utils
 import Image
 import StringIO
 
+from lib import utils
 from lib.forms import Form, EmailField
 from model import getuser
 from wtforms.fields import TextField, TextAreaField, PasswordField, FileField

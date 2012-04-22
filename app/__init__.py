@@ -6,13 +6,13 @@ PATH = path.split(path.realpath(__file__))[0]
 from lib.database import SQLAlchemy
 db = SQLAlchemy('sqlite:////tmp/hanger.db')
 
-import utils
 import view
 import model
 import forms
 
 
 from tornado import web
+from lib import utils
 from config import settings
 from view import Home, SignIn, SignUp, SignOut, PersonPage, Settings
 from base import Base

@@ -2,7 +2,6 @@
 # coding=utf-8 
 import json
 import forms
-import utils
 import model
 
 from model import getuser
@@ -95,7 +94,6 @@ class Base(web.RequestHandler):
         context.update(self.ui) # Enabled tornado UI methods.
         template = self._get_template(template_name)
         html = template.render(**context) #Render template.
-        #html = utils.remove_space(html) #remove space in line head and end.
         return html 
 
     def _get_template(self, template_name):

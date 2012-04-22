@@ -3,7 +3,7 @@
 import datetime
 
 from app import db
-from utils import escape, string_hash
+from lib.utils import escape, string_hash
 from sqlalchemy import Column, Integer, String, DateTime
 
 session = db.session
