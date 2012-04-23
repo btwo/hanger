@@ -12,8 +12,8 @@ def text2html(handler, text):
         html += '<p>%s</p>\n' % paragraph
     return html
 
-def avatar(handler, user):
+def avatar(handler, user, size=200):
     avatar = user.avatar
     if (not avatar) or (avatar == 'gravatar'):
-        return utils.gravatar(user.email)
-    return handler.static_url('avatar/'+user.avatar)
+        return utils.gravatar(user.email, size=200)
+    return handler.static_url('avatar/'+user.avatar) # TODO resize.
