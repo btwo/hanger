@@ -25,7 +25,6 @@ class Error404(Base):
     def post(self):
         raise web.HTTPError(404)
 
-
 routes = [
     # This is url route rule
     (r'/', Home),

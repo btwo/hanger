@@ -21,16 +21,8 @@ class Base(web.RequestHandler):
     def __init__(self, *args, **kwargs):
         super(Base, self).__init__(*args, **kwargs)
         self.name = str(self.__class__.__name__) # class name
-
-        # default form.
-        # TODO Forms map.
-        try:
-            self.forms[self.name] = eval('forms.' + self.name)
-        except AttributeError:
-            pass
-
-        # default template.
-        self.templname = self.name + '.html'
+        self.form_add(self.name) # register default forms.
+        self.templname = self.name + '.html' # default template file name.
 
     def on_finish(self):
         '''
@@ -49,9 +41,12 @@ class Base(web.RequestHandler):
         return form(self)
 
     def form_add(self, form_name):
-        '''Add form to self.forms. '''
-        form = eval('forms.' + form_name)
-        self.forms[form_name] = form
+        '''Register form to self.forms. '''
+        try:
+            form = eval('forms.' + form_name)
+            self.forms[form_name] = form
+        except AttributeError:
+            form = None
         return form
 
     def form_validate(self, form, key = None, **kwargs):
@@ -82,7 +77,7 @@ class Base(web.RequestHandler):
 
     def render_string(self, template_name, **context):
         '''Template render by Jinja2.'''
-        default = {
+        default_context = {
             'xsrf': self.xsrf_form_html,
             'request': self.request,
             'settings': self.settings,
@@ -90,11 +85,10 @@ class Base(web.RequestHandler):
             'static': self.static_url,
             'handler': self,
         }
-        context.update(default)
+        context.update(default_context)
         context.update(self.ui) # Enabled tornado UI methods.
         template = self._get_template(template_name)
-        html = template.render(**context) #Render template.
-        return html 
+        return template.render(**context) #Render template.
 
     def _get_template(self, template_name):
         '''Get jinja2 template object.'''
