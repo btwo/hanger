@@ -2,9 +2,9 @@
 # coding=utf-8
 import datetime
 
-from app import db
 from lib.utils import escape, string_hash
 from sqlalchemy import Column, Integer, String, DateTime
+from app import db
 
 session = db.session
 

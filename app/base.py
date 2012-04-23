@@ -7,7 +7,6 @@ import model
 from model import getuser
 from tornado import web
 from jinja2 import Environment, FileSystemLoader
-from app import db
 
 class Base(web.RequestHandler):
     '''
@@ -16,7 +15,6 @@ class Base(web.RequestHandler):
     '''
     forms = {}
     templname = ''
-    db = db.session
 
     def __init__(self, *args, **kwargs):
         super(Base, self).__init__(*args, **kwargs)
