@@ -1,13 +1,9 @@
 {% extends 'base.html' %}
-{% block header %}
-<header>
-<h1><a href="/">hanger</a></h1>
-{% include 'inc/userbar.html' %}
-</header>
-{% endblock %}
+{%block title%}Hanger 简单明了的Web框架{%endblock%}
 {% block main %}
-<article>
-    <h2>It's work!</h2>
-	<p><a href='http://github.com/tioover/hanger/'>View in Github.</a></p>
-</article>
+  <!-- Main hero unit for a primary marketing message or call to action -->
+  <div class="hero-unit">
+    <h1>Hanger</h1>
+    <p>Hanger正在工作</p>
+  </div>
 {% endblock  %}

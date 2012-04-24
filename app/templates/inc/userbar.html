@@ -1,10 +1,10 @@
-<div id="userbar"><nav>
+<ul class="nav userbar">
     {% if me %}
-        <a href="/person/{{me.id}}">{{me.name}}</a>
-        <a href="/settings/">设置</a>
-        <a href="/signout/">登出</a>
+        <li><a href="/person/{{me.id}}">{{me.name}}</a></li>
+        <li><a href="/settings/">设置</a></li>
+        <li><a href="/signout/">登出</a></li>
     {% else %}
-        <a href="/signin/">登录</a>
-        <a href="/signup/">注册</a>
+        <li><a href="/signin/">登录</a></li>
+        <li><a href="/signup/">注册</a></li>
     {% endif %}
-</nav></div>
+</ul>
