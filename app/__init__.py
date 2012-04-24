@@ -4,7 +4,6 @@ from lib import utils
 PATH = utils.realpath(__file__)
 
 from lib.database import SQLAlchemy
-print "test"
 db = SQLAlchemy('sqlite:////tmp/hanger.db') # first run, run db.create_all().
 
 import view
