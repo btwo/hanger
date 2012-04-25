@@ -13,13 +13,16 @@ class Base(web.RequestHandler):
     Base handler is parent class of all handlers.
     had some tools for simpliy and enhancement base tornado web framework.
     '''
-    forms = {}
-    templname = ''
+    name = "" # class name.
+    forms_name = [] # Key, for autoload forms.
+    forms = {} # wtform obj dict.
+    templname = '' # template file name.
 
     def __init__(self, *args, **kwargs):
         super(Base, self).__init__(*args, **kwargs)
         self.name = str(self.__class__.__name__) # class name
-        self.form_add(self.name) # register default forms.
+        self.forms_name.append(self.name)
+        self.__forms_add() # register default forms.
         self.templname = self.name + '.html' # default template file name.
 
     def on_finish(self):
@@ -38,7 +41,7 @@ class Base(web.RequestHandler):
         form = self.forms[key]
         return form(self)
 
-    def form_add(self, form_name):
+    def __form_add(self, form_name):
         '''Register form to self.forms. '''
         try:
             form = eval('forms.' + form_name)
@@ -46,6 +49,10 @@ class Base(web.RequestHandler):
         except AttributeError:
             form = None
         return form
+
+    def __forms_add(self):
+        for name in self.forms_name:
+            self.__form_add(name)
 
     def form_validate(self, form, key = None, **kwargs):
         '''Automated handle of Forms validate.'''
@@ -85,10 +92,10 @@ class Base(web.RequestHandler):
         }
         context.update(default_context)
         context.update(self.ui) # Enabled tornado UI methods.
-        template = self._get_template(template_name)
+        template = self.__get_template(template_name)
         return template.render(**context) #Render template.
 
-    def _get_template(self, template_name):
+    def __get_template(self, template_name):
         '''Get jinja2 template object.'''
         env = Environment(
             # load template in file system.
