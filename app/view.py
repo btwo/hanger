@@ -67,13 +67,10 @@ class PersonPage(Base):
 
 
 class Settings(Base):
-    def __init__(self, *args, **kwargs):
-        super(Settings, self).__init__(*args, **kwargs)
-        self.avatar_path = self.settings['avatar_path']
-        self.form_add('ChangeAvatar')
-        self.form_add('ChangePassword')
-        self.form_add('ChangeName')
-        self.form_add('EditBio')
+    forms_name = ['ChangeAvatar',
+                  'ChangePassword',
+                  'ChangeName',
+                  'EditBio',]
 
     @web.authenticated
     def get(self):
@@ -124,13 +121,13 @@ class Settings(Base):
         old_file = self.current_user.avatar
         if not old_file:
             return
-        os.remove(os.path.join(self.avatar_path, old_file))
+        os.remove(os.path.join(self.settings['avatar_path'], old_file))
 
     def avatar_save(self, avatar):
         uid = str(self.current_user.id)
         filename = uid + '.' + avatar.format.lower()
         avatar = self.avatar_resize(avatar)
-        save_path = os.path.join(self.avatar_path, filename)
+        save_path = os.path.join(self.settings['avatar_path'], filename)
         avatar.save(save_path, avatar.format)
         return filename
 
