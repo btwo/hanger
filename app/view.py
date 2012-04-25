@@ -141,8 +141,3 @@ class Settings(Base):
 class Home(Base):
     def get(self):
         self.render()
-
-
-class Redir(Base):
-    def get(self):
-        self.redirect()

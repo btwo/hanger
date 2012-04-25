@@ -33,7 +33,7 @@ routes = [
     (r'/signout/?', SignOut),
     (r'/person/(\d+)/?', PersonPage),
     (r'/settings/?', Settings),
-    (r'.*', Error404),
+    (r'.*', Error404), # Place to end.
 ]
 
 
