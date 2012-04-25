@@ -4,25 +4,34 @@
 <article id="settings">
     <h1>用户设置</h1>
     <form method='post' enctype="multipart/form-data" id='change_avatar'>
-		<h2>{{ forms['ChangeAvatar'].avatar.label() }}</h2>
-        {{xsrf()}}
-		<p><img src="{{avatar(me)}}"></p>
-		<p>{{ forms['ChangeAvatar'].avatar() }}</p>
-        <p><input type="submit" value="上传头像"></p>
-        {{avatar_error}}
+        <div class="control-group">
+            {{xsrf()}}
+            <legend>上传头像</legend>
+            <p><img src="{{avatar(me)}}"></p>
+            <p>{{forms['ChangeAvatar'].avatar.label()}}{{ forms['ChangeAvatar'].avatar() }}</p>
+            <p><input type="submit" value="上传头像"></p>
+            {{avatar_error}}
+        </div>
     </form>
 
     <form method='post' id='change_person_data'>
-		<h2>{{ forms['ChangeName'].name.label() }}</h2>
-        {{xsrf()}}
-        {{forms['ChangeName'].name()}}
-		<h2>{{ forms['EditBio'].bio.label() }}</h2>
-		{{forms['EditBio'].bio()}}
-		<h2>修改密码</h2>
-		{{field(forms['ChangePassword'].password)}}
-		{{field(forms['ChangePassword'].new_password)}}
-		{{field(forms['ChangePassword'].new_password_repeat)}}
-        <input type="submit" value="修改">
+        <div class="control-group">
+            <legend>个人信息</legend>
+            {{ forms['ChangeName'].name.label() }}
+            {{xsrf()}}
+            {{forms['ChangeName'].name()}}
+            {{ forms['EditBio'].bio.label() }}
+            {{forms['EditBio'].bio()}}
+        </div>
+        <div class="control-group">
+            <legend>修改密码</legend>
+            {{field(forms['ChangePassword'].password)}}
+            {{field(forms['ChangePassword'].new_password)}}
+            {{field(forms['ChangePassword'].new_password_repeat)}}
+        </div>
+        <div class="form-actions">
+            <input type="submit" class="btn btn-primary" value="修改">
+        </div>
     </form>
 </article>
 {% endblock %}
