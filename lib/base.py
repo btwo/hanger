@@ -3,8 +3,8 @@
 import json
 
 from app import forms, model
+from lib.template import render
 from tornado import web
-from jinja2 import Environment, FileSystemLoader
 
 class Base(web.RequestHandler):
     '''
@@ -90,19 +90,11 @@ class Base(web.RequestHandler):
         }
         context.update(default_context)
         context.update(self.ui) # Enabled tornado UI methods.
-        template = self.__get_template(template_name)
-        return template.render(**context) #Render template.
-
-    def __get_template(self, template_name):
-        '''Get jinja2 template object.'''
-        env = Environment(
-            # load template in file system.
-            loader = FileSystemLoader(self.settings['template_path']), 
-            auto_reload = self.settings['debug'], #auto reload
-            autoescape = False, # auto escape
-        )
-        template = env.get_template(template_name)
-        return template
+        return render(
+            path = self.settings['template_path'],
+            filename = template_name,
+            auto_reload = self.settings['debug'],
+            **context) #Render template.
 
     def json_write(self, obj):
         self.set_header('Content-Type', 'application/json')
