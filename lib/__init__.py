@@ -3,6 +3,7 @@
 '''
 External code.
 '''
+import template
 import database
 import forms
 import markdown2
