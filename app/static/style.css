@@ -1,23 +1,52 @@
+html {
+    background-color: #f3f3f3;
+}
+
 body {
-	font-size: 12px;
+    margin: 60px auto;
+    padding: 10px 20px 30px;
+    background-color: #FFF;
+	font-size: 14px;
+    width: 600px;
+    box-shadow: 1px 1px 3px #CCCCCC;
 }
 
 a {
     text-decoration: none;
+    color: #999;
 }
+a:hover{text-decoration: underline;}
 
 h1 {
-	font-size: 2em;
+    font-family: "Trebuchet MS", Tahoma, Verdana;
+	font-size: 4em;
+	text-align: center;
 }
 
 h1, h2, h3, h4, h5, h6 {
 	font-weight: normal;
 }
 
+fieldset {
+    margin: 10px;
+}
+
+input {
+    font-size: 20px;
+}
+
 body > footer {
 	color: #999;
+	font-size: 12px;
+	text-align: right;
 }
 
 body > footer a {
 	color: #CCC;
+}
+
+#title {
+    font-size: 24px;
+    font-weight: bold;
+    font-family: "Trebuchet MS", Tahoma, Verdana;
 }
