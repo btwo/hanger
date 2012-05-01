@@ -3,9 +3,11 @@
 <article id="person">
     <h1>{{person.name}}</h1>
     <img src="{{avatar(person)}}">
+    {% if person.bio %}
 	<section id='bio'>
 		<h2>个人简介</h2>
 		{{text2html(person.bio)}}
 	</section>
+    {%endif%}
 </article>
 {% endblock %}
