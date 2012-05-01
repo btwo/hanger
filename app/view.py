@@ -81,25 +81,28 @@ class Settings(Base):
         new_password = self.form_loader('ChangePassword')
         new_name = self.form_loader('ChangeName')
         bio = self.form_loader('EditBio').bio.data
-        if self.request.files:
-            self.avatar_uploads()
-        if new_password.new_password.data:
-            self.change_password(new_password)
-        if new_name.name.data:
-            self.change_name(new_name)
-        if bio:
-            self.editbio(bio)
+        try:
+            if self.request.files:
+                self.avatar_uploads()
+            if new_password.new_password.data:
+                self.change_password(new_password)
+            if new_name.name.data:
+                self.change_name(new_name)
+            if bio:
+                self.editbio(bio)
+        except RuntimeError:
+            return
         self.redirect('/settings')
 
     def change_name(self, form):
         #normal settings
         if not self.form_validate(form, 'ChangeName'):
-            return
+            raise RuntimeError
         self.current_user.change_name(form.name.data)
 
     def change_password(self, form):
         if not self.form_validate(form, 'ChangePassword'): # change password.
-            return
+            raise RuntimeError
         self.current_user.change_password(form.new_password.data)
 
     def editbio(self, bio):
@@ -109,7 +112,7 @@ class Settings(Base):
         form_key = 'ChangeAvatar'
         form = self.form_loader(form_key)
         if not self.form_validate(form, form_key):
-            return
+            raise RuntimeError
         avatar = Image.open(StringIO.StringIO(
             self.request.files['avatar'][0]['body']))
         self.remove_old_avatar()
