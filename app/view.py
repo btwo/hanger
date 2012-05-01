@@ -83,7 +83,7 @@ class Settings(Base):
         bio = self.form_loader('EditBio').bio.data
         if self.request.files:
             self.avatar_uploads()
-        if new_password.password.data:
+        if new_password.new_password.data:
             self.change_password(new_password)
         if new_name.name.data:
             self.change_name(new_name)

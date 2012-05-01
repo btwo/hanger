@@ -3,28 +3,25 @@
 {% block main %}
 <article id="settings">
     <h1>用户设置</h1>
-    <form method='post' enctype="multipart/form-data" id='change_avatar'>
-		<h2>修改头像</h2>
+    <form method='post' enctype="multipart/form-data">
         {{xsrf()}}
-		<p><img src="{{avatar(me)}}"></p>
-        <p>{{ forms['ChangeAvatar'].avatar.label() }}
-        {{ forms['ChangeAvatar'].avatar() }}</p>
-        <p><input type="submit" value="上传头像"></p>
-        {{avatar_error}}
-    </form>
-
-    <form method='post' id='change_person_data'>
-		<h2>个人信息</h2>
-        {{xsrf()}}
-        <p>{{ forms['ChangeName'].name.label() }}
-        {{forms['ChangeName'].name()}}</p>
-        <p>{{ forms['EditBio'].bio.label() }}<br>
-		{{forms['EditBio'].bio()}}</p>
-		<h2>修改密码</h2>
-		{{field(forms['ChangePassword'].password)}}
-		{{field(forms['ChangePassword'].new_password)}}
-		{{field(forms['ChangePassword'].new_password_repeat)}}
-        <input type="submit" value="修改">
+        <fieldset>
+            <legend>修改头像</legend>
+            <p><img src="{{avatar(me)}}"></p>
+            {{ field(forms['ChangeAvatar'].avatar) }}
+        </fieldset>
+        <fieldset>
+            <legend>个人信息</legend>
+            {{ field(forms['ChangeName'].name) }}
+            {{ field(forms['EditBio'].bio)}}
+        </fieldset>
+        <fieldset>
+            <legend>修改密码</legend>
+            {{field(forms['ChangePassword'].password)}}
+            {{field(forms['ChangePassword'].new_password)}}
+            {{field(forms['ChangePassword'].new_password_repeat)}}
+        </fieldset>
+        <input type="submit" value="保存更改">
     </form>
 </article>
 {% endblock %}
