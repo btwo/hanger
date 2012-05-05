@@ -12,13 +12,11 @@ from tornado import web
 class Sign(Base):
     def login(self, user):
         '''LogIn user to secure cookie'''
-        json_obj = json.dumps(
-            {
-                'id': user.id,
-                'name': user.name,
-                'email': user.email,
-            }
-        )
+        json_obj = json.dumps({
+            'id': user.id,
+            'name': user.name,
+            'email': user.email,
+        })
         self.set_secure_cookie("user", json_obj)
 
 
@@ -32,7 +30,7 @@ class SignIn(Sign):
             return
         user = getuser(email = form.email.data)
         self.login(user)
-        self.redirect()
+        self.redirect('/')
 
 
 class SignUp(Sign):
@@ -51,13 +49,13 @@ class SignUp(Sign):
         session.add(user)
         session.commit()
         self.login(user)
-        self.redirect()
+        self.redirect('/')
 
 
 class SignOut(Sign):
     def get(self):
         self.set_secure_cookie('user', '')
-        self.redirect()
+        self.redirect('/')
 
 
 class PersonPage(Base):

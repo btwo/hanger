@@ -94,9 +94,6 @@ class Base(web.RequestHandler):
         self.set_header('Content-Type', 'application/json')
         self.write(json.dumps(obj))
 
-    def redirect(self, url = None, *args):
-        if url is None:
-            url = self.get_argument("next", None)
-        if url is None:
-            url = '/'
+    def redirect(self, url, *args):
+        url = self.get_argument("next", None)
         super(Base, self).redirect(url, *args)
