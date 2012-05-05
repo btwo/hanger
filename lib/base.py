@@ -2,7 +2,7 @@
 # coding=utf-8 
 import json
 
-from app import forms, model
+from app import forms
 from lib.template import render
 from tornado import web
 
