@@ -18,6 +18,7 @@ class Base(web.RequestHandler):
 
     def __init__(self, *args, **kwargs):
         super(Base, self).__init__(*args, **kwargs)
+        self.db = self.application.session
         self.name = str(self.__class__.__name__) # class name
         self.forms_name.append(self.name)
         self.__forms_add() # register default forms.
@@ -27,8 +28,8 @@ class Base(web.RequestHandler):
         '''
         commit data to database and close orm session in web request finish.
         '''
-        model.session.commit()
-        model.session.close()
+        self.db.commit()
+        self.db.close()
 
     def form_loader(self, key = None):
         '''
