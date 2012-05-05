@@ -6,16 +6,10 @@ PATH = utils.realpath(__file__)
 from lib.database import SQLAlchemy
 db = SQLAlchemy('sqlite:////tmp/hanger.db') # first run, run db.create_all().
 
-import view
-import model
-import forms
-
-
 from tornado import web
 from config import settings
 from view import Home, SignIn, SignUp, SignOut, PersonPage, Settings
 from base import Base
-
 
 class Error404(Base):
     '''If url not belonging to any handler, raise 404error.'''
