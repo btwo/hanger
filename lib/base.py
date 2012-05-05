@@ -24,13 +24,6 @@ class Base(web.RequestHandler):
         self.__forms_add() # register default forms.
         self.templname = self.name + '.html' # default template file name.
 
-    def on_finish(self):
-        '''
-        commit data to database and close orm session in web request finish.
-        '''
-        self.db.commit()
-        self.db.close()
-
     def form_loader(self, key = None):
         '''
         Get form in forms dict.
