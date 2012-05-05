@@ -3,9 +3,10 @@
 import json
 import lib.base
 
+from lib.base import Base, JinjaMixin
 from model import getuser
 
-class Base(lib.base.Base):
+class Base(JinjaMixin, Base):
     def get_current_user(self):
         cookie = self.get_secure_cookie('user')
         if not cookie: return False

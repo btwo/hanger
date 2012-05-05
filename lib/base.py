@@ -3,8 +3,39 @@
 import json
 
 from app import forms
-from lib.template import render
 from tornado import web
+from jinja2 import Environment, FileSystemLoader
+
+class JinjaMixin(object):
+    def render_string(self, template_name, **context):
+        '''Template render by Jinja2.'''
+        default_context = {
+            'xsrf': self.xsrf_form_html,
+            'request': self.request,
+            'settings': self.settings,
+            'me': self.current_user,
+            'static': self.static_url,
+            'handler': self,
+        }
+        context.update(default_context)
+        context.update(self.ui) # Enabled tornado UI methods.
+        return self.jinja_render(
+            path = self.settings['template_path'],
+            filename = template_name,
+            auto_reload = self.settings['debug'],
+            **context) #Render template.
+
+    def jinja_render(self, path, filename, auto_reload=False, autoescape=False,
+                      **context):
+        env = Environment(
+            # load template in file system.
+            loader = FileSystemLoader(path),
+            auto_reload = auto_reload, #auto reload
+            autoescape = False, # auto escape
+        )
+        template = env.get_template(filename)
+        return template.render(**context)
+
 
 class Base(web.RequestHandler):
     '''
@@ -71,24 +102,6 @@ class Base(web.RequestHandler):
             return self.render_string('errors/'+code+'.html', **kwargs)
         except:
             self.write('Sorry, happen an error.')
-
-    def render_string(self, template_name, **context):
-        '''Template render by Jinja2.'''
-        default_context = {
-            'xsrf': self.xsrf_form_html,
-            'request': self.request,
-            'settings': self.settings,
-            'me': self.current_user,
-            'static': self.static_url,
-            'handler': self,
-        }
-        context.update(default_context)
-        context.update(self.ui) # Enabled tornado UI methods.
-        return render(
-            path = self.settings['template_path'],
-            filename = template_name,
-            auto_reload = self.settings['debug'],
-            **context) #Render template.
 
     def json_write(self, obj):
         self.set_header('Content-Type', 'application/json')
