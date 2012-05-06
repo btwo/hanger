@@ -3,9 +3,8 @@
 import json
 
 from tornado import web
-from jinja2 import Environment, FileSystemLoader
 
-class JinjaMixin(object):
+class JinjaMixin(web.RequestHandler):
     def render_string(self, template_name, **context):
         '''Template render by Jinja2.'''
         default_context = {
@@ -24,15 +23,8 @@ class JinjaMixin(object):
             auto_reload = self.settings['debug'],
             **context) #Render template.
 
-    def jinja_render(self, path, filename, auto_reload=False, autoescape=False,
-                      **context):
-        env = Environment(
-            # load template in file system.
-            loader = FileSystemLoader(path),
-            auto_reload = auto_reload, #auto reload
-            autoescape = False, # auto escape
-        )
-        template = env.get_template(filename)
+    def jinja_render(self, path, filename, **context):
+        template = self.settings['jinja2_env'].get_template(filename)
         return template.render(**context)
 
 
