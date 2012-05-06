@@ -11,7 +11,7 @@ Hanger是基于 [Tornado](http://www.tornadoweb.org/) 以及其它许多代码�
 
 框架假定你使用的是 Linux 系统，使用 Nginx 反向代理 Tornado Web Server 。
 
-详细使用方法请自行阅读代码，重点阅读`./lib/base.py`。
+详细使用方法请自行阅读代码，重点阅读`./lib/hanger.py`。
 
 ## 分支
 

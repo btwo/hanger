@@ -2,7 +2,7 @@
 # coding=utf-8
 import datetime
 
-from lib.utils import escape, string_hash
+from utils import escape, string_hash
 from sqlalchemy import Column, Integer, String, DateTime
 from app import db
 

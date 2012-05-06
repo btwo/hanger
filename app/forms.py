@@ -1,10 +1,9 @@
 #!/usr/bin/env python2
 # coding=utf-8
-import wtforms
 import Image
 import StringIO
+import utils
 
-from lib import utils
 from lib.forms import Form, EmailField
 from model import getuser
 from wtforms.fields import TextField, TextAreaField, PasswordField, FileField
@@ -55,19 +54,24 @@ class SignUp(Form):
             raise ValidationError(u'Opps, 两次密码输入不一致')
 
 class ChangePassword(Form):
-    password = PasswordField(u'原密码', [Length(min = 6), Length(max = 30)])
+    password = PasswordField(u'原密码', [Length(max = 30)])
     new_password = PasswordField(u'新密码',
-        [Length(min = 6), Length(max = 30)])
+        [Length(max = 30)])
 
     new_password_repeat = PasswordField(u'再输一遍', 
-        [Length(min = 6), Length(max = 30)])
+        [Length(max = 30)])
 
     def validate_password(self, field):
-        current_user = self.handler.current_user
-        if current_user.hash_password(field.data) != current_user.password:
+        if not field.data:
+            return
+        me = self.handler.current_user
+        input_password = utils.password_hash(field.data, me.email)
+        if input_password != me.password:
             raise ValidationError(u'原密码输错了。')
 
     def validate_new_password(self, field):
+        if field.data and len(field.data) < 6:
+            raise ValidationError(u'密码最少需要6个字符')
         if field.data != self.new_password_repeat.data:
             raise ValidationError(u'两次密码输入的不一样。')
 
@@ -81,6 +85,8 @@ class ChangeAvatar(Form):
     avatar = FileField(u'上传头像')
 
     def validate_avatar(self, field):
+        if 'avatar' not in self.handler.request.files:
+            return
         filebody = self.handler.request.files['avatar'][0]['body']
         max_size = 1024 * 1024 #1Mb
         if len(filebody) > max_size:

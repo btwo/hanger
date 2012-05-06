@@ -34,7 +34,6 @@ routes = [
 
 class Application(web.Application):
     def __init__(self):
-        self.session = db.session
         super(Application, self).__init__(routes, **settings)
 
 application = Application()

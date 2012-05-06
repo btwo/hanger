@@ -1,12 +1,11 @@
 #!/usr/bin/env python2 
 # coding=utf-8 
 import json
-import lib.base
 
-from lib.base import Base, JinjaMixin
+from lib.hanger import BaseHandler, JinjaMixin, AutomationMixin
 from model import getuser
 
-class Base(JinjaMixin, Base):
+class Base(AutomationMixin, JinjaMixin, BaseHandler):
     def get_current_user(self):
         cookie = self.get_secure_cookie('user')
         if not cookie: return False
