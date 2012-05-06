@@ -6,6 +6,13 @@ from lib.hanger import BaseHandler, JinjaMixin, AutomationMixin
 from model import getuser
 
 class Base(AutomationMixin, JinjaMixin, BaseHandler):
+    def get_error_html(self, status_code, **kwargs):
+        code = str(status_code)
+        try:
+            return self.render_string('errors/'+code+'.html', **kwargs)
+        except:
+            return self.render_string('errors/unkown.html/', **kwargs)
+
     def get_current_user(self):
         cookie = self.get_secure_cookie('user')
         if not cookie: return False

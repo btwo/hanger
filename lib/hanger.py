@@ -89,17 +89,10 @@ class BaseHandler(web.RequestHandler):
     Base handler is parent class of all handlers.
     had some tools for simpliy and enhancement base tornado web framework.
     '''
-    def get_error_html(self, status_code, **kwargs):
-        code = str(status_code)
-        try:
-            return self.render_string('errors/'+code+'.html', **kwargs)
-        except:
-            self.write('Sorry, happen an error.')
-
     def json_write(self, obj):
         self.set_header('Content-Type', 'application/json')
         self.write(json.dumps(obj))
 
     def redirect(self, url):
-        url = self.get_argument("next", url)
+        url = self.get_argument("next", default = url)
         super(BaseHandler, self).redirect(url)
