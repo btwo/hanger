@@ -3,11 +3,8 @@
 from lib import utils
 PATH = utils.realpath(__file__)
 
-from lib.database import SQLAlchemy
-db = SQLAlchemy('sqlite:////tmp/hanger.db') # first run, run db.create_all().
-
 from tornado import web
-from config import settings
+from config import settings, db, env
 from view import Home, SignIn, SignUp, SignOut, PersonPage, Settings
 from base import Base
 
@@ -34,6 +31,7 @@ routes = [
 
 class Application(web.Application):
     def __init__(self):
+        self.env = env
         super(Application, self).__init__(routes, **settings)
 
 application = Application()

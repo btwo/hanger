@@ -24,7 +24,7 @@ class JinjaMixin(web.RequestHandler):
             **context) #Render template.
 
     def jinja_render(self, path, filename, **context):
-        template = self.settings['jinja2_env'].get_template(filename)
+        template = self.application.env.get_template(filename)
         return template.render(**context)
 
 
