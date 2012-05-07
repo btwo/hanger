@@ -5,17 +5,16 @@ import json
 from tornado import web
 
 class JinjaMixin(web.RequestHandler):
+    '''Use Jinja2 template engine.'''
     def render_string(self, template_name, **context):
-        '''Template render by Jinja2.'''
-        default_context = {
+        context.update({
             'xsrf': self.xsrf_form_html,
             'request': self.request,
             'settings': self.settings,
             'me': self.current_user,
             'static': self.static_url,
             'handler': self,
-        }
-        context.update(default_context)
+        })
         context.update(self.ui) # Enabled tornado UI methods.
         return self.jinja_render(
             path = self.settings['template_path'],
@@ -24,15 +23,17 @@ class JinjaMixin(web.RequestHandler):
             **context) #Render template.
 
     def jinja_render(self, path, filename, **context):
-        template = self.application.env.get_template(filename)
+        template = self.settings['jinja_env'].get_template(filename)
         return template.render(**context)
 
 
 class FormsDict(dict):
+    '''WTForms form object dict.'''
     def append(self, Form):
         self[Form.__name__] = Form()
 
 class AutomationMixin(object):
+    '''Hanger automation feature.'''
     Form = None
     formset = []
 

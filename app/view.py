@@ -6,9 +6,34 @@ import StringIO
 import Image
 import forms
 
-from base import Base
 from model import getuser, session, Person
 from tornado import web
+from lib.hanger import BaseHandler, JinjaMixin, AutomationMixin
+
+class Base(AutomationMixin, JinjaMixin, BaseHandler):
+    def get_error_html(self, status_code, **kwargs):
+        code = str(status_code)
+        try:
+            return self.render_string('errors/'+code+'.html', **kwargs)
+        except:
+            return self.render_string('errors/unkown.html/', **kwargs)
+
+    def get_current_user(self):
+        cookie = self.get_secure_cookie('user')
+        if not cookie: return False
+        user_json = json.loads(cookie)
+        user = getuser(user_json['id'])
+        if user: return user
+
+
+class PageNotFound(Base):
+    '''If url not belonging to any handler, raise 404error.'''
+    def get(self):
+        raise web.HTTPError(404)
+
+    def post(self):
+        raise web.HTTPError(404)
+
 
 class Sign(Base):
     def login(self, user):
