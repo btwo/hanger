@@ -16,16 +16,10 @@ jinja_env = Environment(
     autoescape = False, # auto escape
 )
 
-from view import Home, SignIn, SignUp, SignOut, PersonPage, Settings,\
-        PageNotFound
+from view import Home, PageNotFound
 routes = [
     # This is url route rule
     (r'/', Home),
-    (r'/signin/?', SignIn),
-    (r'/signup/?', SignUp),
-    (r'/signout/?', SignOut),
-    (r'/person/(\d+)/?', PersonPage),
-    (r'/settings/?', Settings),
     (r'.*', PageNotFound), # Place to end.
 ]
 
