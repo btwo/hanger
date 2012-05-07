@@ -2,7 +2,7 @@
 # coding=utf-8
 import datetime
 
-from utils import escape, string_hash
+from utils import escape, password_hash
 from sqlalchemy import Column, Integer, String, DateTime
 from app import db
 
@@ -22,14 +22,14 @@ class Person(db.Model):
     def __init__(self, name, email, password):
         self.name = escape(name)
         self.email = escape(email)
-        self.password = string_hash(password, salt = self.email)
+        self.password = password_hash(password, email=self.email)
         self.created = datetime.datetime.now()
 
     def __repr__(self):
         return "<Person ('%s', '%s')>" % (self.id, self.name)
 
     def hash_password(self, password):
-        return string_hash(password, salt = self.email)
+        return password(password, email=self.email)
 
     def change_password(self, password):
         self.password = self.hash_password(password)

@@ -32,6 +32,7 @@ class FormsDict(dict):
     def append(self, Form):
         self[Form.__name__] = Form()
 
+
 class AutomationMixin(object):
     '''Hanger automation feature.'''
     Form = None
