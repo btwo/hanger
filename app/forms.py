@@ -10,6 +10,8 @@ from wtforms.fields import TextField, TextAreaField, PasswordField, FileField
 from wtforms.validators import Required, Length, Email, ValidationError
 
 def name_validate(self, field):
+    if not field.data:
+        return
     if utils.special_char(field.data):
         raise ValidationError(u'昵称里面不允许有特殊字符。')
     elif getuser(name=field.data):
@@ -53,41 +55,34 @@ class SignUp(Form):
         if password != password_repeat:
             raise ValidationError(u'Opps, 两次密码输入不一致')
 
-class ChangePassword(Form):
+class PersonSettings(Form):
+    name = TextField(u'更改称呼', [name_validate, Length(max=10)])
+    avatar = FileField(u'上传头像')
+    bio = TextAreaField(u'简介', [Length(max=200)])
     password = PasswordField(u'原密码', [Length(max = 30)])
-    new_password = PasswordField(u'新密码',
-        [Length(max = 30)])
-
-    new_password_repeat = PasswordField(u'再输一遍', 
-        [Length(max = 30)])
+    new_password = PasswordField(u'新密码', [Length(max = 30)])
+    new_password_repeat = PasswordField(u'再输一遍', [Length(max = 30)])
 
     def validate_password(self, field):
         if not field.data:
             return
-        me = self.handler.current_user
-        input_password = utils.password_hash(field.data, me.email)
-        if input_password != me.password:
+        input_password = utils.password_hash(
+            field.data, self.current_user.email)
+        if input_password != self.current_user.password:
             raise ValidationError(u'原密码输错了。')
 
     def validate_new_password(self, field):
-        if field.data and len(field.data) < 6:
+        if not field.data:
+            return
+        if len(field.data) < 6:
             raise ValidationError(u'密码最少需要6个字符')
         if field.data != self.new_password_repeat.data:
             raise ValidationError(u'两次密码输入的不一样。')
 
-
-class ChangeName(Form):
-    name = TextField(u'更改称呼',
-        [name_validate, Length(max=10)])
-
-
-class ChangeAvatar(Form):
-    avatar = FileField(u'上传头像')
-
     def validate_avatar(self, field):
-        if 'avatar' not in self.handler.request.files:
+        if 'avatar' not in self.files:
             return
-        filebody = self.handler.request.files['avatar'][0]['body']
+        filebody = self.files['avatar'][0]['body']
         max_size = 1024 * 1024 #1Mb
         if len(filebody) > max_size:
             raise ValidationError(u'文件太大！最多只能上传1Mb的图片')
@@ -95,7 +90,3 @@ class ChangeAvatar(Form):
             Image.open(StringIO.StringIO(filebody))
         except IOError:
             raise ValidationError(u'这不是一个图片')
-
-
-class EditBio(Form):
-    bio = TextAreaField(u'简介', [Length(max=200)])

@@ -33,10 +33,12 @@ class Form(wtforms.Form):
     '''
     Base form class
     '''
-    def __init__(self, formdata = None, **kwargs):
-        if formdata:
-            self.handler = formdata
-            formdata = FormDict(formdata)
+    def __init__(self, handler = None, **kwargs):
+        formdata = None
+        if handler:
+            formdata = FormDict(handler)
+            self.current_user = handler.current_user
+            self.files = handler.request.files
         super(Form, self).__init__(formdata = formdata, **kwargs)
 
 

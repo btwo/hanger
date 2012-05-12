@@ -12,18 +12,19 @@ from lib.hanger import BaseHandler, JinjaMixin, AutomationMixin
 
 class Base(AutomationMixin, JinjaMixin, BaseHandler):
     def get_error_html(self, status_code, **kwargs):
-        code = str(status_code)
         try:
-            return self.render_string('errors/'+code+'.html', **kwargs)
+            return self.render_string('errors/%d.html' % status_code, **kwargs)
         except:
-            return self.render_string('errors/unkown.html/', **kwargs)
+            self.set_header('Content-Type', 'text/plan')
+            return "Sorry, an %d HTTP Error has occurred." % status_code
 
     def get_current_user(self):
         cookie = self.get_secure_cookie('user')
-        if not cookie: return False
-        user_json = json.loads(cookie)
-        user = getuser(user_json['id'])
-        if user: return user
+        if not cookie:
+            return None
+        user = getuser(json.loads(cookie)['id'])
+        if user:
+            return user
 
 
 class PageNotFound(Base):
@@ -63,6 +64,7 @@ class SignIn(Sign):
 
 class SignUp(Sign):
     Form = forms.SignUp
+
     def get(self):
         self.render()
     
@@ -95,8 +97,7 @@ class PersonPage(Base):
 
 
 class Settings(Base):
-    formset = [forms.ChangeAvatar, forms.ChangePassword, forms.ChangeName, 
-               forms.EditBio,]
+    Form = forms.PersonSettings
 
     @web.authenticated
     def get(self):
@@ -105,43 +106,28 @@ class Settings(Base):
     @web.authenticated
     def post(self):
         try:
-            change_password = self.form_loader('ChangePassword')
-            change_name = self.form_loader('ChangeName')
-            edit_bio = self.form_loader('EditBio')
-            change_avatar = self.form_loader('ChangeAvatar')
+            form = self.form_loader()
         except RuntimeError:
             return
-        if change_name.name.data:
-            self.change_name(change_name)
-        if edit_bio.bio.data:
-            self.editbio(edit_bio)
-        if change_password.new_password.data:
-            self.change_password(change_password)
-        if self.request.files:
-            self.change_avatar(change_avatar)
+        new_name = form.name.data
+        new_bio = form.bio.data
+        new_password = form.new_password.data
+        if "avatar" in self.request.files:
+            new_avatar = self.request.files['avatar'][0]['body']
+        else:
+            new_avatar = None
+        if new_name:
+            self.current_user.change_name(new_name)
+        if new_bio:
+            self.current_user.change_bio(new_bio)
+        if new_password:
+            self.current_user.change_password(new_password)
+        if new_avatar:
+            self.change_avatar(new_avatar)
         self.redirect('/settings')
 
-    def change_name(self, form):
-        #normal settings
-        if not form:
-            raise RuntimeError
-        self.current_user.change_name(form.name.data)
-
-    def change_password(self, form):
-        if not form: # change password.
-            raise RuntimeError
-        self.current_user.change_password(form.new_password.data)
-
-    def editbio(self, form):
-        if not form:
-            raise RuntimeError
-        self.current_user.change_bio(form.bio.data)
-
-    def change_avatar(self, form):
-        if not form:
-            raise RuntimeError
-        avatar = Image.open(StringIO.StringIO(
-            self.request.files['avatar'][0]['body']))
+    def change_avatar(self, new_avatar):
+        avatar = Image.open(StringIO.StringIO(new_avatar))
         self.remove_old_avatar()
         filename = self.avatar_save(avatar)
         self.current_user.avatar = filename
