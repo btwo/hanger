@@ -5,11 +5,11 @@ from lib.hanger import BaseHandler, JinjaMixin, AutomationMixin
 
 class Base(AutomationMixin, JinjaMixin, BaseHandler):
     def get_error_html(self, status_code, **kwargs):
-        code = str(status_code)
         try:
-            return self.render_string('errors/'+code+'.html', **kwargs)
+            return self.render_string('errors/%d.html' % status_code, **kwargs)
         except:
-            return self.render_string('errors/unkown.html/', **kwargs)
+            self.set_header('Content-Type', 'text/plan')
+            return "Sorry, an %d HTTP Error has occurred." % status_code
 
 
 class PageNotFound(Base):

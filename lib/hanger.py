@@ -3,9 +3,22 @@
 import json
 
 from tornado import web
+from jinja2 import Environment, FileSystemLoader
 
 class JinjaMixin(web.RequestHandler):
     '''Use Jinja2 template engine.'''
+    environment = None
+
+    def __init__(self, *args, **kwargs):
+        super(JinjaMixin, self).__init__(*args, **kwargs)
+        if not JinjaMixin.environment:
+            JinjaMixin.environment = Environment(
+            # load template in file system.
+            loader = FileSystemLoader(self.settings['template_path']),
+            auto_reload = self.settings['debug'], #auto reload
+            autoescape = False, # auto escape
+        )
+
     def render_string(self, template_name, **context):
         context.update({
             'xsrf': self.xsrf_form_html,
@@ -23,7 +36,7 @@ class JinjaMixin(web.RequestHandler):
             **context) #Render template.
 
     def jinja_render(self, path, filename, **context):
-        template = self.settings['jinja_env'].get_template(filename)
+        template = self.environment.get_template(filename)
         return template.render(**context)
 
 
@@ -31,6 +44,7 @@ class FormsDict(dict):
     '''WTForms form object dict.'''
     def append(self, Form):
         self[Form.__name__] = Form()
+
 
 class AutomationMixin(object):
     '''Hanger automation feature.'''

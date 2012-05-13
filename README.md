@@ -13,6 +13,11 @@ Hanger是基于 [Tornado](http://www.tornadoweb.org/) 以及其它许多代码�
 
 详细使用方法请自行阅读代码，重点阅读`./lib/hanger.py`。
 
+第一次运行请创建数据库：
+
+    >>> import app
+    >>> app.db.create_db()
+
 ## 分支
 
 目前项目按照功能不同分为下面一些分支。
