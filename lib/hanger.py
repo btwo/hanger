@@ -13,11 +13,11 @@ class JinjaMixin(web.RequestHandler):
         super(JinjaMixin, self).__init__(*args, **kwargs)
         if not JinjaMixin.environment:
             JinjaMixin.environment = Environment(
-            # load template in file system.
-            loader = FileSystemLoader(self.settings['template_path']),
-            auto_reload = self.settings['debug'], #auto reload
-            autoescape = False, # auto escape
-        )
+                # load template in file system.
+                loader = FileSystemLoader(self.settings['template_path']),
+                auto_reload = self.settings['debug'], #auto reload
+                autoescape = False, # auto escape
+            )
 
     def render_string(self, template_name, **context):
         context.update({

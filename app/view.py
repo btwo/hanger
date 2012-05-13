@@ -22,7 +22,8 @@ class Base(AutomationMixin, JinjaMixin, BaseHandler):
         cookie = self.get_secure_cookie('user')
         if not cookie:
             return None
-        user = getuser(json.loads(cookie)['id'])
+        user_id = int(json.loads(cookie)['id'])
+        user = getuser(id=user_id)
         if user:
             return user
 
@@ -91,8 +92,8 @@ class SignOut(Sign):
 
 
 class PersonPage(Base):
-    def get(self, uid):
-        person = getuser(uid)
+    def get(self, user_id):
+        person = getuser(id=user_id)
         if not person:
             raise web.HTTPError(404)
         self.render(person = person)
