@@ -42,11 +42,10 @@ class Person(db.Model):
 
 
 def getuser(uid = None, email = None, name = None):
-    query = session.query(Person)
     if uid:
-        return query.filter_by(id = int(uid)).first()
+        return Person.query.filter_by(id = int(uid)).first()
     elif email:
-        return query.filter_by(email = email).first()
+        return Person.query.filter_by(email = email).first()
     elif name:
-        return query.filter_by(name = name).first()
+        return Person.query.filter_by(name = name).first()
     return None

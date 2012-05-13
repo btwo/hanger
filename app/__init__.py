@@ -24,7 +24,6 @@ routes = [
 
 class Application(web.Application):
     def __init__(self):
-        super(Application, self).__init__(
-            routes, **settings)
+        super(Application, self).__init__(routes, **settings)
 
 application = Application()
