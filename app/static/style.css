@@ -8,8 +8,7 @@ body {
     background-color: #FFF;
 	font-size: 14px;
     width: 600px;
-    box-shadow: 1px 1px 3px #CCCCCC;
-    border-radius: 6px 6px 6px 6px;
+    border: 1px solid #CCC;
 }
 
 a {
@@ -28,12 +27,66 @@ h1, h2, h3, h4, h5, h6 {
 	font-weight: normal;
 }
 
-fieldset {
-    margin: 10px;
+form {
+    padding: 10px;
 }
 
-input {
+fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+legend {
+    margin: 0;
+    padding: 20px 0 6px 0;
+    font-weight: bold;
+    border-bottom: 1px #ccc solid;
+    width: 100%;
+}
+
+form p {
+    margin: 8px 0;
+    padding: 0;
+}
+
+input[type=text], input[type=email], input[type=password], textarea {
+    border: 1px #ccc solid;
     font-size: 20px;
+}
+
+input[type=text]:focus, input[type=email]:focus, input[type=password]:focus, textarea:focus {
+    border: 1px #999 solid;
+}
+
+input[type=submit]{
+    margin: 4px 0;
+    padding: 4px;
+    border: 1px solid #999;
+    background-color: #FFF;
+    font-size: 18px;
+    color: #999;
+}
+
+input[type=submit]:hover{
+    color: #000;
+    background-color: #f3f3f3;
+}
+
+input[type=submit]:active{
+    color: #CCC;
+    background-color: #999;
+}
+
+header {
+    height: 30px;
+    padding: 10px;
+    border-bottom: 1px solid #CCC;
+}
+
+#home-header {
+    border: none;
+    height: 200px;
 }
 
 body > footer {
@@ -49,6 +102,7 @@ body > footer a {
 #title {
     font-size: 24px;
     font-family: "Trebuchet MS", Tahoma, Verdana;
+    float: right;
 }
 
 #title-h1 {
@@ -57,5 +111,5 @@ body > footer a {
 }
 
 #title a, #title-h1 a {
-    color: #c4a000;
+    color: #999;
 }
