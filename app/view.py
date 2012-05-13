@@ -99,7 +99,7 @@ class PersonPage(Base):
 
 
 class Settings(Base):
-    Form = forms.PersonSettings
+    Form = forms.Settings
 
     @web.authenticated
     def get(self):

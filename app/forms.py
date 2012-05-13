@@ -55,7 +55,7 @@ class SignUp(Form):
         if password != password_repeat:
             raise ValidationError(u'Opps, 两次密码输入不一致')
 
-class PersonSettings(Form):
+class Settings(Form):
     name = TextField(u'更改称呼', [name_validate, Length(max=10)])
     avatar = FileField(u'上传头像')
     bio = TextAreaField(u'简介', [Length(max=200)])

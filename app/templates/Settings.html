@@ -8,18 +8,18 @@
         <fieldset>
             <legend>修改头像</legend>
             <p><img src="{{avatar(me)}}"></p>
-            {{ field(forms['PersonSettings'].avatar) }}
+            {{ field(forms['Settings'].avatar) }}
         </fieldset>
         <fieldset>
             <legend>个人信息</legend>
-            {{ field(forms['PersonSettings'].name) }}
-            {{ field(forms['PersonSettings'].bio)}}
+            {{ field(forms['Settings'].name) }}
+            {{ field(forms['Settings'].bio)}}
         </fieldset>
         <fieldset>
             <legend>修改密码</legend>
-            {{field(forms['PersonSettings'].password)}}
-            {{field(forms['PersonSettings'].new_password)}}
-            {{field(forms['PersonSettings'].new_password_repeat)}}
+            {{field(forms['Settings'].password)}}
+            {{field(forms['Settings'].new_password)}}
+            {{field(forms['Settings'].new_password_repeat)}}
         </fieldset>
         <input type="submit" value="保存更改">
     </form>
