@@ -93,6 +93,8 @@ class SignOut(Sign):
 class PersonPage(Base):
     def get(self, uid):
         person = getuser(uid)
+        if not person:
+            raise web.HTTPError(404)
         self.render(person = person)
 
 
