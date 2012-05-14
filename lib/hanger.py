@@ -5,7 +5,13 @@ import json
 from tornado import web
 from jinja2 import Environment, FileSystemLoader
 
-class JinjaMixin(web.RequestHandler):
+class RequestHandler(web.RequestHandler):
+    def __init__(self, *args, **kwargs):
+        self.handler_name = self.__class__.__name__
+        super(RequestHandler, self).__init__(*args, **kwargs)
+
+
+class JinjaMixin(RequestHandler):
     '''Use Jinja2 template engine.'''
     environment = None
 
@@ -26,14 +32,12 @@ class JinjaMixin(web.RequestHandler):
             'settings': self.settings,
             'me': self.current_user,
             'static': self.static_url,
-            'handler': self,
-        })
+            'handler': self,})
         context.update(self.ui) # Enabled tornado UI methods.
         return self.jinja_render(
             path = self.settings['template_path'],
             filename = template_name,
-            auto_reload = self.settings['debug'],
-            **context) #Render template.
+            auto_reload = self.settings['debug'], **context) #Render template.
 
     def jinja_render(self, path, filename, **context):
         template = self.environment.get_template(filename)
@@ -46,23 +50,27 @@ class FormsDict(dict):
         self[Form.__name__] = Form()
 
 
-class AutomationMixin(object):
-    '''Hanger automation feature.'''
+class AutoTemplatesMixin(RequestHandler):
+    def __init__(self, *args, **kwargs):
+        super(AutoTemplatesMixin, self).__init__(*args, **kwargs)
+        self.template_name = "%s.html" % self.handler_name
+
+    def render(self, **context):
+        context.update({'template_name': self.template_name})
+        super(AutoTemplatesMixin, self).render(**context)
+
+
+class AutoFormsMixin(RequestHandler):
     Form = None
     formset = []
 
     def __init__(self, *args, **kwargs):
-        self.name = self.__class__.__name__
-        self.templname = self.name + '.html'
-        self.form_init()
-        super(AutomationMixin, self).__init__(*args, **kwargs)
-
-    def form_init(self):
         self.forms = FormsDict()
         if self.Form:
             self.forms.append(self.Form)
         for Form in self.formset:
             self.forms.append(Form)
+        super(AutoFormsMixin, self).__init__(*args, **kwargs)
 
     def form_loader(self, key=None, validate=True):
         if not key:
@@ -77,21 +85,20 @@ class AutomationMixin(object):
                 raise RuntimeError("form is not pass the validation.")
         return form
 
-    def form_validate(self, form, **kwargs):
+    def form_validate(self, form, *args, **kwargs):
         '''Automated handle of Forms validate.'''
         if form.validate():
             return form
-        self.render({form.__class__.__name__: form}, **kwargs)
+        self.forms.update({form.__class__.__name__: form})
+        self.render(*args, **kwargs)
         return False
 
-    def render(self, forms=None, **context):
-        if forms:
-            self.forms.update(forms)
-        super(AutomationMixin, self).render(
-            self.templname, forms = self.forms, **context)
+    def render(self, template_name = "", **context):
+        super(AutoFormsMixin, self).render(
+            template_name=self.template_name, forms=self.forms, **context)
+        
 
-
-class BaseHandler(web.RequestHandler):
+class BaseHandler(RequestHandler):
     '''
     Base handler is parent class of all handlers.
     had some tools for simpliy and enhancement base tornado web framework.

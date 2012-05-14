@@ -8,9 +8,9 @@ import forms
 
 from model import getuser, session, Person
 from tornado import web
-from lib.hanger import BaseHandler, JinjaMixin, AutomationMixin
+from lib.hanger import BaseHandler, JinjaMixin, AutoFormsMixin, AutoTemplatesMixin
 
-class Base(AutomationMixin, JinjaMixin, BaseHandler):
+class Base(AutoFormsMixin, AutoTemplatesMixin, JinjaMixin, BaseHandler):
     def get_error_html(self, status_code, **kwargs):
         try:
             return self.render_string('errors/%d.html' % status_code, **kwargs)
