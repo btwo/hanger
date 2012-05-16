@@ -11,12 +11,14 @@ Hanger是基于 [Tornado](http://www.tornadoweb.org/) 以及其它许多代码�
 
 框架假定你使用的是 Linux 系统，使用 Nginx 反向代理 Tornado Web Server 。
 
-详细使用方法请自行阅读代码，重点阅读`./lib/hanger.py`。
+详细使用方法请自行阅读代码，重点阅读`./hanger/hanger.py`。
 
-第一次运行请创建数据库：
+第一次运行示例请创建数据库：
 
+    # python2
     >>> import app
     >>> app.db.create_db()
+    # ./runserver.py
 
 ## 分支
 
@@ -25,13 +27,9 @@ Hanger是基于 [Tornado](http://www.tornadoweb.org/) 以及其它许多代码�
 * **master**: 主要分支，内置有基本的用户注册登录功能。
 * **lite**: 在 master 的基础上删除了用户注册登录功能。
 
-## 依赖
+## 安装
 
-* [Tornado](http://www.tornadoweb.org/)
-* [WTForms](http://wtforms.simplecodes.com/docs/dev/)
-* [Jinja2](http://jinja.pocoo.org/docs/)
-* [SQLAlchemy](http://www.sqlalchemy.org/)
-* [Python Image library(PIL)](http://www.pythonware.com/products/pil/)
+    # ./setup.py install
 
 ## 开发
 

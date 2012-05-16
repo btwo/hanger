@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # coding=utf-8
-from lib import utils
+import utils
 
 def text2html(handler, text):
     '''Text to HTML.'''

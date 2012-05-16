@@ -1,10 +1,10 @@
 #!/usr/bin/env python2
 # coding=utf-8
-from lib import utils
+from hanger import utils
 PATH = utils.realpath(__file__)
 from tornado import web
 from config import settings
-from lib.database import SQLAlchemy
+from hanger.database import SQLAlchemy
 
 db = SQLAlchemy('sqlite:////tmp/hanger.db') # first run, run db.create_all().
 

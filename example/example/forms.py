@@ -4,7 +4,7 @@ import Image
 import StringIO
 import utils
 
-from lib.forms import Form, EmailField
+from hanger.forms import Form, EmailField
 from model import getuser
 from wtforms.fields import TextField, TextAreaField, PasswordField, FileField
 from wtforms.validators import Required, Length, Email, ValidationError

@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # coding=utf-8
 
-from app import application
+from example import application
 from config import settings
 from tornado import httpserver, ioloop, options
 

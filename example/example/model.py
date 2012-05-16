@@ -4,7 +4,7 @@ import datetime
 
 from utils import escape, password_hash
 from sqlalchemy import Column, Integer, String, DateTime
-from app import db
+from example import db
 
 session = db.session
 

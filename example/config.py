@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # coding=utf-8
 from os.path import join
-from app import PATH, ui
+from example import PATH, ui
 
 #setting
 settings = dict(
