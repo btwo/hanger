@@ -21,9 +21,10 @@ Hanger是基于 [Tornado](http://www.tornadoweb.org/) 以及其它许多代码�
 
 第一次运行示例请创建数据库：
 
+    # cd example
     # python2
-    >>> import app
-    >>> app.db.create_db()
+    >>> import example
+    >>> example.db.create_db()
     # ./runserver.py
 
 ## 约定
