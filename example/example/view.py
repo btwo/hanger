@@ -105,6 +105,9 @@ class Settings(Base):
 
     @web.authenticated
     def get(self):
+        form = self.forms['Settings']
+        form.bio.data = self.current_user.bio
+        form.name.data = self.current_user.name
         self.render()
     
     @web.authenticated
