@@ -6,7 +6,8 @@ import StringIO
 import Image
 import forms
 
-from model import getuser, session, Person
+from elixir import session
+from model import getuser, Person
 from tornado import web
 from hanger import BaseHandler, JinjaMixin, AutoFormsMixin, AutoTemplatesMixin
 
@@ -112,6 +113,7 @@ class Settings(Base):
             form = self.form_loader()
         except RuntimeError:
             return
+        me = self.current_user
         new_name = form.name.data
         new_bio = form.bio.data
         new_password = form.new_password.data
@@ -120,13 +122,14 @@ class Settings(Base):
         else:
             new_avatar = None
         if new_name:
-            self.current_user.change_name(new_name)
+            me.name = new_name
         if new_bio:
-            self.current_user.change_bio(new_bio)
+            me.bio = new_bio
         if new_password:
-            self.current_user.change_password(new_password)
+            me.password = me.hash_password(new_password)
         if new_avatar:
             self.change_avatar(new_avatar)
+        session.commit()
         self.redirect('/settings')
 
     def change_avatar(self, new_avatar):

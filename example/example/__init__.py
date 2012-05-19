@@ -4,9 +4,11 @@ from hanger import utils
 PATH = utils.realpath(__file__)
 from tornado import web
 from config import settings
-from hanger.database import SQLAlchemy
 
-db = SQLAlchemy('sqlite:////tmp/hanger.db') # first run, run db.create_all().
+import model
+from hanger.database import Elixir
+
+db = Elixir('sqlite:////tmp/hanger.db') # first run, run db.create_all().
 
 from view import Home, SignIn, SignUp, SignOut, PersonPage, Settings,\
         PageNotFound

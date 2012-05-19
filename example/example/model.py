@@ -1,50 +1,28 @@
 #!/usr/bin/env python2
 # coding=utf-8
-import datetime
+from utils import escape, string_hash
+from elixir import Field
+from sqlalchemy import types
+from hanger.database import Entity
 
-from utils import escape, password_hash
-from sqlalchemy import Column, Integer, String, DateTime
-from example import db
-
-session = db.session
-
-class Base(object):
-    id = Column(Integer, primary_key=True)
-    created = Column(DateTime)
-
-    def __init__(self):
-        self.created = datetime.datetime.now()
-
-
-class Person(Base, db.Model):
-    __tablename__ = 'users'
-
-    name = Column(String)
-    email = Column(String)
-    password = Column(String)
-    avatar = Column(String)
-    bio = Column(String)
+class Person(Entity):
+    name = Field(types.Unicode(32))
+    email = Field(types.String(256))
+    password = Field(types.String(256))
+    avatar = Field(types.String(32))
+    bio = Field(types.Unicode())
 
     def __init__(self, name, email, password):
         super(Person, self).__init__()
         self.name = escape(name)
         self.email = escape(email)
-        self.password = password_hash(password, email=self.email)
-
-    def __repr__(self):
-        return "<Person ('%s', '%s')>" % (self.id, self.name)
-
-    def hash_password(self, password):
-        return password(password, email=self.email)
-
-    def change_password(self, password):
         self.password = self.hash_password(password)
 
-    def change_name(self, name):
-        self.name = escape(name)
+    def __repr__(self):
+        return "<Person #%s [%s]>" % (self.id, self.name)
 
-    def change_bio(self, bio):
-        self.bio = escape(bio)
+    def hash_password(self, password):
+        return string_hash(password, salt=self.email)
 
 
 def getuser(**kwargs):

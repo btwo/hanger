@@ -24,6 +24,7 @@ setup(
         'WTForms',
         'SQLAlchemy',
         'PIL',
+        'Elixir',
     ],
     classifiers=[
         'Environment :: Web Environment',
