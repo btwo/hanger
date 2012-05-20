@@ -20,7 +20,8 @@ class Elixir(object):
         elixir.create_all()
 
 
-class Entity(elixir.Entity):
+class Entity(elixir.entity.EntityBase):
+    __metaclass__ = elixir.entity.EntityMeta
     created = Field(types.DateTime())
 
     def __init__(self, *args, **kwargs):
