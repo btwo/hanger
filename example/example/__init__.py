@@ -9,7 +9,7 @@ import model
 
 db = Elixir('sqlite:////tmp/hanger.db') # first run, run db.create_all().
 
-from view import Home, SignIn, SignUp, SignOut, PersonPage, Settings,\
+from views import Home, SignIn, SignUp, SignOut, PersonPage, Settings,\
         PageNotFound
 routes = [
     # This is url route rule
