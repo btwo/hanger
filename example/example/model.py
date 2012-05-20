@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # coding=utf-8
 from utils import escape, string_hash
-from elixir import Field
+from elixir import session, Field
 from sqlalchemy import types
 from hanger.database import Entity
 

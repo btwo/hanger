@@ -6,8 +6,7 @@ import StringIO
 import Image
 import forms
 
-from elixir import session
-from model import getuser, Person
+from model import session, getuser, Person
 from tornado import web
 from hanger import BaseHandler, JinjaMixin, AutoFormsMixin, AutoTemplatesMixin
 

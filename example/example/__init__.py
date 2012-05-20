@@ -4,9 +4,8 @@ from hanger import utils
 PATH = utils.realpath(__file__)
 from tornado import web
 from config import settings
-
-import model
 from hanger.database import Elixir
+import model
 
 db = Elixir('sqlite:////tmp/hanger.db') # first run, run db.create_all().
 

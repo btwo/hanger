@@ -10,11 +10,10 @@ from sqlalchemy import types
 from elixir import Field
 
 class Elixir(object):
-    def __init__(self, master, **kwargs):
+    def __init__(self, database, echo=False, **kwargs):
         self.metadata = elixir.metadata
-        self.metadata.bind = master
-        self.metadata.bind.echo = False
-        self.session = elixir.session
+        self.metadata.bind = database
+        self.metadata.bind.echo = echo
         elixir.setup_all()
 
     def create_db(self):
