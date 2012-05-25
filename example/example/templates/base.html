@@ -1,32 +1,39 @@
 {% macro field(field, cls='') -%}
-<p>{{field.label()}}</p>
-<p>{{field(class_ = cls)}}</p>
-{%if field.errors%}
-<ul class='errors'>
-    {%for error in field.errors%}
-    <li class='error'>{{error}}</li>
-    {%endfor%}
-</ul>
-{% endif %}
+    <p>{{field.label()}}</p>
+    <p>{{field(class_ = cls)}}</p>
+    {%if field.errors%}
+    <ul class='errors'>
+        {%for error in field.errors%}
+        <li class='error'>{{error}}</li>
+        {%endfor%}
+    </ul>
+    {% endif %}
 {%- endmacro %}
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
+        {% block head %}
         <meta charset="UTF-8" />
-        <title>Hanger - {%block tit%}一个小框架{%endblock%}</title>
-        <link rel="stylesheet/less" type="text/css" href="{{static('style/style.less')}}">
-        <script src="{{static('js/less.js')}}" type="text/javascript"></script>
+        <title>{%block title%}Hanger - {%block tit%}一个小框架{%endblock%}{%endblock%}</title>
+        <link rel="stylesheet" type="text/css" href="{{static('style/style.css')}}">
+        {% block head_extand %} {%endblock%}
+        {% endblock %}
     </head>
     <body>
-        {% block header %}
-        <header>
-            <div id='title'><a href="/">Hanger</a></div>
+        {% block bar %}
+        <div class="top-bar">
+            <div class='title_text'><a href="/">Hanger</a></div>
             {% include 'inc/userbar.html' %}
-        </header>
+        </div>
         {% endblock %}
-        {% block main %}{% endblock %}
+        <div id="page">
+            {% block main %}{% endblock %}
+        </div>
         {% block footer %}
-        <footer>Powered by <a href="http://github.com/tioover/hanger/">Hanger</a>.</footer>
+        <footer>Powered by <a href="http://github.com/tioover/hanger/">hanger</a>.</footer>
         {% endblock %}
+        {%block sciript%}
+            {%block sciript_extend%}{%endblock%}
+        {%endblock%}
     </body>
 </html>

@@ -1,0 +1,21 @@
+body {
+    margin: 10px 20px;
+    font-size: 16px;
+    font-family: "Trebuchet MS", Verdana;
+}
+
+a {
+    text-decoration: none;
+    color: #666;
+}
+
+ul {
+    list-style: square outside none;
+}
+
+a:hover {text-decoration: underline;}
+
+form {
+    width: 600px;}
+
+body>footer {font-size:12px;}
