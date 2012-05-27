@@ -3,18 +3,18 @@
 from os.path import join
 from example import PATH, ui
 
-#setting
 settings = dict(
+    # general
     debug = True,
     ui_methods = ui,
     port = 8888,
     login_url = '/signin/',
     # Security
     xsrf_cookies = True,
-    cookie_secret = r'HaHaNiKanKanNi!Yooooooooooooooooooooooooooooo~~~'
+    cookie_secret = r'哈哈哈你看看你',
+    # path
+    template_path = join(PATH, 'templates'),
+    static_path = join(PATH, 'static'),
+    logfile_path = join(PATH, 'error.log'),
 )
-# Path
-settings['template_path'] = join(PATH, 'templates')
-settings['static_path'] = join(PATH, 'static')
 settings['avatar_path'] = join(settings['static_path'], 'avatar')
-settings['logfile_path'] = join(PATH, 'error.log')
