@@ -58,7 +58,8 @@ class AutoTemplatesMixin(RequestHandler):
         self.template_name = "%s.html" % self.handler_name
 
     def render(self, **context):
-        context.update({'template_name': self.template_name})
+        if 'template_name' not in context:
+            context.update({'template_name': self.template_name})
         super(AutoTemplatesMixin, self).render(**context)
 
 
