@@ -1,9 +1,11 @@
 #!/usr/bin/env python2 
 # coding=utf-8 
 import json
+import traceback
 
-from tornado import web
+from tornado import web, options
 from jinja2 import Environment, FileSystemLoader
+from send_mail import send_mail
 
 class RequestHandler(web.RequestHandler):
     def __init__(self, *args, **kwargs):
@@ -110,3 +112,16 @@ class BaseHandler(RequestHandler):
     def redirect(self, url):
         url = self.get_argument("next", default = url)
         super(BaseHandler, self).redirect(url)
+
+    def get_error_html(self, status_code, **kwargs):
+        if not self.settings['debug'] and code is 500 \
+           and self.settings['send_error_mail']:
+            send_mail(
+                mail_host = '127.0.0.1',
+                mail_user = 'errorlog',
+                mail_postfix = self.settings['mail_postfix'],
+                to_list = [self.settings['admin_mail'],],
+                sub = "500 internal server error.",
+                content = "%s\n\n%s" % (
+                    kwargs["exception"], traceback.format_exc()),
+            )

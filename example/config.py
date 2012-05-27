@@ -16,5 +16,10 @@ settings = dict(
     template_path = join(PATH, 'templates'),
     static_path = join(PATH, 'static'),
     logfile_path = join(PATH, 'error.log'),
+    # email
+    send_error_mail = True,
+    admin_mail = 'tioover@gmail.com',
+    mail_host = '127.1',
+    mail_postfix = 'eggshell.me' # site domain.
 )
 settings['avatar_path'] = join(settings['static_path'], 'avatar')
