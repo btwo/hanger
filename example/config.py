@@ -5,6 +5,8 @@ from example import PATH, ui
 
 settings = dict(
     # general
+    site_name = u'hanger',
+    site_domain = 'eggshell.me',
     debug = True,
     ui_methods = ui,
     port = 8888,

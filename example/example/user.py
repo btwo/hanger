@@ -4,10 +4,12 @@ import os
 import json
 import StringIO
 import Image
+import uuid
 import forms
 
 from model import session, getuser, Person
 from tornado import web
+from hanger.send_mail import send_mail
 from base import Base
 
 class Sign(Base):
@@ -134,11 +136,88 @@ class Settings(Base):
         avatar = avatar.resize((height, weight))
         return avatar
 
+cache = {}
 
+class UUIDCache(object):
+    # TODO use redis.
+
+    def generate(self, user):
+        global cache
+        key = uuid.uuid4()
+        value = user.id
+        cache[str(key)] = value
+        return key
+
+    def destroy(self, key):
+        global cache
+        del cache[key]
+
+    def get(self, key):
+        global cache
+        try:
+            return getuser(id = cache[key])
+        except KeyError:
+            return None
+
+class ForgetPassword(Base):
+    Form = forms.ForgetPassword
+
+    def get(self):
+        self.render()
+
+    def post(self):
+        try:
+            form = self.form_loader()
+        except RuntimeError:
+            return
+        user = getuser(email=form.email.data)
+        key = UUIDCache().generate(user)
+        self.send_mail(
+            name = 'noreply',
+            tolist = [form.email.data],
+            subject = u"[%s]重置你的密码" % self.settings['site_name'],
+            content = self.render_string('mail/reset_password' % key)
+        )
+        self.render(template_name = "mailed.html")
+
+
+class ResetPassword(Base):
+    Form = forms.ResetPassword
+
+    def get(self, key):
+        user = self.get_user(key)
+        if not user:
+            return
+        self.render()
+
+    def post(self, key):
+        user = self.get_user(key)
+        if not user:
+            return
+        try:
+            form = self.form_loader()
+        except RuntimeError:
+            return
+        user.password = user.hash_password(form.password.data)
+        session.commit()
+        self.redirect('/signin')
+
+    def get_user(self, key):
+        user = UUIDCache().get(key)
+        if not user:
+            web.HTTPError(404)
+            return None
+        else:
+            return user
+
+
+uuid_regex = "[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}"
 routes = [
     (r'/signin/?', SignIn),
     (r'/signup/?', SignUp),
     (r'/signout/?', SignOut),
     (r'/person/(\d+)/?', PersonPage),
     (r'/settings/?', Settings),
+    (r'/forget_password/?', ForgetPassword),
+    (r'/reset_password/(%s)/?' % uuid_regex, ResetPassword),
 ]

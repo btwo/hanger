@@ -91,3 +91,23 @@ class Settings(Form):
             Image.open(StringIO.StringIO(filebody))
         except IOError:
             raise ValidationError(u'这不是一个图片')
+
+
+class ForgetPassword(Form):
+    email = EmailField(u'输入你的Email地址',
+        [Required(), Length(min=6), Length(max=120), Email()])
+
+    def validate_email(self, field):
+        if not getuser(email=field.data):
+            raise ValidationError(u'没有这个帐号，请检查输入')
+
+
+class ResetPassword(Form):
+    password = PasswordField(u'密码', [Required(), Length(min=8)])
+    password_repeat = PasswordField(u'再输一遍密码', [Required()])
+
+    def validate_password(self, field):
+        password = field.data
+        password_repeat = self.password_repeat.data
+        if password != password_repeat:
+            raise ValidationError(u'Opps, 两次密码输入不一致')
