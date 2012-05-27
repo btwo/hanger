@@ -6,7 +6,7 @@ from email.mime.text import MIMEText
 def send_mail(host, name, postfix, tolist, subject, content,
               user=None, password=None):
     me = name+"<"+name+"@"+postfix+">"
-    msg = MIMEText(content)
+    msg = MIMEText(content.encode("utf-8"))
     msg.set_charset('utf8')
     msg['Subject'] = subject
     msg['From'] = me

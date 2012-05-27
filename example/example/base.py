@@ -7,7 +7,8 @@ from model import getuser
 
 class Base(AutoFormsMixin, AutoTemplatesMixin, JinjaMixin, BaseHandler):
     def get_error_html(self, status_code, **kwargs):
-        self.send_error_mail(status_code, **kwargs)
+        if not self.settings['debug'] and status_code is 500:
+            self.send_error_mail('mail/500error', **kwargs)
         try:
             return self.render_string('errors/%d.html' % status_code, **kwargs)
         except:

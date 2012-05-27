@@ -34,6 +34,8 @@ class JinjaMixin(RequestHandler):
             'settings': self.settings,
             'me': self.current_user,
             'static': self.static_url,
+            'domain': self.settings['site_domain'],
+            'sitename': self.settings['site_name'],
             'handler': self,})
         context.update(self.ui) # Enabled tornado UI methods.
         return self.jinja_render(
@@ -58,7 +60,8 @@ class AutoTemplatesMixin(RequestHandler):
         self.template_name = "%s.html" % self.handler_name
 
     def render(self, **context):
-        if 'template_name' not in context:
+        print context
+        if not 'template_name' in context:
             context.update({'template_name': self.template_name})
         super(AutoTemplatesMixin, self).render(**context)
 
@@ -97,8 +100,10 @@ class AutoFormsMixin(RequestHandler):
         return False
 
     def render(self, template_name = "", **context):
+        if not template_name:
+            template_name = self.template_name
         super(AutoFormsMixin, self).render(
-            template_name=self.template_name, forms=self.forms, **context)
+            template_name=template_name, forms=self.forms, **context)
         
 
 class BaseHandler(RequestHandler):
@@ -114,20 +119,19 @@ class BaseHandler(RequestHandler):
         url = self.get_argument("next", default = url)
         super(BaseHandler, self).redirect(url)
 
-    def send_error_mail(self, status_code, **kwargs):
-        if not self.settings['debug'] and code is 500 \
-           and self.settings['send_error_mail']:
-            exception = "%s\n\n%s" % (
-                    kwargs["exception"], traceback.format_exc())
-            self.send_mail(
-                name = 'errorlog',
-                tolist = [self.settings['admin_mail'],],
-                subject = u"[%s]500 internal server error."\
-                    % self.settings['site_name'],
-                content = self.render_string(
-                    'mail/error', exception=exception),
-            )
-        return
+    def send_error_mail(self, template_name, status_code, **kwargs):
+        if not self.settings['send_error_mail']:
+            return
+        exception = "%s\n\n%s" % (
+                kwargs["exception"], traceback.format_exc())
+        self.send_mail(
+            name = 'errorlog',
+            tolist = [self.settings['admin_mail'],],
+            subject = u"[%s]500 internal server error."\
+                % self.settings['site_name'],
+            content = self.render_string(
+                template_name, exception=exception),
+        )
 
     def send_mail(self, name, tolist, subject, content,
                   user=None, password=None):
