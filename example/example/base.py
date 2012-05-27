@@ -7,7 +7,7 @@ from model import getuser
 
 class Base(AutoFormsMixin, AutoTemplatesMixin, JinjaMixin, BaseHandler):
     def get_error_html(self, status_code, **kwargs):
-        super(Base, self).get_error_html(status_code, **kwargs)
+        self.send_error_mail(status_code, **kwargs)
         try:
             return self.render_string('errors/%d.html' % status_code, **kwargs)
         except:

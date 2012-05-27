@@ -113,15 +113,30 @@ class BaseHandler(RequestHandler):
         url = self.get_argument("next", default = url)
         super(BaseHandler, self).redirect(url)
 
-    def get_error_html(self, status_code, **kwargs):
+    def send_error_mail(self, status_code, **kwargs):
         if not self.settings['debug'] and code is 500 \
            and self.settings['send_error_mail']:
-            send_mail(
-                mail_host = '127.0.0.1',
-                mail_user = 'errorlog',
-                mail_postfix = self.settings['mail_postfix'],
-                to_list = [self.settings['admin_mail'],],
-                sub = "500 internal server error.",
-                content = "%s\n\n%s" % (
-                    kwargs["exception"], traceback.format_exc()),
+            exception = "%s\n\n%s" % (
+                    kwargs["exception"], traceback.format_exc())
+            self.send_mail(
+                name = 'errorlog',
+                tolist = [self.settings['admin_mail'],],
+                subject = u"[%s]500 internal server error."\
+                    % self.settings['site_name'],
+                content = self.render_string(
+                    'mail/error', exception=exception),
             )
+        return
+
+    def send_mail(self, name, tolist, subject, content,
+                  user=None, password=None):
+        send_mail(
+            host = self.settings['mail_host'],
+            name = name,
+            postfix = self.settings['mail_postfix'],
+            tolist = tolist,
+            subject = subject,
+            content = content,
+            user = user,
+            password = password,
+        )
