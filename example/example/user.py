@@ -171,14 +171,16 @@ class ForgetPassword(Base):
             return
         user = getuser(email=form.email.data)
         key = cache.generate(user)
-        self.send_mail(
+        sent = self.send_mail(
             name = 'noreply',
             to = form.email.data,
             subject = u"[%s]重置你的密码" % self.settings['site_name'],
             content = self.render_string('mail/reset_password' % key)
         )
-        print key
-        self.render(template_name = "mailed.html")
+        if sent:
+            self.render(template_name = "mailed.html")
+        else:
+            self.render(template_name = "mailnotsent.html")
 
 
 class ResetPassword(Base):

@@ -134,7 +134,7 @@ class BaseHandler(RequestHandler):
 
     def send_mail(self, name, subject, content,
                   to=None, tolist=None, user=None, password=None):
-        send_mail(
+        return send_mail(
             host = self.settings['mail_host'],
             name = name,
             postfix = self.settings['mail_postfix'],
