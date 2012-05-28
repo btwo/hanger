@@ -125,20 +125,21 @@ class BaseHandler(RequestHandler):
                 kwargs["exception"], traceback.format_exc())
         self.send_mail(
             name = 'errorlog',
-            tolist = [self.settings['admin_mail'],],
+            to = self.settings['admin_mail'],
             subject = u"[%s]500 internal server error."\
                 % self.settings['site_name'],
             content = self.render_string(
                 template_name, exception=exception),
         )
 
-    def send_mail(self, name, tolist, subject, content,
-                  user=None, password=None):
+    def send_mail(self, name, subject, content,
+                  to=None, tolist=None, user=None, password=None):
         send_mail(
             host = self.settings['mail_host'],
             name = name,
             postfix = self.settings['mail_postfix'],
             tolist = tolist,
+            to = to,
             subject = subject,
             content = content,
             user = user,
