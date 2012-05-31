@@ -175,7 +175,7 @@ class ForgetPassword(Base):
             name = 'noreply',
             to = form.email.data,
             subject = u"[%s]重置你的密码" % self.settings['site_name'],
-            content = self.render_string('mail/reset_password' % key)
+            content = self.render_string('mail/reset_password', key=key)
         )
         if sent:
             self.render(template_name = "mailed.html")

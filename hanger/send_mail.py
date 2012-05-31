@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import smtplib
 import logging
+import traceback
 
 from email.mime.text import MIMEText
 
@@ -12,10 +13,9 @@ def send_mail(host, name, postfix, subject, content,
     msg.set_charset('utf8')
     msg['Subject'] = subject
     msg['From'] = me
-    if to:
-        msg['To'] = to
-    else:
-        msg['To'] = ";".join(tolist)
+    if not tolist:
+        tolist = [to]
+    msg['To'] = ";".join(tolist)
     try:
         smtp = smtplib.SMTP()
         smtp.connect(host)
@@ -25,5 +25,5 @@ def send_mail(host, name, postfix, subject, content,
         smtp.close()
         return True
     except Exception, e:
-        logging.getLogger().error(e)
+        logging.getLogger().error("%s\n\n%s" % (e, traceback.format_exc()))
         return False
