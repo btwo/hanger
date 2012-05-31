@@ -8,7 +8,7 @@ import uuid
 import forms
 
 from model import session, getuser, Person
-from tornado import web
+from tornado import web, ioloop
 from base import Base
 
 class Sign(Base):
@@ -155,7 +155,11 @@ class UUIDCache(object):
         except KeyError:
             return None
 
+    def clear(self):
+        self.cache = {}
+
 cache = UUIDCache()
+
 
 class ForgetPassword(Base):
     Form = forms.ForgetPassword
@@ -177,6 +181,7 @@ class ForgetPassword(Base):
             subject = u"[%s]重置你的密码" % self.settings['site_name'],
             content = self.render_string('mail/reset_password', key=key)
         )
+        print key
         if sent:
             self.render(template_name = "mailed.html")
         else:
@@ -207,6 +212,14 @@ class ResetPassword(Base):
         cache.destroy(key)
         self.redirect('/signin')
 
+def clear_uuid():
+    '''Remove all key.'''
+    global cache
+    cache.clear()
+
+one_day = 24 * 60 * 60 * 1000
+ioloop.PeriodicCallback(
+    clear_uuid, one_day).start() # remove all key each day.
 
 uuid_regex = "[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}"
 routes = [
