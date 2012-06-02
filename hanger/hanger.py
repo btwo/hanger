@@ -137,7 +137,7 @@ class BaseHandler(RequestHandler):
         return send_mail(
             host = self.settings['mail_host'],
             name = name,
-            postfix = self.settings['mail_postfix'],
+            postfix = self.settings['site_domain'],
             tolist = tolist,
             to = to,
             subject = subject,

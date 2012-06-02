@@ -1,0 +1,15 @@
+{
+    "site_name": "YourSiteName",
+    "site_domain": "www.your.url",
+    "debug": true,
+    "port": 8888,
+    "login_url": "/signin/",
+    "xsrf_cookies": true,
+    "cookie_secret": "不怕贼偷就怕贼惦记。",
+    "send_error_email": true,
+    "admin_mail": "yourname@yoursite.com",
+    "mail_host": "127.1",
+    "template_path": "templates",
+    "static_path": "static",
+    "logfile_path": "error.log"
+}
