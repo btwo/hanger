@@ -1,4 +1,3 @@
-#!/usr/bin/env python2
 # coding=utf-8
 from os.path import join
 from example import PATH, ui

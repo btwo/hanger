@@ -6,6 +6,7 @@ import StringIO
 import Image
 import uuid
 import forms
+import socket
 
 from model import session, getuser, Person
 from tornado import web, ioloop
@@ -134,6 +135,12 @@ class Settings(Base):
         weight = height
         avatar = avatar.resize((height, weight))
         return avatar
+
+def sent_avatar(self, path, avatar):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(('localhost', 53333))
+    sock.send(json.dumps({'path':path, 'avatar':avatar}))
+    sock.close()
 
 
 class UUIDCache(object):
