@@ -107,7 +107,7 @@ def file_changer(app_path, app_name, app_port, redis_port, app_domain,
             ("{{{redis_port}}}", str(redis_port)),
             ("{{{redis_db_file}}}", redis_file_path),
             ("{{{redis_logfile_path}}}", redis_logfile_path),
-            ("{{{random_secret}}}", uuid.uuid4()),
+            ("{{{random_secret}}}", str(uuid.uuid4())),
         ])
 
 def replace(file_name, replace_list):
