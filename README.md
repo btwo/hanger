@@ -30,7 +30,7 @@ Hanger是基于 [Tornado](http://www.tornadoweb.org/) 以及其它许多代码�
 
 1. 使用 `./app_setup.py` 初始化项目。
 2. 将Nginx配置 `proxy.conf` 复制到配置目录启用，重启Nginx。
-3. 启动 Supervisord `supervisord <your_application_path>/conf/supervisord.conf`
+3. 启动 Supervisord `supervisord -c <your_application_path>/conf/supervisord.conf`
 
 ## 约定
 
