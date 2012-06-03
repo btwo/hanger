@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 # coding=utf-8
 from os.path import join
-from hanger import utils
 from tornado import web
 from hanger.database import Elixir
 from redis import StrictRedis

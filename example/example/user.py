@@ -6,10 +6,10 @@ import StringIO
 import Image
 import uuid
 import forms
-import socket
+import time
 
 from model import session, getuser, Person
-from tornado import web, ioloop
+from tornado import web
 from base import Base
 
 class Sign(Base):
@@ -136,52 +136,44 @@ class Settings(Base):
         avatar = avatar.resize((height, weight))
         return avatar
 
-def sent_avatar(self, path, avatar):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(('localhost', 53333))
-    sock.send(json.dumps({'path':path, 'avatar':avatar}))
-    sock.close()
 
-
-class UUIDCache(object):
-    # TODO use redis.
-    cache = {}
-
-    def generate(self, user):
-        key = uuid.uuid4()
-        value = user.id
-        self.cache[str(key)] = value
+class ResetBase(Base):
+    def secret_init(self, user):
+        hour = 60 * 60
+        life = time.time() + (hour)
+        key = str(uuid.uuid4())
+        self.redis.lpush("secret_key", key) # add new key in list head.
+        self.redis.set("%s:user_id" % key, user.id)
+        self.redis.set("%s:life" % key, life)
         return key
 
-    def destroy(self, key):
-        del self.cache[key]
+    def secret_destroy(self, key):
+        self.redis.delete("%s:user_id" % key)
 
-    def get(self, key):
+    def secret_get(self, key):
         try:
-            return getuser(id = self.cache[key])
+            user_id = int(self.redis.get("%s:user_id"%key))
+        except TypeError: # not get value.
+            return None
+        try:
+            return getuser(id = user_id)
         except KeyError:
             return None
 
-    def clear(self):
-        self.cache = {}
 
-cache = UUIDCache()
-
-
-class ForgetPassword(Base):
+class ForgetPassword(ResetBase):
     Form = forms.ForgetPassword
 
     def get(self):
         self.render()
 
     def post(self):
-        global cache
         try:
             form = self.form_loader()
         except RuntimeError:
             return
         user = getuser(email=form.email.data)
-        key = cache.generate(user)
+        key = self.secret_init(user)
         sent = self.send_mail(
             name = 'noreply',
             to = form.email.data,
@@ -195,19 +187,17 @@ class ForgetPassword(Base):
             self.render(template_name = "mailnotsent.html")
 
 
-class ResetPassword(Base):
+class ResetPassword(ResetBase):
     Form = forms.ResetPassword
 
     def get(self, key):
-        global cache
-        user = cache.get(key)
+        user = self.secret_get(key)
         if not user:
             raise web.HTTPError(404)
         self.render()
 
     def post(self, key):
-        global cache
-        user = cache.get(key)
+        user = self.secret_get(key)
         if not user:
             raise web.HTTPError(404)
         try:
@@ -216,17 +206,9 @@ class ResetPassword(Base):
             return
         user.password = user.hash_password(form.password.data)
         session.commit()
-        cache.destroy(key)
+        self.secret_destroy(key)
         self.redirect('/signin')
 
-def clear_uuid():
-    '''Remove all key.'''
-    global cache
-    cache.clear()
-
-one_day = 24 * 60 * 60 * 1000
-ioloop.PeriodicCallback(
-    clear_uuid, one_day).start() # remove all key each day.
 
 uuid_regex = "[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}"
 routes = [
