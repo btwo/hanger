@@ -94,6 +94,7 @@ def file_changer(app_path, app_name, app_port, redis_port, app_domain,
     redis_logfile_path = join(app_path, "log", "redis.log")
     redis_file_path = app_path
     secret = ''.join(random.sample([chr(i) for i in range(48, 123)], 40))
+    secret = secret.replace("\\", "\\\\")
     for file_name in files:
         file_name = join(app_path, file_name)
         replace(file_name, [

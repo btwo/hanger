@@ -6,6 +6,10 @@ from hanger import BaseHandler, JinjaMixin, AutoFormsMixin, AutoTemplatesMixin
 from model import getuser
 
 class Base(AutoFormsMixin, AutoTemplatesMixin, JinjaMixin, BaseHandler):
+    def __init__(self, *args, **kwargs):
+        super(Base, self).__init__(*args, **kwargs)
+        self.redis = self.application.redis
+
     def get_error_html(self, status_code, **kwargs):
         if not self.settings['debug'] and status_code is 500:
             self.send_error_mail('mail/500error', **kwargs)

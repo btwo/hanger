@@ -16,6 +16,7 @@ class Home(Base):
     def get(self):
         self.render()
 
+
 routes = [
     (r'/', Home),
 ]
