@@ -4,6 +4,7 @@ import json
 
 from {{{app_name}}} import Application
 from tornado import httpserver, ioloop, options
+from utils import get_config
 
 def run(config):
     # first should create database: ./dbinit.py
@@ -15,12 +16,6 @@ def run(config):
     http_server.listen(config['port'])
     ioloop.IOLoop.instance().start() #Start IO Loop.
 
-def get_config():
-    config_file = open("conf/config.json")
-    string = config_file.read()
-    config = json.loads(unicode(string.decode("utf-8")))
-    config_file.close()
-    return config
 
 if __name__ == '__main__':
     run(get_config())
