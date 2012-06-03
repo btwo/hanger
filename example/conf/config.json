@@ -4,6 +4,7 @@
     "debug": true,
     "port": {{{app_port}}},
     "redis_port": {{{redis_port}}},
+    "redis_db": 0,
     "login_url": "/signin/",
     "xsrf_cookies": true,
     "cookie_secret": "{{{random_secret}}}",

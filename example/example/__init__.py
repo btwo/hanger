@@ -18,7 +18,7 @@ class Application(web.Application):
         import ui
         config = config_handler(config)
         self.redis = StrictRedis(
-            host='localhost', port=config['redis_port'], db=0)
+            host='localhost', port=config['redis_port'], db=config['redis_db'])
         # Settings extend.
         #url roues
         routes = []
