@@ -23,7 +23,9 @@ def killer(redis):
         else:
             # Died
             redis.delete(life_key)
-    redis.lpush(listname, *swap_list)
+            redis.delete("%s:user_id" % secret)
+    if swap_list:
+        redis.lpush(listname, *swap_list)
 
 def main():
     config = get_config()
