@@ -26,10 +26,5 @@ class Application(web.Application):
 
 
 def config_handler(config):
-    PATH = utils.realpath(__file__)
-    keys = ['template_path', "static_path", "logfile_path"]
-    for key in keys:
-        config[key] = join(PATH, config[key])
-
     config['avatar_path'] = join(config['static_path'], 'avatar')
     return config

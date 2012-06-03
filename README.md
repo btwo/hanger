@@ -17,15 +17,20 @@ Hanger是基于 [Tornado](http://www.tornadoweb.org/) 以及其它许多代码�
 
 示例应用中有一个完整的用户注册，登录和设置机制，可以用来参考和引用。
 
-第一次运行示例请创建数据库：
+### 初始化
 
-    # cd example
-    # ./dbinit.py
-    # ./runserver.py
+请运行 `app_setup.py`来初始化示例，脚本会自动修改程序和配置文件，配置出一个可以用的项目原型。
 
 ### 示例应用的配置
 
-配置文件在 `example/conf/` 中，包含了应用本身的配置文件 `config.json` ，和 Nginx 配置文件 `proxy.conf`。
+配置文件在 `example/conf/` 中，包含了应用本身的配置文件 `config.json` ，和 Nginx 配置文件 `proxy.conf`，Redis键值数据库配置文件 `redis.conf` 。以及启动服务器和相关进程的守护进程管理程序配置文件 `supervisord.conf`。
+
+## 部署
+依赖的外部程序为Nginx，Redis以及Supervisor。
+
+1. 使用 `./app_setup.py` 初始化项目。
+2. 将Nginx配置 `proxy.conf` 复制到配置目录启用，重启Nginx。
+3. 启动 Supervisord `supervisord <your_application_path>/conf/supervisord.conf`
 
 ## 约定
 
