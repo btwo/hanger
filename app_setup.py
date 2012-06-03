@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 # coding=utf-8
 import os
-import random
+import uuid
 
 from os.path import join
 
@@ -93,8 +93,6 @@ def file_changer(app_path, app_name, app_port, redis_port, app_domain,
     logfile_path = join(app_path, "log", "application.log")
     redis_logfile_path = join(app_path, "log", "redis.log")
     redis_file_path = app_path
-    secret = ''.join(random.sample([chr(i) for i in range(48, 123)], 40))
-    secret = secret.replace("\\", "\\\\")
     for file_name in files:
         file_name = join(app_path, file_name)
         replace(file_name, [
@@ -109,7 +107,7 @@ def file_changer(app_path, app_name, app_port, redis_port, app_domain,
             ("{{{redis_port}}}", str(redis_port)),
             ("{{{redis_db_file}}}", redis_file_path),
             ("{{{redis_logfile_path}}}", redis_logfile_path),
-            ("{{{random_secret}}}", secret),
+            ("{{{random_secret}}}", uuid.uuid4()),
         ])
 
 def replace(file_name, replace_list):
