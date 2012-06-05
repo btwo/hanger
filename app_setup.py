@@ -85,7 +85,7 @@ def dir_changer(app_path, app_name):
 
 def file_changer(app_path, app_name, app_port, redis_port, app_domain,
                  admin_email):
-    files = ['runserver.py', 'avatar_saver.py', 'dbinit.py',
+    files = ['server.py', 'avatar_saver.py', 'dbinit.py',
              'conf/config.json', 'conf/proxy.conf', "conf/supervisord.conf",
              'conf/redis.conf']
     static_path = join(app_path, app_name, "static")

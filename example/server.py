@@ -1,7 +1,5 @@
 #!/usr/bin/env python2.7
 # coding=utf-8
-import json
-
 from {{{app_name}}} import Application
 from tornado import httpserver, ioloop, options
 from utils import get_config
