@@ -6,6 +6,7 @@ from example import Application
 from tornado import httpserver, ioloop, options
 from hanger.utils import realpath
 
+example.db.create_db()
 j = lambda p: join(realpath(example.__file__), p)
 
 config = {

@@ -2,10 +2,11 @@
 # coding=utf-8
 import json
 
-from hanger import BaseHandler, JinjaMixin, AutoFormsMixin, AutoTemplatesMixin
+from hanger import BaseHandler, JinjaMixin, AutoFormsMixin,\
+        AutoTemplatesMixin, MailMixin
 from model import getuser
 
-class Base(AutoFormsMixin, AutoTemplatesMixin, JinjaMixin, BaseHandler):
+class Base(MailMixin, AutoFormsMixin, AutoTemplatesMixin, JinjaMixin, BaseHandler):
     def __init__(self, *args, **kwargs):
         super(Base, self).__init__(*args, **kwargs)
         self.redis = self.application.redis
