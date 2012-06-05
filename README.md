@@ -17,7 +17,12 @@ Hanger是基于 [Tornado](http://www.tornadoweb.org/) 以及其它许多代码�
 
 示例应用中有一个完整的用户注册，登录和设置机制，可以用来参考和引用。
 
-### 初始化
+### 运行示例
+
+    # cd example
+    # ./dev_server.py
+
+### 初始化一个新项目
 
 请运行 `app_setup.py`来初始化示例，脚本会自动修改程序和配置文件，配置出一个可以用的项目原型。
 
@@ -36,10 +41,11 @@ Hanger是基于 [Tornado](http://www.tornadoweb.org/) 以及其它许多代码�
 
 框架中的约定完全可以不遵守或者修改删除，禁用某个特性只需要在定义继承视图的时候不继承相应的类。
 
+* `BaseHandler` 继承`tornado.web.RequestHandler`，是最基本的，在多重继承列表中必须填到最后面以便其他类能正常工作，另外有一些其他的简单特性，比如方便的json输出。
+* `JinjaMixin` 能让项目使用 Jinja2 模板渲染引擎。
 * `AutoTemplatesMixin` 提供一个自动载入和视图类名相同文件名的模板文件的特性。
 * `AutoFormsMixin` 能让模板方便的渲染 WTForms 表单，也能让视图方便的验证表单。
-* `JinjaMixin` 能让项目使用 Jinja2 模板渲染引擎。
-* `BaseHandler` 是一些其他的简单特性，比如方便的json输出。
+* `MailMixin` 邮件发送特性，`MailMixin.send_mail`方法可以用来发送邮件，继承这个 Class 后如果服务器遇到 500 错误，会自动发送错误信息给你的邮箱;
 
 如果对这些需要更改，请修改 `hanger/hanger.py`的内容。
 
