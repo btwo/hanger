@@ -20,11 +20,11 @@ Hanger是基于 [Tornado](http://www.tornadoweb.org/) 以及其它许多代码�
 ### 运行示例
 
     # cd example
-    # ./dev_server.py
+    # ./server_dev.py
 
 ### 初始化一个新项目
 
-请运行 `app_setup.py`来初始化示例，脚本会自动修改程序和配置文件，配置出一个可以用的项目原型。
+请运行 `setup_app.py`来初始化示例，脚本会自动修改程序和配置文件，配置出一个可以用的项目原型。
 
 ### 示例应用的配置
 
@@ -45,9 +45,9 @@ Hanger是基于 [Tornado](http://www.tornadoweb.org/) 以及其它许多代码�
 * `JinjaMixin` 能让项目使用 Jinja2 模板渲染引擎。
 * `AutoTemplatesMixin` 提供一个自动载入和视图类名相同文件名的模板文件的特性。
 * `AutoFormsMixin` 能让模板方便的渲染 WTForms 表单，也能让视图方便的验证表单。
-* `MailMixin` 邮件发送特性，`MailMixin.send_mail`方法可以用来发送邮件，继承这个 Class 后如果服务器遇到 500 错误，会自动发送错误信息给你的邮箱;
+* `MailMixin` 邮件发送特性，`MailMixin.send_mail`方法可以用来发送邮件，继承这个 Class 后如果服务器遇到 500 错误，会自动发送错误信息给你的邮箱。
 
-如果对这些需要更改，请修改 `hanger/hanger.py`的内容。
+如果对这些需要更改，请修改 `./hanger/`文件夹中的内容。
 
 ## 开发
 
