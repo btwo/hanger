@@ -20,24 +20,30 @@ Hanger是基于 [Tornado](http://www.tornadoweb.org/) 以及其它许多代码�
 ### 运行示例
 
     # cd example
-    # ./server_dev.py
-
-### 初始化一个新项目
-
-请运行 `setup_app.py`来初始化示例，脚本会自动修改程序和配置文件，配置出一个可以用的项目原型。
+    # ./server.py
 
 ### 示例应用的配置
 
 配置文件在 `example/conf/` 中，包含了应用本身的配置文件 `config.json` ，和 Nginx 配置文件 `proxy.conf`，Redis键值数据库配置文件 `redis.conf` 。以及启动服务器和相关进程的守护进程管理程序配置文件 `supervisord.conf`。
 
-## 部署
+## 开始你的项目
+
+你可以选择参照 `./example` 中的示例项目自己从头开始创建一个项目。
+
+或者可以编辑 `./example/config.py` 配置文件后运行 `./example/project_init.py` 来开始你的项目。
+
+并且将 `example` 文件夹重命名成你的项目名称和移动到它应该在的位置。
+
+如果示例项目有任何难懂的地方，可以在[项目主页提交一个 Issue](https://github.com/tioover/hanger/issues)。
+
+### 部署
 依赖的外部程序为Nginx，Redis以及Supervisor。
 
-1. 使用 `./app_setup.py` 初始化项目。
-2. 将Nginx配置 `proxy.conf` 复制到配置目录启用，重启Nginx。
+1. 使用 `./example/project_init.py` 通过你的项目配置文件来配置其他组件。
+2. 将Nginx配置 `proxy.conf` 复制到配置目录，重启Nginx启用。
 3. 启动 Supervisord `supervisord -c <your_application_path>/conf/supervisord.conf`
 
-## 约定
+## 特性
 
 框架中的约定完全可以不遵守或者修改删除，禁用某个特性只需要在定义继承视图的时候不继承相应的类。
 
