@@ -16,4 +16,4 @@ def avatar(handler, user, size=200):
     avatar = user.avatar
     if (not avatar) or (avatar == 'gravatar'):
         return utils.gravatar(user.email, size=200)
-    return handler.static_url('avatar/'+user.avatar) # TODO resize.
+    return '/media/avatar/%s' % user.avatar # TODO resize.

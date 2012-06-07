@@ -21,9 +21,10 @@ def escape(raw):
     '''Html escape.'''
     return xhtml_escape(xhtml_unescape(raw))
 
-def random_string(long = 40):
-    #return ''.join(random.sample([chr(i) for i in range(48, 123)], long))
-    return os.urandom(long)
+def random_string(length = 40):
+    string = ''.join(random.sample([chr(i) for i in range(48, 123)], length))
+    string.replace("\\", "/")
+    return string
 
 def string_hash(string, salt=""):
     string = hashlib.sha224(salt + string).hexdigest()
