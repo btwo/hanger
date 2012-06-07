@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python2.7
+# coding=utf-8
 import smtplib
 import logging
 import traceback
