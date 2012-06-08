@@ -3,12 +3,14 @@
 from jinja2 import Environment, FileSystemLoader
 
 class AutoTemplatesMixin(object):
+    autoload_template = True
     def __init__(self, *args, **kwargs):
         super(AutoTemplatesMixin, self).__init__(*args, **kwargs)
-        self.template_name = "%s.html" % self.handler_name
+        if self.autoload_template:
+            self.template_name = "%s.html" % self.handler_name
 
     def render(self, **context):
-        if not 'template_name' in context:
+        if 'template_name' not in context and self.autoload_template:
             context.update({'template_name': self.template_name})
         super(AutoTemplatesMixin, self).render(**context)
 

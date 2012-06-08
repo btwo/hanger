@@ -7,8 +7,10 @@ import traceback
 from email.mime.text import MIMEText
 
 class MailMixin(object):
+    enable_error_mail = True
+
     def send_error_mail(self, template_name, status_code, **kwargs):
-        if not self.settings['send_error_mail']:
+        if self.enable_error_mail and not self.settings['send_error_mail']:
             return
         exception = "%s\n\n%s" % (kwargs["exception"], traceback.format_exc())
         self.send_mail(
