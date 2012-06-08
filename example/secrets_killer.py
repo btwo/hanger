@@ -2,7 +2,7 @@
 # coding=utf-8
 import time
 
-from utils import get_config
+from config import config
 from redis import StrictRedis
 
 def killer(redis):
@@ -28,7 +28,6 @@ def killer(redis):
         redis.lpush(listname, *swap_list)
 
 def main():
-    config = get_config()
     redis = StrictRedis(
         host='localhost', port=config['redis_port'], db=config['redis_db'])
     while True:
@@ -36,4 +35,4 @@ def main():
         time.sleep(60 * 30)
 
 if __name__ == "__main__":
-    main()
+    ain()
