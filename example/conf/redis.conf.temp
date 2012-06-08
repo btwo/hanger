@@ -13,5 +13,5 @@ databases 16
 save 900 1
 save 300 10
 save 60 10000
-dbfilename redis.rdb
-dir {{{redis_db_file}}}
+dbfilename {{{redis_db_filename}}}
+dir {{{path}}}

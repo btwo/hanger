@@ -4,7 +4,8 @@ import os.path
 import ui_methods
 from hanger.utils import random_string, realpath
 
-ad = lambda p: os.path.join(realpath(__file__), p) # absolute directory maker.
+ownpath = realpath(__file__)
+ad = lambda p: os.path.join(ownpath, p) # absolute directory maker.
 
 config = {
     "site_name": "Hanger", # your website name, support unicode.
@@ -43,7 +44,7 @@ app_config = {
 redis_config = {
     "redis_port": 6379, # this number must to same as `conf/redis.conf`.
     "redis_db": 0, # the number of redis database serial.
-    "redis_db_file": ad("redis.rdb"),
+    "redis_db_filename": "redis.rdb",
     "redis_logfile": ad("conf/redis.conf"),
 }
 
