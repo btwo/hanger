@@ -4,6 +4,7 @@ from jinja2 import Environment, FileSystemLoader
 
 class AutoTemplatesMixin(object):
     autoload_template = True
+
     def __init__(self, *args, **kwargs):
         super(AutoTemplatesMixin, self).__init__(*args, **kwargs)
         if self.autoload_template:
