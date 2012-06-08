@@ -35,4 +35,4 @@ def main():
         time.sleep(60 * 30)
 
 if __name__ == "__main__":
-    ain()
+    main()
