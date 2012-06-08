@@ -23,7 +23,14 @@ pip-log.txt
 #Translations
 *.mo
 
-#Mr Developer
+# Mr Developer
 .mr.developer.cfg
-#other
+
+#temp
 *~
+
+# project
+proxy.conf
+redis.conf
+secret
+supervisord.conf
