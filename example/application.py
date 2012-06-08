@@ -3,7 +3,7 @@
 from tornado import web
 from hanger.database import Elixir
 from redis import StrictRedis
-from config import config, ad
+from config import config
 import model
 
 db = Elixir(config['database_url']) # first run, run db.create_all().
@@ -22,9 +22,10 @@ class Application(web.Application):
         for view in modules:
             routes.extend(view.routes)
         routes.extend([
-            (r"/media/(.*)", web.StaticFileHandler, {"path": ad("media")}),
-            ('.*', views.PageNotFound)], # 404 page, place bottom.
-        )
+            (r"/media/(.*)", web.StaticFileHandler, {
+                "path": config['media_path']}),
+            ('.*', views.PageNotFound), # 404 page, place bottom.
+        ])
 
         super(Application, self).__init__(routes, **config)
 

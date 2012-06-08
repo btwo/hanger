@@ -37,7 +37,7 @@ app_config = {
     "login_url": "/signin/",
     "template_path": ad("templates"),
     "static_path": ad("static"),
-    "media_path": ad("media/avatar"),
+    "media_path": ad("media"),
     "avatar_path": ad("media/avatar"),
 }
 
