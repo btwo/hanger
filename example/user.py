@@ -133,7 +133,7 @@ class Settings(Base):
     def avatar_resize(self, avatar):
         height = 160
         weight = height
-        avatar = avatar.resize((height, weight))
+        avatar = avatar.resize((height, weight), Image.ANTIALIAS)
         return avatar
 
 
