@@ -14,7 +14,8 @@ def name_validate(self, field):
         return
     if utils.special_char(field.data):
         raise ValidationError(u'昵称里面不允许有特殊字符。')
-    elif getuser(name=field.data):
+    user = getuser(name=field.data)
+    if user and user is not self.current_user:
         raise ValidationError(u'Opps，这个昵称已经有人在用了。')
 
 class SignIn(Form):
