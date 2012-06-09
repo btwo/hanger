@@ -7,6 +7,7 @@ import Image
 import uuid
 import forms
 import time
+import avatar
 
 from model import session, getuser, Person
 from tornado import web
@@ -94,10 +95,10 @@ class Settings(Base):
         new_name = form.name.data
         new_bio = form.bio.data
         new_password = form.new_password.data
+        new_avatar = None
         if "avatar" in self.request.files:
             new_avatar = self.request.files['avatar'][0]['body']
-        else:
-            new_avatar = None
+
         if new_name:
             me.name = new_name
         if new_bio:
@@ -105,36 +106,10 @@ class Settings(Base):
         if new_password:
             me.password = me.hash_password(new_password)
         if new_avatar:
-            self.change_avatar(new_avatar)
+            avatar.change_avatar(
+                new_avatar, self.current_user, self.settings['avatar_path'])
         session.commit()
         self.redirect('/settings')
-
-    def change_avatar(self, new_avatar):
-        avatar = Image.open(StringIO.StringIO(new_avatar))
-        self.remove_old_avatar()
-        filename = self.avatar_save(avatar)
-        self.current_user.avatar = filename
-        return
-    
-    def remove_old_avatar(self):
-        old_file = self.current_user.avatar
-        if not old_file:
-            return
-        os.remove(os.path.join(self.settings['avatar_path'], old_file))
-
-    def avatar_save(self, avatar):
-        uid = str(self.current_user.id)
-        filename = uid + '.' + avatar.format.lower()
-        avatar = self.avatar_resize(avatar)
-        save_path = os.path.join(self.settings['avatar_path'], filename)
-        avatar.save(save_path, avatar.format)
-        return filename
-
-    def avatar_resize(self, avatar):
-        height = 160
-        weight = height
-        avatar = avatar.resize((height, weight), Image.ANTIALIAS)
-        return avatar
 
 
 class ResetBase(Base):
