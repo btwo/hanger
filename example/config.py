@@ -7,6 +7,20 @@ from hanger.utils import random_string, realpath
 ownpath = realpath(__file__)
 ad = lambda p: os.path.join(ownpath, p) # absolute directory maker.
 
+def secret(config):
+    '''Load cookie secret from file, if not such file, whill be create one.'''
+    try:
+        secret = open(config['cookie_secret_file'])
+    except IOError:
+        config['cookie_secret'] = random_string(30)
+        secret = open(config['cookie_secret_file'], "w")
+        secret.write(config['cookie_secret'])
+        secret.close()
+    else:
+        config['cookie_secret'] = secret.readline()
+        secret.close()
+    return config
+
 config = {
     "site_name": "Hanger", # your website name, support unicode.
     "site_domain": "foo.bar", # site domain, not affect debug.
@@ -20,17 +34,6 @@ config = {
     "mail_host": "127.1", # mail server.
     "logfile": ad("log/application.log"), # application error logfile.
 }
-
-try:
-    secret = open(config['cookie_secret_file'])
-except IOError:
-    config['cookie_secret'] = random_string(30)
-    secret = open(config['cookie_secret_file'], "w")
-    secret.write(config['cookie_secret'])
-    secret.close()
-else:
-    config['cookie_secret'] = secret.readline()
-    secret.close()
 
 app_config = {
     "ui_methods": ui_methods,
@@ -48,5 +51,6 @@ redis_config = {
     "redis_logfile": ad("conf/redis.conf"),
 }
 
+config = secret(config)
 config.update(app_config)
 config.update(redis_config)

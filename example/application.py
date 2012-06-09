@@ -12,6 +12,7 @@ import user
 import views
 
 class Application(Hanger):
+    '''Hanger application.'''
     def __init__(self):
         self.redis = StrictRedis(host='localhost', port=config['redis_port'],
             db=config['redis_db'])

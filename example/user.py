@@ -2,8 +2,6 @@
 # coding=utf-8
 import os
 import json
-import StringIO
-import Image
 import uuid
 import forms
 import time
@@ -91,6 +89,7 @@ class Settings(Base):
             form = self.form_loader()
         except RuntimeError:
             return
+        # get data from the form.
         me = self.current_user
         new_name = form.name.data
         new_bio = form.bio.data
@@ -98,7 +97,7 @@ class Settings(Base):
         new_avatar = None
         if "avatar" in self.request.files:
             new_avatar = self.request.files['avatar'][0]['body']
-
+        # edit person.
         if new_name:
             me.name = new_name
         if new_bio:
@@ -108,24 +107,34 @@ class Settings(Base):
         if new_avatar:
             avatar.change_avatar(
                 new_avatar, self.current_user, self.settings['avatar_path'])
-        session.commit()
+        session.commit() # both commit to database.
         self.redirect('/settings')
 
 
 class ResetBase(Base):
+    '''
+    The Password report the loss and reset.
+    while user forget self's password, whill generate a secret to reset
+    the password, secret save to redis database. key is an uuid, value is
+    the id of user, at the same time, you need run `secret_killer.py`script,
+    this script whill remove expired secret.
+    '''
     def secret_init(self, user):
         hour = 60 * 60
-        life = time.time() + (hour)
-        key = str(uuid.uuid4())
+        # if timestamp is greater than life, secret is expired.
+        life = time.time() + (hour) 
+        key = str(uuid.uuid4()) # the key of the secret.
         self.redis.lpush("secret_key", key) # add new key in list head.
-        self.redis.set("%s:user_id" % key, user.id)
-        self.redis.set("%s:life" % key, life)
+        self.redis.set("%s:user_id" % key, user.id) # linked key with user id.
+        self.redis.set("%s:life" % key, life) # linked key with the life value.
         return key
 
     def secret_destroy(self, key):
+        '''While password is reseted, destroy the secret.'''
         self.redis.delete("%s:user_id" % key)
 
     def secret_get(self, key):
+        '''Give secret key, return user'''
         try:
             user_id = int(self.redis.get("%s:user_id"%key))
         except TypeError: # not get value.
@@ -159,6 +168,8 @@ class ForgetPassword(ResetBase):
         if sent:
             self.render(template_name = "mailed.html")
         else:
+            # When the process of sending the mail, occur some error.
+            # Whill be recode to log file.
             self.render(template_name = "mailnotsent.html")
 
 

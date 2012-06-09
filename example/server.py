@@ -1,10 +1,12 @@
 #!/usr/bin/env python2.7
 # coding=utf-8
+# recommand run `python2.7 -R` fix the Hash Collision DoS
 from application import application
 from tornado import httpserver, ioloop, options
 from config import config
 
 def run():
+    '''start logging, load application and start the server.'''
     # first should create database: ./dbinit.py
     if not config['debug']:
         options.options.log_file_prefix = config['logfile']

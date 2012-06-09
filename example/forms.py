@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.7
 # coding=utf-8
+'''From handle'''
 import Image
 import StringIO
 import utils

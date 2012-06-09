@@ -8,13 +8,16 @@ from model import getuser
 
 class Base(MailMixin, AutoFormsMixin, AutoTemplatesMixin, JinjaMixin,
            BaseHandler):
+    '''The base handler of user request.'''
+
     def __init__(self, *args, **kwargs):
         super(Base, self).__init__(*args, **kwargs)
         self.redis = self.application.redis
 
     def get_error_html(self, status_code, **kwargs):
         if not self.settings['debug'] and status_code is 500:
-            self.send_error_mail('mail/500error', **kwargs)
+            # send mail to admin when 500 error is occur.
+            self.send_error_mail('mail/500error', **kwargs) 
         try:
             return self.render_string('errors/%d.html' % status_code, **kwargs)
         except:

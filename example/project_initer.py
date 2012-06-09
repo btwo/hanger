@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.7
 # coding=utf-8
+'''Edit some config file.'''
 from os.path import split
 from config import config, ownpath, ad
 filenames = ["conf/proxy.conf", "conf/redis.conf", "conf/supervisord.conf"]
