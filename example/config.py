@@ -41,7 +41,9 @@ app_config = {
     "template_path": ad("templates"),
     "static_path": ad("static"),
     "media_path": ad("media"),
+    "media_url": "/media/",
     "avatar_path": ad("media/avatar"),
+    "avatar_url": "/media/avatar/",
 }
 
 redis_config = {

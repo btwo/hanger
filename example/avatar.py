@@ -1,9 +1,11 @@
 #!/usr/bin/env python2.7
 # coding=utf-8
-'''avatar file operations.'''
 import os
 import Image
 import StringIO
+import utils
+
+SIZE = 256
 
 def change_avatar(file_body, user, avatar_path):
     # TODO 128*128, 64*64, 32*32 size.
@@ -29,7 +31,7 @@ def remove_old(user, path):
         pass
 
 def resize(avatar):
-    height = 256
+    height = SIZE
     weight = height
     return avatar.resize((height, weight), Image.ANTIALIAS)
 
@@ -42,3 +44,9 @@ def save(avatar, user, path):
 
 def change_user_data(user, filename):
     user.avatar = filename
+
+def avatar_url(url, user, size=SIZE):
+    filename = user.avatar
+    if filename == 'gravatar' or not filename:
+        return utils.gravatar(user.email, size=size)
+    return "%s/%s" % (url, filename)
