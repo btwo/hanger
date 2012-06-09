@@ -6,6 +6,7 @@ import Image
 import StringIO
 
 def change_avatar(file_body, user, avatar_path):
+    # TODO 128*128, 64*64, 32*32 size.
     try:
         avatar = avatar_load(file_body)
     except IOError:
@@ -28,7 +29,7 @@ def remove_old(user, path):
         pass
 
 def resize(avatar):
-    height = 160
+    height = 256
     weight = height
     return avatar.resize((height, weight), Image.ANTIALIAS)
 
