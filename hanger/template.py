@@ -3,6 +3,7 @@
 from jinja2 import Environment, FileSystemLoader
 
 class AutoTemplatesMixin(object):
+    '''Auto set template_name to class name.'''
     autoload_template = True
 
     def __init__(self, *args, **kwargs):
@@ -10,10 +11,10 @@ class AutoTemplatesMixin(object):
         if self.autoload_template:
             self.template_name = "%s.html" % self.handler_name
 
-    def render(self, **context):
-        if 'template_name' not in context and self.autoload_template:
-            context.update({'template_name': self.template_name})
-        super(AutoTemplatesMixin, self).render(**context)
+    def render(self, **kwargs):
+        if 'template_name' not in kwargs and self.autoload_template:
+            kwargs.update({'template_name': self.template_name})
+        super(AutoTemplatesMixin, self).render(**kwargs)
 
 
 class JinjaMixin(object):

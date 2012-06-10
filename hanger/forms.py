@@ -18,6 +18,7 @@ class FormsDict(dict):
 
 
 class AutoFormsMixin(object):
+    '''Auto add form to `forms`dict in the templates.'''
     Form = None
     formset = []
 
@@ -30,7 +31,9 @@ class AutoFormsMixin(object):
         super(AutoFormsMixin, self).__init__(*args, **kwargs)
 
     def form_loader(self, key=None, validate=True):
+        '''Get and validate a form.'''
         if not key:
+            # return default form
             try:
                 form = self.Form(self)
             except TypeError:
@@ -39,6 +42,7 @@ class AutoFormsMixin(object):
             form = self.forms[key].__class__(self)
         if validate:
             if not self.form_validate(form):
+                # form validate.
                 raise RuntimeError("form is not pass the validation.")
         return form
 

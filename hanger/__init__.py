@@ -13,11 +13,12 @@ import forms
 
 
 class Hanger(web.Application):
+    '''Hanger application class.'''
     def __init__(self, handlers=None, *args, **settings):
+        '''Add media handler.'''
         media_handler = (
             r"%s(.*)" % settings['media_url'],
             web.StaticFileHandler, {"path": settings['media_path']})
-
         if settings.has_key("media_path"):
             handlers.insert(0, media_handler)
         super(Hanger, self).__init__(handlers, *args, **settings)

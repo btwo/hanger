@@ -26,4 +26,4 @@ class Entity(elixir.entity.EntityBase):
 
     def __init__(self, *args, **kwargs):
         super(Entity, self).__init__(*args, **kwargs)
-        self.created = datetime.datetime.now()
+        self.created = datetime.datetime.now() # add create time field.
