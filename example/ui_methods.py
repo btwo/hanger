@@ -1,7 +1,8 @@
 #!/usr/bin/env python2.7
 # coding=utf-8
 import utils
-from avatar import avatar_url
+
+from urlparse import urljoin
 
 def text2html(handler, text):
     '''Text to HTML.'''
@@ -14,4 +15,7 @@ def text2html(handler, text):
     return html
 
 def avatar(handler, user, size=256):
-    return avatar_url(handler.settings['avatar_url'], user, size)
+    filename = user.avatar
+    if filename == 'gravatar' or not filename:
+        return utils.gravatar(user.email, size=size)
+    return urljoin(handler.settings['avatar_url'], filename)

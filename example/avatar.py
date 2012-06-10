@@ -44,9 +44,3 @@ def save(avatar, user, path):
 
 def change_user_data(user, filename):
     user.avatar = filename
-
-def avatar_url(url, user, size=SIZE):
-    filename = user.avatar
-    if filename == 'gravatar' or not filename:
-        return utils.gravatar(user.email, size=size)
-    return "%s/%s" % (url, filename)

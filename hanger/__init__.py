@@ -3,7 +3,7 @@
 import json
 
 from tornado import web
-
+from urlparse import urljoin
 from template import JinjaMixin, AutoTemplatesMixin
 from forms import AutoFormsMixin
 from mail import MailMixin
@@ -42,6 +42,9 @@ class BaseHandler(web.RequestHandler):
     def __init__(self, *args, **kwargs):
         self.handler_name = self.__class__.__name__
         super(BaseHandler, self).__init__(*args, **kwargs)
+
+    def media_url(self, url):
+        return urljoin(self.settings['media_url'], url)
 
     def json_write(self, obj):
         self.set_header('Content-Type', 'application/json')
