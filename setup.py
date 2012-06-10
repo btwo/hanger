@@ -7,7 +7,7 @@ from setuptools import setup
 
 setup(
     name='Hanger',
-    version='0.6',
+    version='0.7',
     url='http://github.com/tioover/hanger/',
     license='MIT',
     author='tioover',
