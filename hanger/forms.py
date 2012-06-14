@@ -88,7 +88,6 @@ class Form(wtforms.Form):
         if handler:
             formdata = FormDict(handler)
             self.current_user = handler.current_user
-            self.files = handler.request.files
         super(Form, self).__init__(formdata = formdata, **kwargs)
 
 
