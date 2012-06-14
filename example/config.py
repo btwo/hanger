@@ -59,3 +59,9 @@ redis_config = {
 config = secret(config)
 config.update(app_config)
 config.update(redis_config)
+
+upload_config = {
+    "store": "/tmp/%s" % dirname,
+    "max_size": "24m",
+    "limit": "128k",
+}
