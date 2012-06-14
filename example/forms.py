@@ -82,9 +82,9 @@ class Settings(Form):
             raise ValidationError(u'两次密码输入的不一样。')
 
     def validate_avatar(self, field):
-        if 'avatar' not in self.files:
+        if 'avatar' not in self.handler.request.files:
             return
-        filebody = self.files['avatar'][0]['body']
+        filebody = self.handler.request.files['avatar'][0]['body']
         max_size = 1024 * 1024 #1Mb
         if len(filebody) > max_size:
             raise ValidationError(u'文件太大！最多只能上传1Mb的图片')

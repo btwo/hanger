@@ -87,6 +87,7 @@ class Form(wtforms.Form):
         formdata = None
         if handler:
             formdata = FormDict(handler)
+            self.handler = handler
             self.current_user = handler.current_user
         super(Form, self).__init__(formdata = formdata, **kwargs)
 
