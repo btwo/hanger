@@ -5,6 +5,8 @@ import ui_methods
 from hanger.utils import random_string, realpath
 
 ownpath = realpath(__file__)
+dirname = os.path.split(ownpath)[1]
+
 ad = lambda p: os.path.join(ownpath, p) # absolute directory maker.
 
 def secret(config):
@@ -22,6 +24,7 @@ def secret(config):
     return config
 
 config = {
+    "name": dirname,
     "site_name": "Hanger", # your website name, support unicode.
     "site_domain": "foo.bar", # site domain, not affect debug.
     "debug": True, # debug mode.

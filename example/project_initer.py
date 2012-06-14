@@ -1,13 +1,12 @@
 #!/usr/bin/env python2.7
 # coding=utf-8
 '''Edit some config file.'''
-from os.path import split
-from config import config, ownpath, ad
+from config import config, ownpath, ad, dirname
 filenames = ["conf/proxy.conf", "conf/redis.conf", "conf/supervisord.conf"]
 
 # conver {{{key}}} to value in config files.
 covers = [ 
-    ("name", split(ownpath)[1]),
+    ("name", dirname),
     ("path", ownpath),
     ("domain", config["site_domain"]),
     ("port", config["port"]),
