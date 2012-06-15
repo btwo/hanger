@@ -1,11 +1,10 @@
 #!/usr/bin/env python2.7
 # coding=utf-8
 '''From handle'''
-import Image
-import StringIO
 import utils
 
-from hanger.forms import Form, EmailField
+from hanger.forms import Form
+from hanger.forms.field import EmailField
 from model import getuser
 from wtforms.fields import TextField, TextAreaField, PasswordField, FileField
 from wtforms.validators import Required, Length, Email, ValidationError
