@@ -14,7 +14,7 @@ setup(
     author_email='tioover@gmail.com',
     description='Hanger web framework.',
     long_description=__doc__,
-    packages=['hanger'],
+    packages=['hanger', 'hanger.forms'],
     zip_safe=False,
     include_package_data=True,
     platforms='any',

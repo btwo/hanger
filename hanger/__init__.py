@@ -14,7 +14,7 @@ class Hanger(web.Application):
     '''Hanger application class.'''
     def __init__(self, handlers=None, *args, **settings):
         if settings.has_key("media_path"):
-            self.media_route()
+            self.media_route(handlers, settings)
         super(Hanger, self).__init__(handlers, *args, **settings)
 
     def route(self, *modules, **addhandlers):

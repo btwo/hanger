@@ -25,7 +25,7 @@ class FormDict(dict):
         then an empty list is returned.
         """
         try:
-            return self.arguments[key]
+            return [i.decode("utf-8") for i in self.arguments[key]]
         except KeyError:
             return []
 
