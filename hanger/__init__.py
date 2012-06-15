@@ -11,16 +11,11 @@ import database
 import utils
 import forms
 
-
 class Hanger(web.Application):
     '''Hanger application class.'''
     def __init__(self, handlers=None, *args, **settings):
-        '''Add media handler.'''
-        media_handler = (
-            r"%s(.*)" % settings['media_url'],
-            web.StaticFileHandler, {"path": settings['media_path']})
         if settings.has_key("media_path"):
-            handlers.insert(0, media_handler)
+            self.media_route()
         super(Hanger, self).__init__(handlers, *args, **settings)
 
     def route(self, *modules, **addhandlers):
@@ -33,6 +28,15 @@ class Hanger(web.Application):
         if addhandlers.has_key("end_handlers"):
             routes.extend(addhandlers['end_handlers'])
         return routes
+
+    def media_route(self, handlers, settings):
+        '''Add media handler.'''
+        media_handler = (
+            r"%s(.*)" % settings['media_url'],
+            web.StaticFileHandler, {"path": settings['media_path']})
+        if settings.has_key("media_path"):
+            handlers.insert(0, media_handler)
+
 
 class BaseHandler(web.RequestHandler):
     '''
