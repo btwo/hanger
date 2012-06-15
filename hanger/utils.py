@@ -10,7 +10,6 @@ import hashlib
 import datetime
 import markdown2
 
-from gravatar import gravatar
 from tornado.escape import xhtml_unescape, xhtml_escape
 
 def realpath(file_):
@@ -70,3 +69,11 @@ def special_char(string):
     regex = re.compile("\W", re.UNICODE)
     result = regex.search(string)
     return result
+
+def gravatar(email, size=200, default="identicon"):
+    '''Make gravatar image URL.'''
+    email = email.encode('utf-8').lower()
+    email = hashlib.md5(email).hexdigest()
+    url = "http://www.gravatar.com/avatar/%s/?s=%s&d=%s" % (
+        email, str(size), default)
+    return url
