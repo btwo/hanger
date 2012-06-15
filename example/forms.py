@@ -6,8 +6,14 @@ import utils
 from hanger.forms import Form
 from hanger.forms.field import EmailField
 from model import getuser
-from wtforms.fields import TextField, TextAreaField, PasswordField, FileField
+from wtforms.fields import TextField, TextAreaField, PasswordField
+from wtforms.fields import FileField as _FileField
 from wtforms.validators import Required, Length, Email, ValidationError
+
+class FileField(_FileField):
+    '''If use Nginx Loadup Module, use this Field.'''
+    pass
+
 
 def name_validate(self, field):
     if not field.data:
