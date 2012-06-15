@@ -1,13 +1,12 @@
 #!/usr/bin/env python2.7
 # coding=utf-8
-import os
 import json
 import uuid
 import forms
 import time
 import avatar
 
-from model import session, getuser, Person
+from model import db, getuser, Person
 from tornado import web
 from base import Base
 
@@ -53,8 +52,8 @@ class SignUp(Sign):
             password = form.password.data,
             email = form.email.data,
         )
-        session.add(user)
-        session.commit()
+        db.session.add(user)
+        db.session.commit()
         self.login(user)
         self.redirect('/')
 
@@ -107,7 +106,7 @@ class Settings(Base):
         if new_avatar:
             avatar.change_avatar(
                 new_avatar, self.current_user, self.settings['avatar_path'])
-        session.commit() # both commit to database.
+        db.session.commit() # both commit to database.
         self.redirect('/settings')
 
 
@@ -191,7 +190,7 @@ class ResetPassword(ResetBase):
         except RuntimeError:
             return
         user.password = user.hash_password(form.password.data)
-        session.commit()
+        db.session.commit()
         self.secret_destroy(key)
         self.redirect('/signin')
 

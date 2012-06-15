@@ -1,16 +1,15 @@
 #!/usr/bin/env python2.7
 # coding=utf-8
 from utils import escape, string_hash
-from elixir import session, Field
-from sqlalchemy import types
-from hanger.database import Entity
+from sqlalchemy import Column, types
+from application import db
 
-class Person(Entity):
-    name = Field(types.Unicode(32))
-    email = Field(types.String(256))
-    password = Field(types.String(256))
-    avatar = Field(types.String(32))
-    bio = Field(types.Unicode())
+class Person(db.Model):
+    name = Column(types.Unicode(32), unique=True)
+    email = Column(types.String(256), unique=True)
+    password = Column(types.String(256))
+    avatar = Column(types.String(32))
+    bio = Column(types.Unicode())
 
     def __init__(self, name, email, password):
         super(Person, self).__init__()
@@ -19,7 +18,7 @@ class Person(Entity):
         self.password = self.hash_password(password)
 
     def __repr__(self):
-        return "<Person #%s [%s]>" % (self.id, self.name)
+        return "<Person #%d [%s]>" % (self.id, self.name)
 
     def hash_password(self, password):
         return string_hash(password, salt=self.email)

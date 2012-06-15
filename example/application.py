@@ -1,12 +1,11 @@
 #!/usr/bin/env python2.7
 # coding=utf-8
 from hanger import Hanger
-from hanger.database import Elixir
+from hanger.database import SQLAlchemy
 from redis import StrictRedis
 from config import config
-import model
 
-db = Elixir(config['database_url']) # first run, run db.create_all().
+db = SQLAlchemy(config['database_url']) # first run, run db.create_all().
 
 import user
 import views
