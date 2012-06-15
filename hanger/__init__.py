@@ -6,7 +6,6 @@ from tornado import web
 from urlparse import urljoin
 from template import JinjaMixin, AutoTemplatesMixin
 from forms import AutoFormsMixin
-from mail import MailMixin
 import database
 import utils
 import forms
@@ -59,5 +58,5 @@ class BaseHandler(web.RequestHandler):
         super(BaseHandler, self).redirect(url)
 
 
-__all__ = ['utils', 'database', 'forms', 'MailMixin', 'AutoFormsMixin',
+__all__ = ['utils', 'database', 'forms', 'AutoFormsMixin',
            'AutoTemplatesMixin', 'BaseHandler', 'JinjaMixin']

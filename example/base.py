@@ -2,9 +2,9 @@
 # coding=utf-8
 import json
 
-from hanger import BaseHandler, JinjaMixin, AutoFormsMixin,\
-        AutoTemplatesMixin, MailMixin
+from hanger import BaseHandler, JinjaMixin, AutoFormsMixin, AutoTemplatesMixin 
 from model import getuser
+from mail import MailMixin
 
 class Base(MailMixin, AutoFormsMixin, AutoTemplatesMixin, JinjaMixin,
            BaseHandler):
